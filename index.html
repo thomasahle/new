@@ -1235,7 +1235,7 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
          <section id="publications">
             <div class="section-head">
                <h2>Research</h2>
-               <a class="link-button" href="publications.html">All publications <svg class="icon"><use href="#i-arrow"/></svg></a>
+               <a class="link-button" href="research.html#publications">All publications <svg class="icon"><use href="#i-arrow"/></svg></a>
             </div>
             <ul class="pubs">
                <li class="toggle-item featured has_image"
@@ -1454,7 +1454,7 @@ Oblivious sketching has emerged as a powerful approach to speeding up numerical 
          <section id="manuscripts">
             <div class="section-head">
                <h2>Manuscripts</h2>
-               <a class="link-button" href="manuscripts.html">All manuscripts <svg class="icon"><use href="#i-arrow"/></svg></a>
+               <a class="link-button" href="research.html#manuscripts">All manuscripts <svg class="icon"><use href="#i-arrow"/></svg></a>
             </div>
             <ul class="pubs">
                <li class="toggle-item featured has_image"
@@ -1863,12 +1863,12 @@ We also provide a new fast branch-free code for division and modulus with Mersen
    function track() {
       if (window.gtag) window.gtag.apply(null, arguments);
    }
-   /* Links to a paper that is only on the full lists go there */
-   var paperPages = {'expm': 'publications.html', 'tla': 'publications.html', 'tiling': 'publications.html', 'bi-moments': 'publications.html', 'tcu': 'publications.html', 'p1': 'publications.html', 'lasvegas': 'publications.html', 'output-sensitive': 'publications.html', 'mips': 'publications.html', 'emt': 'manuscripts.html', 'cookbook': 'manuscripts.html', 'errmit': 'manuscripts.html', 'favour': 'manuscripts.html', 'weighted-sampling': 'manuscripts.html', 'minner': 'manuscripts.html', 'phd': 'manuscripts.html', 'tensorsketch2': 'manuscripts.html', 'verification': 'manuscripts.html', 'minhash': 'manuscripts.html', 'tails': 'manuscripts.html', 'donkey': 'manuscripts.html', 
+   /* Links to a paper that is only on the Research page go there */
+   var paperPages = {'expm': 1, 'tla': 1, 'tiling': 1, 'bi-moments': 1, 'tcu': 1, 'p1': 1, 'lasvegas': 1, 'output-sensitive': 1, 'mips': 1, 'emt': 1, 'cookbook': 1, 'errmit': 1, 'favour': 1, 'weighted-sampling': 1, 'minner': 1, 'phd': 1, 'tensorsketch2': 1, 'verification': 1, 'minhash': 1, 'tails': 1, 'donkey': 1, 
    };
    var hashTag = location.hash.replace(/^#paper-/, '');
    if (/^#paper-/.test(location.hash) && paperPages[hashTag]) {
-      location.replace(paperPages[hashTag] + location.hash);
+      location.replace('research.html' + location.hash);
    }
 
    /* Highlight the top bar link of the section in view */
