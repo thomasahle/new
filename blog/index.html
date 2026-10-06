@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+   <head>
+      <!-- Google Analytics (GA4). Besides the standard page_view this records the full
+     referrer, its host, the landing page with query string, and any ?ref= tag
+     as event parameters. Register them in GA4 as event-scoped custom
+     dimensions (full_referrer, referrer_host, landing_page, ref_tag) to see them.
+     This file is the single source of truth: templates include it, and the
+     standalone pages under blog/ and 404.html carry an inlined copy. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-40XB6Q54CE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-40XB6Q54CE', (function () {
+    var ref = document.referrer || '';
+    var host = '';
+    if (ref) {
+      // android-app:// and other odd schemes may not parse; fall back to the raw string.
+      try { host = new URL(ref).hostname || ref; } catch (e) { host = ref; }
+    }
+    var params = {
+      full_referrer: ref || '(direct)',
+      referrer_host: host || '(direct)',
+      landing_page: location.pathname + location.search
+    };
+    var tag = new URLSearchParams(location.search).get('ref');
+    if (tag) { params.ref_tag = tag; }
+    return params;
+  })());
+</script>
+
+      <meta charset="utf-8">
+      <meta name="robots" content="noindex">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="thumbnail" content="/static/potrait.jpg" />
+
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon-16x16.png" sizes="16x16" />
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon-32x32.png" sizes="32x32"/>
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon.ico" sizes="48x48" />
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/android-chrome-192x192.png" sizes="192x192" />
+
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Cardo:ital@0;1&amp;family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&amp;display=swap" rel="stylesheet">
+
+      
+      <script type="application/javascript">function addLoadEvent(func) {
+  var oldonload = window.onload;
+  if (typeof window.onload != 'function') {
+    window.onload = func;
+  } else {
+    window.onload = function() {
+      if (oldonload) {
+        oldonload();
+      }
+      func();
+    }
+  }
+}
+// External links
+addLoadEvent(function() {
+   for (let a of document.querySelectorAll('a[href^="http"]')) {
+      // :not([href*="//' + location.host + '"])')
+      a.addEventListener('click', event => {
+         gtag('event', 'click', {
+            'event_category': 'outbound',
+            'event_label': a.href,
+            'transport_type': 'beacon'
+            /*'hitCallback': function() { document.location = a.href; }*/
+         });
+         //return false;
+      });
+   }
+});</script>
+
+      <script type="application/ld+json">
+         {"@context" : "http://schema.org",
+    "@type" : "CollectionPage",
+     "author": {
+          "@type": "Person",
+          "name": "Thomas Dybdahl Ahle",
+           "image": [ "https://thomasahle.com/static/potrait.jpg" ],
+           "spouse": {
+                "@type": "Person",
+                "name": "Morgan Mingle"
+           }
+     },
+     "description": "My research concerns the theoretical foundations of machine learning and massive data, including similarity search, high-dimensional geometry, kernel methods, sketching and derandomization.",
+     "image": [ "https://thomasahle.com/static/potrait.jpg" ],
+     "primaryImageOfPage": "https://thomasahle.com/static/potrait.jpg",
+     "thumbnailUrl": "https://thomasahle.com/static/potrait.jpg"
+     }
+      </script>
+      <meta name="description"
+            content="Thomas Dybdahl Ahle is a researcher in the theoretical foundations of machine learning and massive data, including similarity search, high-dimensional geometry, kernel methods, sketching and derandomization." />
+  <style type="text/css">:root {
+   /* One neutral grey family and one link blue across the site */
+   --ink: #111;
+   --text: #333;
+   --muted: #666;
+   --line: #e5e5e5;
+   --bg: #fff;
+   --link: #0645ad;
+   --radius: 8px;
+   --sans: Lato, "Helvetica Neue", sans-serif;
+   --serif: Cardo, Garamond, "Times New Roman", serif;
+}
+
+* {
+   box-sizing: border-box;
+}
+
+[hidden] {
+   display: none !important;
+}
+
+html {
+   scroll-behavior: smooth;
+}
+
+body {
+   margin: 0;
+   background: var(--bg);
+   color: var(--text);
+   font-family: var(--sans);
+   font-size: 16px;
+   font-weight: 300;
+   line-height: 1.6;
+   -webkit-font-smoothing: antialiased;
+   text-rendering: optimizeLegibility;
+}
+
+a {
+   color: var(--link);
+   text-decoration: none;
+}
+
+a:hover {
+   text-decoration: underline;
+   text-decoration-skip-ink: auto;
+}
+
+h1, h2, h3 {
+   color: var(--ink);
+}
+
+ul {
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+sub, sup {
+   font-size: 75%;
+   line-height: 0;
+   position: relative;
+   vertical-align: baseline;
+}
+
+sup {
+   top: -0.5em;
+}
+
+sub {
+   bottom: -0.25em;
+}
+
+/* Lato Light for running text, regular for controls */
+.top-nav a, .link-button {
+   font-weight: 400;
+}
+
+.icon {
+   width: 20px;
+   height: 20px;
+   flex: none;
+   fill: none;
+   stroke: currentColor;
+   stroke-width: 1.75;
+   stroke-linecap: round;
+   stroke-linejoin: round;
+}
+
+.icon.solid {
+   fill: currentColor;
+   stroke: none;
+}
+
+/********** Top bar: centered section links in serif small caps **********/
+
+.topbar {
+   position: sticky;
+   top: 0;
+   z-index: 10;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 12px 52px;
+   background: rgba(255, 255, 255, .97);
+   border-bottom: 3px double #ccc;
+}
+
+/* The name is in the letterhead; the bar only shows it on phones */
+.brand {
+   display: none;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.3rem;
+   letter-spacing: .03em;
+   color: #111;
+}
+
+.brand:hover {
+   text-decoration: none;
+}
+
+.menu-toggle {
+   display: none;
+   align-items: center;
+   gap: 6px;
+   padding: 6px 10px;
+   font: inherit;
+   font-size: .95rem;
+   color: var(--ink);
+   background: #fff;
+   border: 1px solid var(--line);
+   border-radius: 6px;
+   cursor: pointer;
+}
+
+.top-nav {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: 4px 0;
+}
+
+.top-nav a {
+   padding: 4px 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.12rem;
+   letter-spacing: .05em;
+   color: #222;
+}
+
+.top-nav a:not(:last-child)::after {
+   content: "·";
+   margin: 0 16px;
+   color: #aaa;
+}
+
+.top-nav a:hover {
+   color: var(--link);
+   text-decoration: none;
+}
+
+.top-nav a.active {
+   font-style: italic;
+   color: #000;
+}
+
+/********** Main **********/
+
+.main {
+   padding: 40px 52px 72px;
+}
+
+.container {
+   max-width: 1100px;
+   margin: 0 auto;
+}
+
+@media (min-width: 1600px) {
+   .container {
+      max-width: 1400px;
+   }
+}
+
+section, h2[id], h3[id], [id^="paper-"], .anchor {
+   scroll-margin-top: 76px;
+}
+
+.anchor {
+   display: block;
+}
+
+/********** Section headings **********/
+
+.section-head {
+   display: flex;
+   align-items: baseline;
+   justify-content: space-between;
+   gap: 8px 16px;
+   flex-wrap: wrap;
+   margin: 36px 0 14px;
+}
+
+.section-head h2,
+.section h2,
+.page-title {
+   margin: 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: 1.85rem;
+   line-height: 1.2;
+   letter-spacing: .03em;
+}
+
+.link-button {
+   display: inline-flex;
+   align-items: center;
+   gap: 6px;
+   padding: 0;
+   font: inherit;
+   font-size: .95rem;
+   color: var(--link);
+   background: none;
+   border: 0;
+   cursor: pointer;
+}
+
+.link-button:hover {
+   text-decoration: underline;
+}
+
+.link-button .icon {
+   width: 17px;
+   height: 17px;
+}
+
+
+/********** Blog preview **********/
+
+.post-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1rem;
+}
+
+@media (min-width: 1300px) {
+   .post-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+.post-card {
+   display: grid;
+   grid-template-columns: 15rem minmax(0, 1fr);
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+
+/* Images fill the left column edge to edge, like the paper cards */
+.post-thumb {
+   position: relative;
+   display: block;
+   border-right: 1px solid #eee;
+   background: #fafafa;
+}
+
+/* Card height follows the text; the image fills whatever space that leaves */
+.post-thumb img {
+   position: absolute;
+   inset: 0;
+   display: block;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   /* Charts and screenshots have their titles and axes at the top left */
+   object-position: left top;
+}
+
+.post-body {
+   display: flex;
+   flex-direction: column;
+   min-width: 0;
+   padding: 14px 18px 16px;
+}
+
+.post-category {
+   margin: 0;
+   font-size: .72rem;
+   font-weight: 400;
+   letter-spacing: .14em;
+   text-transform: uppercase;
+   color: var(--muted);
+}
+
+.post-card h3 {
+   margin: 4px 0 2px;
+   font-size: 1.08rem;
+   font-weight: 700;
+   line-height: 1.3;
+}
+
+.post-card h3 a {
+   color: var(--ink);
+}
+
+.post-meta {
+   margin: 0 0 6px;
+   font-size: .82rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+
+.post-lead {
+   margin: 0 0 10px;
+   font-size: .95rem;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 3;
+   overflow: hidden;
+}
+
+.post-body .link-button {
+   margin-top: auto;
+   align-self: flex-start;
+   font-size: .92rem;
+}
+
+/********** Footer: profiles and social links **********/
+
+/* Inline link lists separated by dots */
+.dots a + a::before {
+   content: "·";
+   display: inline-block;
+   margin: 0 .55em;
+   color: #999;
+}
+
+.page-foot {
+   margin-top: 64px;
+   padding-top: 18px;
+   border-top: 1px solid var(--line);
+   text-align: center;
+   font-size: .85rem;
+   color: var(--muted);
+}
+
+.page-foot p {
+   margin: 0 auto 8px;
+   max-width: none;
+}
+
+.page-foot a {
+   white-space: nowrap;
+}
+
+/********** Narrow screens: name and a menu button **********/
+
+@media (max-width: 900px) {
+   .topbar {
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--line);
+   }
+
+   .brand {
+      display: block;
+   }
+
+   .menu-toggle {
+      display: inline-flex;
+   }
+
+   .top-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 8px 20px 14px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, .06);
+   }
+
+   .topbar.open .top-nav {
+      display: flex;
+   }
+
+   .top-nav a {
+      padding: 9px 0;
+      font-size: 1.15rem;
+   }
+
+   .top-nav a:not(:last-child)::after {
+      content: none;
+   }
+
+   .main {
+      padding: 28px 20px 56px;
+   }
+}
+
+@media (max-width: 1180px) {
+   .main {
+      padding: 36px 36px 64px;
+   }
+
+}
+
+@media (max-width: 640px) {
+   .post-card {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .post-thumb {
+      border-right: 0;
+      border-bottom: 1px solid #eee;
+   }
+
+   .post-thumb img {
+      position: static;
+      height: auto;
+      aspect-ratio: 2 / 1;
+   }
+}
+
+/********** Blog index **********/
+
+.page-head {
+   display: flex;
+   align-items: baseline;
+   justify-content: space-between;
+   gap: 12px 24px;
+   flex-wrap: wrap;
+   margin: 4px 0 18px;
+}
+
+.page-title {
+   font-size: 2.4rem;
+}
+
+.search {
+   width: min(18rem, 100%);
+   padding: 7px 12px;
+   font: inherit;
+   font-size: .95rem;
+   font-weight: 400;
+   color: var(--ink);
+   background: #fff;
+   border: 1px solid var(--line);
+   border-radius: 4px;
+   outline: none;
+}
+
+.search:focus {
+   border-color: var(--link);
+}
+
+/* One post per row: the index has room for the full lead */
+.post-list {
+   display: grid;
+   gap: 1rem;
+}
+
+.post-list .post-card {
+   grid-template-columns: 15rem minmax(0, 1fr);
+   min-height: 12rem;
+}
+
+.post-list .post-lead {
+   -webkit-line-clamp: 4;
+}
+
+.no-results {
+   color: var(--muted);
+}
+
+@media (max-width: 640px) {
+   .post-list .post-card {
+      grid-template-columns: minmax(0, 1fr);
+   }
+}
+  </style>
+  <title>Blog</title>
+</head>
+
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></symbol>
+   </svg>
+
+   <header class="topbar" id="topbar">
+      <a class="brand" href="/new/">Thomas Ahle</a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="top-nav">
+         <svg class="icon"><use href="#i-menu"/></svg> Menu
+      </button>
+      <nav class="top-nav" id="top-nav" aria-label="Sections">
+         <a href="/new/">Home</a>
+         <a href="/new/#publications">Publications</a>
+         <a href="/new/#manuscripts">Manuscripts</a>
+         <a href="/new/#projects">Software &amp; Games</a>
+         <a href="/new/#media">Media</a>
+         <a href="/new/#teaching">Teaching</a>
+         <a href="/new/blog/" class="active" aria-current="page">Blog</a>
+      </nav>
+   </header>
+   <script>
+(function () {
+   /* Narrow screens: the menu button opens the section list */
+   var topbar = document.getElementById('topbar');
+   var menu = document.getElementById('menu-toggle');
+   function closeMenu() {
+      topbar.classList.remove('open');
+      menu.setAttribute('aria-expanded', 'false');
+   }
+   menu.addEventListener('click', function () {
+      var open = topbar.classList.toggle('open');
+      menu.setAttribute('aria-expanded', String(open));
+   });
+   topbar.querySelectorAll('.top-nav a').forEach(function (a) {
+      a.addEventListener('click', closeMenu);
+   });
+})();
+   </script>
+
+   <main class="main" id="top">
+      <div class="container">
+         <div class="page-head">
+            <h1 class="page-title">Blog</h1>
+            <input class="search" id="search" type="search" placeholder="Search posts" aria-label="Search posts" autocomplete="off">
+         </div>
+
+         <div class="post-list">
+            <article class="post-card">
+               <a class="post-thumb" href="/blog/adversarial-examples-for-hashes/" tabindex="-1" aria-hidden="true"><img src="../feature_imgs/fast_hashes_need_proofs.png" alt="" loading="eager"></a>
+               <div class="post-body">
+                  <p class="post-category">Algorithms</p>
+                  <h3><a href="/blog/adversarial-examples-for-hashes/">Adversarial Examples for Fast Hash Functions</a></h3>
+                  <p class="post-meta"><time datetime="2026-09-17">Sep 2026</time> &middot; 25 min</p>
+                  <p class="post-lead">Explicit colliding inputs for komihash, a5hash, MuseAir, t1ha2, HighwayHash and others under random seeds, measured as worst-case collision bits, next to hash functions with proven bounds and their speed.</p>
+                  <a class="link-button" href="/blog/adversarial-examples-for-hashes/" aria-label="Read Adversarial Examples for Fast Hash Functions">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+               </div>
+            </article>
+            <article class="post-card">
+               <a class="post-thumb" href="https://normalcomputing.com/blog/building-an-open-source-verilog-simulator-with-ai-580k-lines-in-43-days" tabindex="-1" aria-hidden="true"><img src="../feature_imgs/verilog_sim.png" alt="" loading="eager"></a>
+               <div class="post-body">
+                  <p class="post-category">AI for Hardware</p>
+                  <h3><a href="https://normalcomputing.com/blog/building-an-open-source-verilog-simulator-with-ai-580k-lines-in-43-days">Building an Open-Source Verilog Simulator with AI: 580K Lines in 43 Days</a></h3>
+                  <p class="post-meta"><time datetime="2026-03-02">Mar 2026</time> &middot; 8 min</p>
+                  <p class="post-lead">Over 43 days, AI agents landed 2,968 commits on a fork of CIRCT: an event-driven Verilog simulator, UVM and cocotb support, bounded model checking, equivalence checking and mutation testing. Published on the Normal Computing blog.</p>
+                  <a class="link-button" href="https://normalcomputing.com/blog/building-an-open-source-verilog-simulator-with-ai-580k-lines-in-43-days" aria-label="Read Building an Open-Source Verilog Simulator with AI: 580K Lines in 43 Days">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+               </div>
+            </article>
+            <article class="post-card">
+               <a class="post-thumb" href="/blog/stirling_bounds.html" tabindex="-1" aria-hidden="true"><img src="../feature_imgs/urn.png" alt="" loading="eager"></a>
+               <div class="post-body">
+                  <p class="post-category">Probability</p>
+                  <h3><a href="/blog/stirling_bounds.html">Simple Stirling Upper/Lower Bounds</a></h3>
+                  <p class="post-meta"><time datetime="2025-03-04">Mar 2025</time> &middot; 2 min</p>
+                  <p class="post-lead">A short, elementary route from n! = ∫ x^n e^{-x} to sharp Stirling bounds via a Gaussian change of variables—and a natural path to the full expansion.</p>
+                  <a class="link-button" href="/blog/stirling_bounds.html" aria-label="Read Simple Stirling Upper/Lower Bounds">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+               </div>
+            </article>
+            <article class="post-card">
+               <a class="post-thumb" href="/blog/termo_linalg.html" tabindex="-1" aria-hidden="true"><img src="../feature_imgs/termo_linalg.png" alt="" loading="lazy"></a>
+               <div class="post-body">
+                  <p class="post-category">Stochastic Processes</p>
+                  <h3><a href="/blog/termo_linalg.html">Analysis of Ornstein-Uhlenbeck Process for Linear Systems</a></h3>
+                  <p class="post-meta"><time datetime="2024-01-31">Jan 2024</time> &middot; 1 min</p>
+                  <p class="post-lead">
+            This blog post delves into the Ornstein-Uhlenbeck (OU) process and its application in the analysis of linear systems. We explore how the OU process, when applied to a Positive Semi-Definite (PSD) matrix and a specific vector, leads to more efficient and accurate sampling strategies.
+            </p>
+                  <a class="link-button" href="/blog/termo_linalg.html" aria-label="Read Analysis of Ornstein-Uhlenbeck Process for Linear Systems">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+               </div>
+            </article>
+            <article class="post-card">
+               <a class="post-thumb" href="/blog/differentiable_topk.html" tabindex="-1" aria-hidden="true"><img src="../feature_imgs/mips.png" alt="" loading="lazy"></a>
+               <div class="post-body">
+                  <p class="post-category">Machine Learning</p>
+                  <h3><a href="/blog/differentiable_topk.html">A Differentiable Top-k Layer for PyTorch</a></h3>
+                  <p class="post-meta"><time datetime="2022-08-05">Aug 2022</time> &middot; 4 min</p>
+                  <p class="post-lead">Binary-search a scalar shift, reuse it in backprop via implicit differentiation, and you get a simple, exact top-k relaxation that plays nicely with PyTorch autograd.</p>
+                  <a class="link-button" href="/blog/differentiable_topk.html" aria-label="Read A Differentiable Top-k Layer for PyTorch">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+               </div>
+            </article>
+            <article class="post-card">
+               <a class="post-thumb" href="https://github.com/thomasahle/ziplm" tabindex="-1" aria-hidden="true"><img src="../feature_imgs/ziplm.png" alt="" loading="lazy"></a>
+               <div class="post-body">
+                  <p class="post-category">Language Models</p>
+                  <h3><a href="https://github.com/thomasahle/ziplm">ZipLM with Beam Search, BPE and Progressive Compression</a></h3>
+                  <p class="post-meta"><time datetime="2023-08-28">Aug 2023</time> &middot; 1 min</p>
+                  <p class="post-lead">
+            ZipLM uses Gzip to create a language model, however it is quite bad. This post shows how to use beam search to improve the output of ZipLM. When sampling sentences from "The Great Gatsby," the raw model produces near-gibberish. However, implementing beam search yields increasingly coherent sentences as the beam width increases, although performance is still poor compared to older models.
+            </p>
+                  <a class="link-button" href="https://github.com/thomasahle/ziplm" aria-label="Read ZipLM with Beam Search, BPE and Progressive Compression">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+               </div>
+            </article>
+            <article class="post-card">
+               <a class="post-thumb" href="/blog/einsum_to_dot.html" tabindex="-1" aria-hidden="true"><img src="../feature_imgs/tensor.png" alt="" loading="lazy"></a>
+               <div class="post-body">
+                  <p class="post-category">Tensors</p>
+                  <h3><a href="/blog/einsum_to_dot.html">Convert Einsum to Tensor Network</a></h3>
+                  <p class="post-meta"><time datetime="2023-01-01">Jan 2023</time> &middot; 1 min</p>
+                  <p class="post-lead">A technical guide on converting Einstein summation to tensor network operations.</p>
+                  <a class="link-button" href="/blog/einsum_to_dot.html" aria-label="Read Convert Einsum to Tensor Network">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+               </div>
+            </article>
+            <article class="post-card">
+               <a class="post-thumb" href="https://towardsdatascience.com/lairs-dice-by-self-play-3bbed6addde0/" tabindex="-1" aria-hidden="true"><img src="../feature_imgs/dudo.png" alt="" loading="lazy"></a>
+               <div class="post-body">
+                  <p class="post-category">Game AI</p>
+                  <h3><a href="https://towardsdatascience.com/lairs-dice-by-self-play-3bbed6addde0/">Liar’s Dice by Self-Play</a></h3>
+                  <p class="post-meta"><time datetime="2022-01-01">Jan 2022</time> &middot; 1 min</p>
+                  <p class="post-lead">I’ve been meaning to learn about AIs for games like Poker or Liar’s Dice for a while. Recently while reading DeepMind’s article Player of Games, I thought I might be able to make something really simple that works well enough to be fun. “It shouldn’t take more than an afternoon,” I thought. Of course, I ended up spending much more time on it, but it did turn out to be fun and very simple.</p>
+                  <a class="link-button" href="https://towardsdatascience.com/lairs-dice-by-self-play-3bbed6addde0/" aria-label="Read Liar’s Dice by Self-Play">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+               </div>
+            </article>
+            <article class="post-card">
+               <a class="post-thumb" href="/blog/sets.html" tabindex="-1" aria-hidden="true"><img src="../feature_imgs/sets.png" alt="" loading="lazy"></a>
+               <div class="post-body">
+                  <p class="post-category">Data Structures</p>
+                  <h3><a href="/blog/sets.html">An Evolutionary Data Structure for Sets</a></h3>
+                  <p class="post-meta"><time datetime="2020-01-01">Jan 2020</time> &middot; 1 min</p>
+                  <p class="post-lead">I recently published a preprint, together with Jakob Knudsen, describing a new, optimal data structure for set similarity search. An interesting way to look at this is as an Evolutionary Algorithm (aka genetic algorithm). We think it's probably the first time the provably best way to solve a problem has been evolutionary. This post won't go deep into the mathematics, but will contain code samples and some fun gadgets I built to simulate it.</p>
+                  <a class="link-button" href="/blog/sets.html" aria-label="Read An Evolutionary Data Structure for Sets">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+               </div>
+            </article>
+            <article class="post-card">
+               <a class="post-thumb" href="https://ahlenotes.wordpress.com/2015/12/08/hypergeometric_tail/" tabindex="-1" aria-hidden="true"><img src="../feature_imgs/hyper.png" alt="" loading="lazy"></a>
+               <div class="post-body">
+                  <p class="post-category">Probability</p>
+                  <h3><a href="https://ahlenotes.wordpress.com/2015/12/08/hypergeometric_tail/">Another Tail of the Hypergeometric Distribution</a></h3>
+                  <p class="post-meta"><time datetime="2015-12-08">Dec 2015</time> &middot; 1 min</p>
+                  <p class="post-lead">This blog post sheds light on the less-discussed sampling without replacement scenario, its implications in algorithm analysis, and how it compares with its more famous counterpart, the binomial distribution.</p>
+                  <a class="link-button" href="https://ahlenotes.wordpress.com/2015/12/08/hypergeometric_tail/" aria-label="Read Another Tail of the Hypergeometric Distribution">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+               </div>
+            </article>
+         </div>
+         <p class="no-results" id="no-results" hidden>No posts match your search.</p>
+
+<footer class="page-foot">
+            <p class="dots"><span>Elsewhere:</span> <a href="https://en.wikipedia.org/wiki/User:Thomasda">Wikipedia</a><a href="https://oeis.org/wiki/User:Thomas_Dybdahl_Ahle">OEIS</a><a href="https://dblp1.uni-trier.de/pers/hd/a/Ahle:Thomas_D=">DBLP</a><a href="https://orcid.org/0000-0001-9747-0479">ORCID</a><a href="https://www.mathgenealogy.org/id.php?id=254777">Mathematics Genealogy</a><a href="https://mathscinet.ams.org/mathscinet/freetools/collab-dist?source=1223412&amp;target=189017">Erdős number</a></p>
+            <p class="dots"><a href="https://github.com/thomasahle">GitHub</a><a href="https://x.com/thomasahle">X</a><a href="https://bsky.app/profile/thomasahle.bsky.social">Bluesky</a><a href="https://scholar.google.dk/citations?user=aRiVoYgAAAAJ&amp;sortby=pubdate">Google Scholar</a><a href="https://linkedin.com/in/thomasahle">LinkedIn</a><a href="mailto:thomas@ahle.dk">Email</a></p>
+         </footer>
+      </div>
+   </main>
+
+   <script>
+(function () {
+   /* Filter the posts as you type */
+   var input = document.getElementById('search');
+   var empty = document.getElementById('no-results');
+   var posts = Array.prototype.slice.call(document.querySelectorAll('.post-card'));
+   input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase();
+      var shown = 0;
+      posts.forEach(function (post) {
+         var hit = !q || post.textContent.toLowerCase().indexOf(q) !== -1;
+         post.hidden = !hit;
+         if (hit) shown++;
+      });
+      empty.hidden = shown > 0;
+   });
+})();
+   </script>
+</body>
+</html>

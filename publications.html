@@ -1,0 +1,1803 @@
+
+<!DOCTYPE html>
+<html lang="en-GB">
+   <head>
+      <!-- Google Analytics (GA4). Besides the standard page_view this records the full
+     referrer, its host, the landing page with query string, and any ?ref= tag
+     as event parameters. Register them in GA4 as event-scoped custom
+     dimensions (full_referrer, referrer_host, landing_page, ref_tag) to see them.
+     This file is the single source of truth: templates include it, and the
+     standalone pages under blog/ and 404.html carry an inlined copy. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-40XB6Q54CE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-40XB6Q54CE', (function () {
+    var ref = document.referrer || '';
+    var host = '';
+    if (ref) {
+      // android-app:// and other odd schemes may not parse; fall back to the raw string.
+      try { host = new URL(ref).hostname || ref; } catch (e) { host = ref; }
+    }
+    var params = {
+      full_referrer: ref || '(direct)',
+      referrer_host: host || '(direct)',
+      landing_page: location.pathname + location.search
+    };
+    var tag = new URLSearchParams(location.search).get('ref');
+    if (tag) { params.ref_tag = tag; }
+    return params;
+  })());
+</script>
+
+      <meta charset="utf-8">
+      <meta name="robots" content="noindex">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="thumbnail" content="/static/potrait.jpg" />
+
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon-16x16.png" sizes="16x16" />
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon-32x32.png" sizes="32x32"/>
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon.ico" sizes="48x48" />
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/android-chrome-192x192.png" sizes="192x192" />
+
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Cardo:ital@0;1&amp;family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&amp;display=swap" rel="stylesheet">
+
+      
+      <script type="application/javascript">function addLoadEvent(func) {
+  var oldonload = window.onload;
+  if (typeof window.onload != 'function') {
+    window.onload = func;
+  } else {
+    window.onload = function() {
+      if (oldonload) {
+        oldonload();
+      }
+      func();
+    }
+  }
+}
+// External links
+addLoadEvent(function() {
+   for (let a of document.querySelectorAll('a[href^="http"]')) {
+      // :not([href*="//' + location.host + '"])')
+      a.addEventListener('click', event => {
+         gtag('event', 'click', {
+            'event_category': 'outbound',
+            'event_label': a.href,
+            'transport_type': 'beacon'
+            /*'hitCallback': function() { document.location = a.href; }*/
+         });
+         //return false;
+      });
+   }
+});</script>
+
+      <script type="application/ld+json">
+         {"@context" : "http://schema.org",
+    "@type" : "CollectionPage",
+     "author": {
+          "@type": "Person",
+          "name": "Thomas Dybdahl Ahle",
+           "image": [ "https://thomasahle.com/static/potrait.jpg" ],
+           "spouse": {
+                "@type": "Person",
+                "name": "Morgan Mingle"
+           }
+     },
+     "description": "My research concerns the theoretical foundations of machine learning and massive data, including similarity search, high-dimensional geometry, kernel methods, sketching and derandomization.",
+     "image": [ "https://thomasahle.com/static/potrait.jpg" ],
+     "primaryImageOfPage": "https://thomasahle.com/static/potrait.jpg",
+     "thumbnailUrl": "https://thomasahle.com/static/potrait.jpg"
+     }
+      </script>
+      <meta name="description"
+            content="Thomas Dybdahl Ahle is a researcher in the theoretical foundations of machine learning and massive data, including similarity search, high-dimensional geometry, kernel methods, sketching and derandomization." />
+  <style type="text/css">:root {
+   /* One neutral grey family and one link blue across the site */
+   --ink: #111;
+   --text: #333;
+   --muted: #666;
+   --line: #e5e5e5;
+   --bg: #fff;
+   --link: #0645ad;
+   --radius: 8px;
+   --sans: Lato, "Helvetica Neue", sans-serif;
+   --serif: Cardo, Garamond, "Times New Roman", serif;
+}
+
+* {
+   box-sizing: border-box;
+}
+
+[hidden] {
+   display: none !important;
+}
+
+html {
+   scroll-behavior: smooth;
+}
+
+body {
+   margin: 0;
+   background: var(--bg);
+   color: var(--text);
+   font-family: var(--sans);
+   font-size: 16px;
+   font-weight: 300;
+   line-height: 1.6;
+   -webkit-font-smoothing: antialiased;
+   text-rendering: optimizeLegibility;
+}
+
+a {
+   color: var(--link);
+   text-decoration: none;
+}
+
+a:hover {
+   text-decoration: underline;
+   text-decoration-skip-ink: auto;
+}
+
+h1, h2, h3 {
+   color: var(--ink);
+}
+
+ul {
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+sub, sup {
+   font-size: 75%;
+   line-height: 0;
+   position: relative;
+   vertical-align: baseline;
+}
+
+sup {
+   top: -0.5em;
+}
+
+sub {
+   bottom: -0.25em;
+}
+
+/* Lato Light for running text, regular for controls */
+.top-nav a, .link-button {
+   font-weight: 400;
+}
+
+.icon {
+   width: 20px;
+   height: 20px;
+   flex: none;
+   fill: none;
+   stroke: currentColor;
+   stroke-width: 1.75;
+   stroke-linecap: round;
+   stroke-linejoin: round;
+}
+
+.icon.solid {
+   fill: currentColor;
+   stroke: none;
+}
+
+/********** Top bar: centered section links in serif small caps **********/
+
+.topbar {
+   position: sticky;
+   top: 0;
+   z-index: 10;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 12px 52px;
+   background: rgba(255, 255, 255, .97);
+   border-bottom: 3px double #ccc;
+}
+
+/* The name is in the letterhead; the bar only shows it on phones */
+.brand {
+   display: none;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.3rem;
+   letter-spacing: .03em;
+   color: #111;
+}
+
+.brand:hover {
+   text-decoration: none;
+}
+
+.menu-toggle {
+   display: none;
+   align-items: center;
+   gap: 6px;
+   padding: 6px 10px;
+   font: inherit;
+   font-size: .95rem;
+   color: var(--ink);
+   background: #fff;
+   border: 1px solid var(--line);
+   border-radius: 6px;
+   cursor: pointer;
+}
+
+.top-nav {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: 4px 0;
+}
+
+.top-nav a {
+   padding: 4px 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.12rem;
+   letter-spacing: .05em;
+   color: #222;
+}
+
+.top-nav a:not(:last-child)::after {
+   content: "·";
+   margin: 0 16px;
+   color: #aaa;
+}
+
+.top-nav a:hover {
+   color: var(--link);
+   text-decoration: none;
+}
+
+.top-nav a.active {
+   font-style: italic;
+   color: #000;
+}
+
+/********** Main **********/
+
+.main {
+   padding: 40px 52px 72px;
+}
+
+.container {
+   max-width: 1100px;
+   margin: 0 auto;
+}
+
+@media (min-width: 1600px) {
+   .container {
+      max-width: 1400px;
+   }
+}
+
+section, h2[id], h3[id], [id^="paper-"], .anchor {
+   scroll-margin-top: 76px;
+}
+
+.anchor {
+   display: block;
+}
+
+/********** Section headings **********/
+
+.section-head {
+   display: flex;
+   align-items: baseline;
+   justify-content: space-between;
+   gap: 8px 16px;
+   flex-wrap: wrap;
+   margin: 36px 0 14px;
+}
+
+.section-head h2,
+.section h2,
+.page-title {
+   margin: 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: 1.85rem;
+   line-height: 1.2;
+   letter-spacing: .03em;
+}
+
+.link-button {
+   display: inline-flex;
+   align-items: center;
+   gap: 6px;
+   padding: 0;
+   font: inherit;
+   font-size: .95rem;
+   color: var(--link);
+   background: none;
+   border: 0;
+   cursor: pointer;
+}
+
+.link-button:hover {
+   text-decoration: underline;
+}
+
+.link-button .icon {
+   width: 17px;
+   height: 17px;
+}
+
+
+/********** Blog preview **********/
+
+.post-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1rem;
+}
+
+@media (min-width: 1300px) {
+   .post-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+.post-card {
+   display: grid;
+   grid-template-columns: 15rem minmax(0, 1fr);
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+
+/* Images fill the left column edge to edge, like the paper cards */
+.post-thumb {
+   position: relative;
+   display: block;
+   border-right: 1px solid #eee;
+   background: #fafafa;
+}
+
+/* Card height follows the text; the image fills whatever space that leaves */
+.post-thumb img {
+   position: absolute;
+   inset: 0;
+   display: block;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   /* Charts and screenshots have their titles and axes at the top left */
+   object-position: left top;
+}
+
+.post-body {
+   display: flex;
+   flex-direction: column;
+   min-width: 0;
+   padding: 14px 18px 16px;
+}
+
+.post-category {
+   margin: 0;
+   font-size: .72rem;
+   font-weight: 400;
+   letter-spacing: .14em;
+   text-transform: uppercase;
+   color: var(--muted);
+}
+
+.post-card h3 {
+   margin: 4px 0 2px;
+   font-size: 1.08rem;
+   font-weight: 700;
+   line-height: 1.3;
+}
+
+.post-card h3 a {
+   color: var(--ink);
+}
+
+.post-meta {
+   margin: 0 0 6px;
+   font-size: .82rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+
+.post-lead {
+   margin: 0 0 10px;
+   font-size: .95rem;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 3;
+   overflow: hidden;
+}
+
+.post-body .link-button {
+   margin-top: auto;
+   align-self: flex-start;
+   font-size: .92rem;
+}
+
+/********** Footer: profiles and social links **********/
+
+/* Inline link lists separated by dots */
+.dots a + a::before {
+   content: "·";
+   display: inline-block;
+   margin: 0 .55em;
+   color: #999;
+}
+
+.page-foot {
+   margin-top: 64px;
+   padding-top: 18px;
+   border-top: 1px solid var(--line);
+   text-align: center;
+   font-size: .85rem;
+   color: var(--muted);
+}
+
+.page-foot p {
+   margin: 0 auto 8px;
+   max-width: none;
+}
+
+.page-foot a {
+   white-space: nowrap;
+}
+
+/********** Narrow screens: name and a menu button **********/
+
+@media (max-width: 900px) {
+   .topbar {
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--line);
+   }
+
+   .brand {
+      display: block;
+   }
+
+   .menu-toggle {
+      display: inline-flex;
+   }
+
+   .top-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 8px 20px 14px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, .06);
+   }
+
+   .topbar.open .top-nav {
+      display: flex;
+   }
+
+   .top-nav a {
+      padding: 9px 0;
+      font-size: 1.15rem;
+   }
+
+   .top-nav a:not(:last-child)::after {
+      content: none;
+   }
+
+   .main {
+      padding: 28px 20px 56px;
+   }
+}
+
+@media (max-width: 1180px) {
+   .main {
+      padding: 36px 36px 64px;
+   }
+
+}
+
+@media (max-width: 640px) {
+   .post-card {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .post-thumb {
+      border-right: 0;
+      border-bottom: 1px solid #eee;
+   }
+
+   .post-thumb img {
+      position: static;
+      height: auto;
+      aspect-ratio: 2 / 1;
+   }
+}
+/* Home page only. Shared tokens, top bar, headings, post cards and footer are in base.css. */
+
+/********** Letterhead: centered on the page, drawing to the right **********/
+
+.letterhead {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) minmax(0, 40em) minmax(0, 1fr);
+   align-items: center;
+   column-gap: 32px;
+   padding: 8px 0 12px;
+   text-align: center;
+}
+
+.letterhead .lh-text {
+   grid-column: 2;
+   grid-row: 1;
+}
+
+.letterhead .portrait {
+   grid-column: 3;
+   grid-row: 1;
+   justify-self: start;
+   position: relative;
+   width: 180px;
+}
+
+.letterhead .portrait img {
+   display: block;
+   width: 100%;
+   height: auto;
+}
+
+.letterhead .portrait .photo {
+   position: absolute;
+   inset: 0;
+   height: 100%;
+   object-fit: cover;
+   opacity: 0;
+   transition: opacity .2s;
+}
+
+.letterhead .portrait:hover .photo[src] {
+   opacity: 1;
+}
+
+.letterhead h1 {
+   margin: 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: clamp(2.1rem, 4vw, 3rem);
+   line-height: 1.1;
+   letter-spacing: .03em;
+}
+
+.letterhead .role {
+   margin: 6px 0 16px;
+   font-family: var(--serif);
+   font-style: italic;
+   font-size: 1.25rem;
+   color: #333;
+}
+
+.letterhead .bio {
+   margin: 0 auto 16px;
+   font-size: 1.05rem;
+}
+
+/* Contact links stack in the left column, mirroring the drawing on the right */
+.letterhead .contact {
+   grid-column: 1;
+   grid-row: 1;
+   justify-self: end;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   gap: 7px;
+   text-align: right;
+   font-size: .82rem;
+   font-weight: 400;
+   letter-spacing: .08em;
+   text-transform: uppercase;
+}
+
+.letterhead .bio {
+   margin-bottom: 0;
+}
+
+/********** Publication cards: the original thomasahle.com design **********/
+
+.pubs {
+   --item-size: 14rem;
+   --item-height: 14rem;
+   --item-padding: 1.5rem;
+   --border-radius: 4px;
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1rem;
+}
+
+/* While an abstract is open, cards keep their own height */
+.pubs:has(.toggle-item.open) {
+   align-items: start;
+}
+
+/* The original cards were sized with the default box model; with
+   border-box the 14rem image would overflow the bottom border. */
+.toggle-item, .toggle-item * {
+   box-sizing: content-box;
+}
+
+.toggle-item {
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: var(--border-radius);
+   background: white;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   color: black;
+   line-height: 1.55;
+   hyphens: auto;
+   display: grid;
+   grid-template-rows: auto 1fr;
+   grid-column-gap: 0px;
+   grid-row-gap: 0px;
+}
+.toggle-item.has_image {
+   grid-template-columns: var(--item-size) 1fr;
+}
+.toggle-item:active {
+   background: #fafafa;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.2);
+}
+.toggle-item:focus-visible {
+   outline: 2px solid var(--link);
+   outline-offset: 2px;
+}
+.toggle-item a {
+   color: var(--link);
+}
+.shown {
+   grid-area: 1 / 2 / 2 / 3;
+   padding: 8px 6%;
+   text-align: center;
+}
+.feature_image {
+   grid-area: 1 / 1 / 3 / 2;
+   border-right: 1px solid #eee;
+}
+.feature_image > img {
+   height: var(--item-height);
+   max-width: 100%;
+   width: auto;
+   object-fit: cover;
+   object-position: center center;
+   border-top-left-radius: 3px;
+   border-bottom-left-radius: 3px;
+}
+.shown .year {
+   display: block;
+   text-align: left;
+}
+.shown .files {
+   float: right;
+   text-align: right;
+}
+.toggle-item .files, .toggle-item .year, .toggle-item .authors {
+   font-size: 90%;
+}
+.shown .title {
+   hyphens: none;
+   margin-top: .5rem;
+   display: block;
+   font-weight: 400;
+   clear: both;
+}
+.toggle-item .abstract {
+   grid-area: 2 / 2 / 3 / 3;
+   padding: 0px var(--item-padding) 1rem var(--item-padding);
+   position: relative;
+   font-family: var(--serif);
+   text-align: justify;
+   line-height: 1.15;
+}
+.toggle-item .abstract p {
+   text-indent: 1em;
+   margin: 0;
+}
+.toggle-item .abstract p:first-child {
+   text-indent: 0;
+}
+.toggle-item:not(.open) {
+   height: var(--item-size);
+}
+.toggle-item:not(.open) .abstract {
+   line-height: 1.1;
+   overflow: hidden;
+   font-style: italic;
+   font-size: .85rem;
+   cursor: pointer;
+   color: #222;
+}
+.toggle-item .abstract:before {
+   position: absolute;
+   font-style: normal;
+   cursor: pointer;
+   color: black;
+   bottom: 0; right: 0;
+   z-index: 1;
+   background: white;
+   padding: 8px 10px 8px 10px;
+   font-family: var(--sans);
+   border-radius: var(--border-radius);
+   font-size: .85rem;
+}
+.toggle-item:not(.open) .abstract:before {
+   content: "View Abstract ⌵";
+}
+.toggle-item.open .abstract:before {
+   margin-top: 10px;
+   content: "Hide Abstract ⌃";
+}
+.toggle-item:not(.open) .abstract:after {
+   content: " ";
+   position: absolute;
+   left: 0; right: 0; top: 0; bottom: 0;
+   background: linear-gradient(180deg, rgba(255,255,255,0) 60%, rgba(255,255,255,1) 100%);
+   border-radius: var(--border-radius);
+}
+.toggle-item .comment {
+   font-style: italic;
+}
+.toggle-item .new {
+   font-weight: bold;
+   background-color: var(--link);
+   color: white;
+   padding: 1px 5px;
+   border-radius: 3px;
+}
+
+/* Wide screens: two cards per row */
+@media (min-width: 1300px) {
+   .pubs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+/* Phones: the original small-screen card */
+@media only screen and (max-width: 500px) {
+   .pubs {
+      --item-size: 7rem;
+      --item-height: 7rem;
+      --item-padding: 1rem;
+   }
+   .toggle-item:not(.open) {
+      height: auto;
+   }
+   .toggle-item:not(.open) .abstract {
+      display: none;
+   }
+   .shown {
+      grid-area: 1 / 2 / 2 / 3;
+   }
+   .toggle-item:not(.has_image) > .shown {
+      grid-area: 1 / 1 / 2 / 3;
+   }
+   .feature_image {
+      grid-area: 1 / 1 / 2 / 2;
+   }
+   .toggle-item .abstract {
+      grid-area: 2 / 1 / 3 / 3;
+   }
+}
+
+/* Media shows the six most recent items until "Show all" is pressed */
+#media:not(.all) .media-card.extra,
+#media:not(.all) .when-all-media,
+#media.all .when-recent,
+#media.all .media-more {
+   display: none;
+}
+
+.media-more {
+   display: block;
+   margin: 16px auto 0;
+}
+
+/********** Recent posts (Bluesky) **********/
+
+.head-links {
+   display: inline-flex;
+   gap: 18px;
+}
+
+.post-card.no-thumb {
+   grid-template-columns: minmax(0, 1fr);
+}
+
+/* Bluesky posts have no title, so their text gets more lines */
+.bsky-text {
+   margin-top: 4px;
+   color: var(--ink);
+   white-space: pre-line;
+   -webkit-line-clamp: 5;
+}
+
+.feed-fallback {
+   margin: 0;
+   color: var(--text);
+}
+
+/********** Full sections **********/
+
+.section {
+   margin-top: 44px;
+}
+
+.section h2 {
+   margin-bottom: 14px;
+}
+
+.section p {
+   max-width: 46em;
+   margin: 0 0 12px;
+}
+
+/* Two-column typographic index (software, games, teaching, other) */
+.index-cols {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 0 48px;
+}
+
+.index-cols h3 {
+   margin: 0 0 4px;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.25rem;
+   font-weight: 400;
+   letter-spacing: .05em;
+   color: var(--muted);
+}
+
+.index {
+   margin: 0;
+}
+
+.index dt {
+   margin-top: 12px;
+   font-size: 1.05rem;
+}
+
+.index dt b {
+   font-weight: 700;
+   color: var(--ink);
+}
+
+.index .links {
+   margin-left: .3em;
+   font-size: .9rem;
+   font-weight: 400;
+}
+
+.index .links a {
+   white-space: nowrap;
+}
+
+.index dd {
+   margin: 1px 0 0;
+   font-family: var(--serif);
+   font-size: 1.04rem;
+   line-height: 1.4;
+   color: #222;
+}
+
+/* The coauthor list uses the full width of the page */
+.section p.coauthor-list {
+   max-width: none;
+}
+
+.coauthor-list b {
+   font-weight: 700;
+   color: var(--ink);
+}
+
+/********** Media cards **********/
+
+.media-grid {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 1rem;
+}
+
+.media-card {
+   display: grid;
+   grid-template-columns: 7.5rem minmax(0, 1fr);
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+
+.media-card.no-logo {
+   grid-template-columns: minmax(0, 1fr);
+}
+
+.media-logo {
+   display: grid;
+   place-items: center;
+   padding: 14px;
+   border-right: 1px solid #eee;
+   background: white;
+}
+
+.media-logo img {
+   display: block;
+   width: 100%;
+   max-width: 92px;
+   height: auto;
+   border-radius: 4px;
+}
+
+.media-body {
+   padding: 14px 18px 16px;
+}
+
+.media-top {
+   display: flex;
+   justify-content: space-between;
+   gap: 12px;
+   font-size: .82rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+
+.media-top .outlet {
+   text-transform: uppercase;
+   letter-spacing: .06em;
+   color: var(--muted);
+}
+
+.media-card h3 {
+   margin: 6px 0;
+   font-family: var(--serif);
+   font-style: italic;
+   font-weight: 400;
+   font-size: 1.2rem;
+   line-height: 1.3;
+   letter-spacing: 0;
+}
+
+.media-card h3 a {
+   color: var(--ink);
+}
+
+.media-card p {
+   margin: 0;
+   font-size: .95rem;
+}
+
+/********** Medium screens: smaller portrait **********/
+
+@media (max-width: 1180px) {
+   /* Text stays centered in its column, drawing to its right */
+   .letterhead {
+      grid-template-columns: minmax(0, 1fr) 150px;
+   }
+
+   .letterhead .lh-text {
+      grid-column: 1;
+   }
+
+   .letterhead .portrait {
+      grid-column: 2;
+      width: 150px;
+   }
+
+   .letterhead .contact {
+      grid-column: 1;
+      grid-row: 2;
+      justify-self: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px 0;
+      margin-top: 16px;
+      text-align: center;
+   }
+
+   .letterhead .contact a + a::before {
+      content: "·";
+      display: inline-block;
+      margin: 0 .55em;
+      color: #999;
+   }
+}
+
+@media (max-width: 640px) {
+   .letterhead {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 14px;
+      padding-top: 0;
+   }
+
+   .letterhead .lh-text {
+      grid-column: 1;
+   }
+
+   .letterhead .portrait {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: center;
+      width: 110px;
+   }
+
+   .letterhead .lh-text {
+      grid-row: 2;
+   }
+
+   /* Wrapped lines would start with a dot, so phones use spacing instead */
+   .letterhead .contact {
+      grid-row: 3;
+      margin-top: 0;
+      gap: 6px 16px;
+   }
+
+   .letterhead .contact a + a::before {
+      content: none;
+   }
+
+   .letterhead .bio {
+      font-size: 1rem;
+   }
+
+   .media-grid {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .index-cols {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .index-cols > div + div {
+      margin-top: 22px;
+   }
+
+   .media-card {
+      grid-template-columns: 5rem minmax(0, 1fr);
+   }
+
+   .media-logo {
+      padding: 10px;
+   }
+}
+
+/********** Book: The Tensor Cookbook **********/
+.book {
+   display: grid;
+   grid-template-columns: minmax(0, 23rem) minmax(0, 1fr);
+   margin: 28px 0 8px;
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+.book-cover {
+   display: block;
+   border-right: 1px solid #eee;
+   background: #fff;
+}
+.book-cover img {
+   display: block;
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   padding: 14px;
+}
+.book-body {
+   padding: 18px 28px 18px;
+}
+.book-label {
+   margin: 0;
+   font-size: .72rem;
+   font-weight: 400;
+   letter-spacing: .14em;
+   text-transform: uppercase;
+   color: var(--muted);
+}
+.book-title {
+   margin: 2px 0 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: 2rem;
+   letter-spacing: .03em;
+   line-height: 1.15;
+}
+.book-title a {
+   color: var(--ink);
+}
+.book-pitch {
+   margin: 2px 0 10px;
+   font-family: var(--serif);
+   font-style: italic;
+   font-size: 1.2rem;
+   color: #333;
+}
+.book-desc {
+   margin: 0 0 8px;
+   max-width: 44em;
+}
+.book-meta {
+   margin: 0 0 4px;
+   font-size: .85rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+.book-links {
+   margin: 0;
+   font-size: .95rem;
+}
+@media (max-width: 760px) {
+   .book {
+      grid-template-columns: minmax(0, 1fr);
+   }
+   .book-cover {
+      border-right: 0;
+      border-bottom: 1px solid #eee;
+   }
+   .book-body {
+      padding: 14px 18px 16px;
+   }
+}
+.page-head {
+   margin: 4px 0 18px;
+}
+
+.page-title {
+   font-size: 2.4rem;
+}
+
+.page-count {
+   margin: 2px 0 0;
+   color: var(--muted);
+}
+</style>
+  <title>Publications &middot; Thomas Dybdahl Ahle</title>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></symbol>
+   </svg>
+
+   <header class="topbar" id="topbar">
+      <a class="brand" href="/new/">Thomas Ahle</a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="top-nav">
+         <svg class="icon"><use href="#i-menu"/></svg> Menu
+      </button>
+      <nav class="top-nav" id="top-nav" aria-label="Sections">
+         <a href="/new/">Home</a>
+         <a href="/new/#publications" class="active" aria-current="page">Publications</a>
+         <a href="/new/#manuscripts">Manuscripts</a>
+         <a href="/new/#projects">Software &amp; Games</a>
+         <a href="/new/#media">Media</a>
+         <a href="/new/#teaching">Teaching</a>
+         <a href="/new/blog/">Blog</a>
+      </nav>
+   </header>
+   <script>
+(function () {
+   /* Narrow screens: the menu button opens the section list */
+   var topbar = document.getElementById('topbar');
+   var menu = document.getElementById('menu-toggle');
+   function closeMenu() {
+      topbar.classList.remove('open');
+      menu.setAttribute('aria-expanded', 'false');
+   }
+   menu.addEventListener('click', function () {
+      var open = topbar.classList.toggle('open');
+      menu.setAttribute('aria-expanded', String(open));
+   });
+   topbar.querySelectorAll('.top-nav a').forEach(function (a) {
+      a.addEventListener('click', closeMenu);
+   });
+})();
+   </script>
+
+   <main class="main" id="top">
+      <div class="container">
+         <div class="page-head">
+            <h1 class="page-title">Publications</h1>
+            <p class="page-count">13 publications, newest first. Click a card to read its abstract.</p>
+         </div>
+         <ul class="pubs">
+               <li class="toggle-item featured has_image"
+                   id="paper-pcb" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/pdf/2312.04836"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_pcb_arxiv'});"
+                           >arxiv</a>]  [<a href="https://www.nature.com/articles/s41467-025-59011-x"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_pcb_journal'});"
+                           >journal</a>]</span>
+
+                     <span class="year">NATCOM
+                     2025
+                        &mdash;
+                        <span class="new">NEW!</span></span>
+
+                     <span class="title">Thermodynamic Computing System for AI Applications</span>
+
+                     <span class="authors">
+                     <a href="https://scholar.google.com/citations?user=Ee_tECgAAAAJ&hl=en"
+                              title="Denis Melanson"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'D Melanson'});"
+                              >Melanson</a>, <a href="https://scholar.google.com/citations?user=TbO7kjW1GlwC&hl=en"
+                              title="Mohammad Abu Khater"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Abu Khater'});"
+                              >Abu Khater</a>, <a href="https://scholar.google.com/citations?user=A9p6aIIAAAAJ&hl=en"
+                              title="Maxwell Aifer"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Aifer'});"
+                              >Aifer</a>, <a href="https://scholar.google.com/citations?user=iM2qRCkAAAAJ&hl=en"
+                              title="Kaelan Donatella"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'K Donatella'});"
+                              >Donatella</a>, <a href="https://scholar.google.co.uk/citations?user=I2W8xCoAAAAJ&hl=en"
+                              title="Max Hunter Gordon"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M H Gordon'});"
+                              >Gordon</a>, TA, <a href="https://threeplusone.com/"
+                              title="Gavin E. Crooks"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'G E Crooks'});"
+                              >Crooks</a>, <a href="https://scholar.google.com/citations?user=GS0gdQIAAAAJ&hl=en"
+                              title="Antonio J. Martinez"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'A J Martinez'});"
+                              >Martinez</a>, <a href="https://scholar.google.com/citations?user=8mnfsnYAAAAJ&hl=en"
+                              title="Faris Sbahi"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'F Sbahi'});"
+                              >Sbahi</a>, <a href="https://scholar.google.com/citations?user=jvz1G9EAAAAJ&hl=en"
+                              title="Patrick J. Coles"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'P J Coles'});"
+                              >Coles</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/pcb.png" alt="" loading="lazy"></div>
+                  <div class="abstract">Recent breakthroughs in artificial intelligence (AI) algorithms have highlighted the need for novel
+computing hardware in order to truly unlock the potential for AI. Physics-based hardware, such
+as thermodynamic computing, has the potential to provide a fast, low-power means to accelerate
+AI primitives, especially generative AI and probabilistic AI. In this work, we present a small-scale
+thermodynamic computer, which we call the stochastic processing unit. This device is composed of
+RLC circuits, as unit cells, on a printed circuit board, with 8 unit cells that are all-to-all coupled
+via switched capacitances. It can be used for either sampling or linear algebra primitives, and we
+demonstrate Gaussian sampling and matrix inversion on our hardware. The latter represents the
+first thermodynamic linear algebra experiment. We envision that this hardware, when scaled up in
+size, will have significant impact on accelerating various probabilistic AI applications.
+</div>
+               </li>
+               <li class="toggle-item has_image"
+                   id="paper-expm" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2311.12759"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_expm_arxiv'});"
+                           >arxiv</a>]  [<a href="https://doi.org/10.1103/PhysRevResearch.7.013147"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_expm_journal'});"
+                           >journal</a>]</span>
+
+                     <span class="year">PRR
+                     2025</span>
+
+                     <span class="title">Thermodynamic Matrix Exponentials and Thermodynamic Parallelism</span>
+
+                     <span class="authors">
+                     <a href="https://twitter.com/Sam_Duffield"
+                              title="Sam Duffield"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'S Duffield'});"
+                              >Duffield</a>, <a href="https://scholar.google.com/citations?user=A9p6aIIAAAAJ&hl=en"
+                              title="Maxwell Aifer"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Aifer'});"
+                              >Aifer</a>, <a href="https://threeplusone.com/"
+                              title="Gavin E. Crooks"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'G E Crooks'});"
+                              >Crooks</a>, TA, <a href="https://scholar.google.com/citations?user=jvz1G9EAAAAJ&hl=en"
+                              title="Patrick J. Coles"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'P J Coles'});"
+                              >Coles</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/expm.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+Thermodynamic computing exploits fluctuations and dissipation in physical systems to efficiently solve various mathematical problems. For example, it was recently shown that certain linear algebra problems can be solved thermodynamically, leading to an asymptotic speedup scaling with the matrix dimension. The origin of this "thermodynamic advantage" has not yet been fully explained, and it is not clear what other problems might benefit from it. Here we provide a new thermodynamic algorithm for exponentiating a real matrix, with applications in simulating linear dynamical systems. We describe a simple electrical circuit involving coupled oscillators, whose thermal equilibration can implement our algorithm. We also show that this algorithm also provides an asymptotic speedup that is linear in the dimension. Finally, we introduce the concept of thermodynamic parallelism to explain this speedup, stating that thermodynamic noise provides a resource leading to effective parallelization of computations, and we hypothesize this as a mechanism to explain thermodynamic advantage more generally.
+</p>
+</div>
+               </li>
+               <li class="toggle-item has_image"
+                   id="paper-tla" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2308.05660"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tla_arxiv'});"
+                           >arxiv</a>]  [<a href="https://www.nature.com/articles/s44335-024-00014-0"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tla_journal'});"
+                           >journal</a>]</span>
+
+                     <span class="year">UNCONV
+                     2024</span>
+
+                     <span class="title">Thermodynamic Linear Algebra</span>
+
+                     <span class="authors">
+                     <a href="https://scholar.google.com/citations?user=A9p6aIIAAAAJ&hl=en"
+                              title="Maxwell Aifer"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Aifer'});"
+                              >Aifer</a>, <a href="https://scholar.google.com/citations?user=iM2qRCkAAAAJ&hl=en"
+                              title="Kaelan Donatella"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'K Donatella'});"
+                              >Donatella</a>, <a href="https://scholar.google.co.uk/citations?user=I2W8xCoAAAAJ&hl=en"
+                              title="Max Hunter Gordon"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M H Gordon'});"
+                              >Gordon</a>, <a href="https://twitter.com/Sam_Duffield"
+                              title="Sam Duffield"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'S Duffield'});"
+                              >Duffield</a>, TA, <a href="https://dpsimpson.github.io/"
+                              title="Daniel Simpson"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'D Simpson'});"
+                              >Simpson</a>, <a href="https://threeplusone.com/"
+                              title="Gavin E. Crooks"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'G E Crooks'});"
+                              >Crooks</a>, <a href="https://scholar.google.com/citations?user=jvz1G9EAAAAJ&hl=en"
+                              title="Patrick J. Coles"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'P J Coles'});"
+                              >Coles</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/tla.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+Linear algebraic primitives are at the core of many modern algorithms in engineering, science, and machine learning. Hence, accelerating these primitives with novel computing hardware would have tremendous economic impact. Quantum computing has been proposed for this purpose, although the resource requirements are far beyond current technological capabilities, so this approach remains long-term in timescale. Here we consider an alternative physics-based computing paradigm based on classical thermodynamics, to provide a near-term approach to accelerating linear algebra.
+</p><p>
+At first sight, thermodynamics and linear algebra seem to be unrelated fields. In this work, we connect solving linear algebra problems to sampling from the thermodynamic equilibrium distribution of a system of coupled harmonic oscillators. We present simple thermodynamic algorithms for (1) solving linear systems of equations, (2) computing matrix inverses, (3) computing matrix determinants, and (4) solving Lyapunov equations. Under reasonable assumptions, we rigorously establish asymptotic speedups for our algorithms, relative to digital methods, that scale linearly in matrix dimension. Our algorithms exploit thermodynamic principles like ergodicity, entropy, and equilibration, highlighting the deep connection between these two seemingly distinct fields, and opening up algebraic applications for thermodynamic computing hardware.
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured has_image"
+                   id="paper-cqr" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2210.05974"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cqr_arxiv'});"
+                           >arxiv</a>]  [<a href="https://github.com/thomasahle/cce"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cqr_github'});"
+                           >github</a>]  [<a href="/papers/cqr.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cqr_pdf'});"
+                           >pdf</a>]  [<a href="/papers/cce_poster.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cqr_poster'});"
+                           >poster</a>]  [<a href="https://thomasahle.github.io/cce"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cqr_website'});"
+                           >website</a>]</span>
+
+                     <span class="year">NEURIPS
+                     2023</span>
+
+                     <span class="title">Clustering the Sketch: Dynamic Compression for Embedding Tables</span>
+
+                     <span class="authors">
+                     <a href="https://scholars.croucher.org.hk/scholars/ling-hei-tsang"
+                              title="Henry Ling-Hei Tsang"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'H Tsang'});"
+                              >H Tsang</a>, TA
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/cqr.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+Embedding tables are used by machine learning systems to work with categorical features.
+These tables can become exceedingly large in modern recommendation systems, necessitating the development of new methods for fitting them in memory, even during training.
+</p>
+<p>
+The best previous methods for table compression are so called "post training" quantization schemes such as "product" and "residual" quantization.
+These methods replace table rows with references to k-means clustered "codewords".
+Unfortunately, clustering requires prior knowledge of the table to be compressed, which limits the memory savings to inference time and not training time.
+Hence, recent work, like the QR method, has used random references (linear sketching), which can be computed with hash functions before training.
+Unfortunately, the compression achieved is inferior to that achieved by post-training quantization.
+</p>
+<p>
+The new algorithm, CQR, shows how to get the best of two worlds by combining clustering and sketching:
+First IDs are randomly assigned to a codebook and codewords are trained (end to end) for an epoch. Next, we expand the codebook and apply clustering to reduce the size again. Finally, we add new random references and continue training.
+</p>
+<p>
+We show experimentally close to those of post-training quantization with the training time memory reductions of sketch-based methods, and we prove that our method always converges to the optimal embedding table for least-squares training.
+</p>
+</div>
+               </li>
+               <li class="toggle-item has_image"
+                   id="paper-tiling" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2011.10983"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tiling_arxiv'});"
+                           >arxiv</a>]  [<a href="https://doi.org/10.1145/3597932"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tiling_journal'});"
+                           >journal</a>]  [<a href="/papers/tiling.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tiling_pdf'});"
+                           >pdf</a>]  [<a href="/papers/tiling_mikkel.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tiling_slides'});"
+                           >slides</a>]</span>
+
+                     <span class="year">SOCG
+                     2022
+                        &mdash;
+                        <span class="comment">Journal version in ACM Transactions on Algorithms</span></span>
+
+                     <span class="title">Tiling with Squares and Packing Dominos in Polynomial Time</span>
+
+                     <span class="authors">
+                     <a href="https://di.ku.dk/english/staff/?pure=en/persons/433494"
+                              title="Anders Åmand"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'A Aamand'});"
+                              >A Aamand</a>, <a href="https://sites.google.com/view/mikkel-abrahamsen"
+                              title="Mikkel Abrahamsen"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Abrahamsen'});"
+                              >M Abrahamsen</a>, TA, <a href="https://di.ku.dk/english/staff/?pure=en/persons/462256"
+                              title="Peter M. R. Rasmussen"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'P Rasmussen'});"
+                              >P Rasmussen</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/domino.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>We consider planar tiling and packing problems with polyomino pieces and a polyomino container P. A polyomino is a polygonal region with axis parallel edges and corners of integral coordinates, which may have holes. We give two polynomial time algorithms, one for deciding if P can be tiled with 2×2 squares (that is, deciding if P is the union of a set of non-overlapping copies of the 2×2 square) and one for packing P with a maximum number of non-overlapping and axis-parallel 2×1 dominos, allowing rotations of 90<sup>∘</sup>. As packing is more general than tiling, the latter algorithm can also be used to decide if P can be tiled by 2×1 dominos.
+</p><p>These are classical problems with important applications in VLSI design, and the related problem of finding a maximum packing of 2×2 squares is known to be NP-Hard [J.~Algorithms 1990]. For our three problems there are known pseudo-polynomial time algorithms, that is, algorithms with running times polynomial in the <i>area</i> of P. However, the standard, compact way to represent a polygon is by listing the coordinates of the corners in binary. We use this representation, and thus present the first polynomial time algorithms for the problems. Concretely, we give a simple O(nlogn) algorithm for tiling with squares, and a more involved O(n<sup>4</sup>) algorithm for packing and tiling with dominos.</p>
+</div>
+               </li>
+               <li class="toggle-item has_image"
+                   id="paper-bi-moments" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2103.17027"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_bi-moments_arxiv'});"
+                           >arxiv</a>]  [<a href="https://www.sciencedirect.com/science/article/abs/pii/S0167715221002662"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_bi-moments_journal'});"
+                           >journal</a>]  [<a href="/papers/bi-moments.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_bi-moments_pdf'});"
+                           >pdf</a>]</span>
+
+                     <span class="year">STAT. PROB. LETT.
+                     2022</span>
+
+                     <span class="title">Sharp and Simple Bounds for the raw Moments of the Binomial and Poisson Distributions</span>
+
+                     <span class="authors">
+                     TA
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/urn.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>We prove the inequality
+E(X/μ)ᵏ    ≤    [(k/μ)/log(k/μ+1)]ᵏ    ≤    exp[k²/(2μ)] for sub−poissonian random variables, such as Binomially or Poisson distributed random variables with mean μ.</p>
+<p>This improves over previous uniform bounds for the raw moments of those distributions by a factor exponential in k.</p>
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-tcu" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2006.12608"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tcu_arxiv'});"
+                           >arxiv</a>]  [<a href="/papers/tcu.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tcu_pdf'});"
+                           >pdf</a>]  [<a href="https://youtu.be/Ts8ZB-LsGQ4"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tcu_video'});"
+                           >video</a>]</span>
+
+                     <span class="year">SISAP
+                     2020</span>
+
+                     <span class="title">Similarity Search with Tensor Core Units</span>
+
+                     <span class="authors">
+                     TA, <a href="http://www.dei.unipd.it/~silvestri/"
+                              title="Francesco Silvestri"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'F Silvestri'});"
+                              >F Silvestri</a>
+                     </span>
+                  </div>
+                  <div class="abstract"><p>Tensor Core Units (TCUs) are hardware accelerators developed for deep neural networks, which efficiently support the multiplication of two dense √m × √m matrices, where m is agiven hardware parameter.
+In this paper, we show that TCUs can speed up similarity searchproblems  as  well.   We  propose  algorithms  for  the  Johnson-Lindenstrauss  dimensionality reduction and for similarity join that, by leveraging TCUs, achieve a √m speedup up with respect to traditional approaches.
+</p>
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-p1" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2005.12065"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_p1_arxiv'});"
+                           >arxiv</a>]  [<a href="/papers/p1.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_p1_pdf'});"
+                           >pdf</a>]  [<a href="https://youtu.be/o0jqXjUF_d4"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_p1_video'});"
+                           >video</a>]</span>
+
+                     <span class="year">SISAP
+                     2020</span>
+
+                     <span class="title">On the Problem of p₁⁻¹ in Locality‑Sensitive Hashing</span>
+
+                     <span class="authors">
+                     TA
+                     </span>
+                  </div>
+                  <div class="abstract"><p>A Locality-Sensitive Hash (LSH) function is called (r,cr,p<sub>1</sub>,p<sub>1</sub>)-sensitive, if two data-points with a distance less than r collide with probability at least p<sub>1</sub> while data points with a distance greater than cr collide with probability at most p<sub>2</sub>.
+These functions form the basis of the successful Indyk-Motwani algorithm (STOC 1998) for nearest neighbour problems.
+In particular one may build a c-approximate nearest neighbour data structure with query time O(n<sup>ρ</sup>/p₁) where ρ = (log 1/p<sub>1</sub>)/(log 1/p<sub>2</sub>) ∈ (0,1).
+That is, <em>sub-linear time</em>, as long as p<sub>1</sub> is not too small.
+This is significant since most high dimensional nearest neighbour problems suffer from the curse of dimensionality, and can't be solved <em>exact</em>, faster than a brute force <em>linear-time</em> scan of the database.
+</p><p>
+Unfortunately, the best LSH functions tend to have very low collision probabilities, p<sub>1</sub> and p<sub>2</sub>.
+Including the best functions for Cosine and Jaccard Similarity.
+This means that the n<sup>ρ</sup>/p<sub>1</sub> query time of <em>LSH is often not sub-linear after all</em>, even for approximate nearest neighbours!
+</p><p>
+In this paper, we improve the general Indyk-Motwani algorithm to reduce the query time of LSH to O(n<sup>ρ</sup>/p<sub>1</sub><sup>1-ρ</sup>) (and the space usage correspondingly.)
+Since  n<sup>ρ</sup>/p<sub>1</sub><sup>1-ρ</sup> < n ⇔ p<sub>1</sub> > 1/n,
+our algorithm always obtains sublinear query time, for all collision probabilities at least  1/n.
+For  p<sub>1</sub>  and  p<sub>2</sub>  small enough, our improvement over all previous methods can be <em>up to a factor  n </em> in both query time and space.
+</p><p>
+The improvement comes from a simple change to the Indyk-Motwani algorithm, which can easily be implemented in existing software packages.
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured has_image"
+                   id="paper-supermajority" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="http://arxiv.org/abs/1904.04045"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_supermajority_arxiv'});"
+                           >arxiv</a>]  [<a href="https://thomasahle.com/blog/sets.html"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_supermajority_blog post'});"
+                           >blog post</a>]  [<a href="/papers/supermajority.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_supermajority_pdf'});"
+                           >pdf</a>]  [<a href="https://docs.google.com/presentation/d/1qB4M7oEHmeRs8b0x1u0O3NS7PozydhVgqI059Bi_2QE"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_supermajority_slides'});"
+                           >slides</a>]  [<a href="https://www.youtube.com/watch?v=Bp3afo2YYCQ"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_supermajority_video'});"
+                           >video</a>]</span>
+
+                     <span class="year">FOCS
+                     2020</span>
+
+                     <span class="title">Subsets and Supermajorities: Optimal Hashing‑based Set Similarity Search</span>
+
+                     <span class="authors">
+                     TA, <a href="https://di.ku.dk/english/staff/?pure=en/persons/493157"
+                              title="Jakob Bæk Tejs Knudsen"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'J Knudsen'});"
+                              >J Knudsen</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/sets.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+We formulate and optimally solve a new generalized Set Similarity Search problem,
+which assumes the size of the database and query sets are known in advance.
+By creating polylog copies of our data-structure, we optimally solve any symmetric Approximate Set Similarity Search problem, including approximate versions of Subset Search, Maximum Inner Product Search (MIPS), Jaccard Similarity Search and Partial Match.
+</p>
+
+<p>
+Our algorithm can be seen as a natural generalization of previous work on Set as well as Euclidean Similarity Search, but conceptually it differs by optimally exploiting the information present in the sets as well as their complements, and doing so asymmetrically between queries and stored sets.
+Doing so we improve upon the best previous work:
+MinHash [J. Discrete Algorithms 1998], SimHash [STOC 2002], Spherical LSF
+[SODA 2016, 2017] and Chosen Path [STOC 2017] by as much as a factor n<sup>.14</sup> in both time and space; or in the near-constant time regime, in space, by an arbitrarily large polynomial factor.
+</p>
+
+<p>
+Turning the geometric concept, based on Boolean supermajority functions, into a practical algorithm requires ideas from branching random walks on Z<sup>2</sup>, for which we give the first non-asymptotic near tight analysis.
+</p>
+
+<p>
+Our lower bounds follow from new hypercontractive arguments, which can be seen as characterizing the exact family of similarity search problems for which supermajorities are optimal.
+The optimality holds for among all hashing based data structures in the random setting, and by reductions, for 1 cell and 2 cell probe data structures.
+As a side effect, we obtain new hypercontractive bounds on the directed noise operator.
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured has_image"
+                   id="paper-tensorsketch-joint" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/1909.01410"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tensorsketch-joint_arxiv'});"
+                           >arxiv</a>]  [<a href="/papers/tensorsketch-joint.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tensorsketch-joint_pdf'});"
+                           >pdf</a>]  [<a href="/papers/TensorSketch_Amir.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tensorsketch-joint_slides'});"
+                           >slides</a>]  [<a href="https://docs.google.com/presentation/d/1cPMMaZ2kuVI1PEJrBjKxLq6k8GYP7JUh_Q23gBw1LGA/edit?usp=sharing"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tensorsketch-joint_slides 2'});"
+                           >slides 2</a>]</span>
+
+                     <span class="year">SODA
+                     2020
+                        &mdash;
+                        <span class="comment">Merged from "Almost Optimal Tensor&nbsp;Sketch"</span></span>
+
+                     <span class="title">Oblivious Sketching of High‑Degree Polynomial Kernels</span>
+
+                     <span class="authors">
+                     TA, <a href="https://theory.epfl.ch/kapralov/"
+                              title="Michael Kapralov"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Kapralov'});"
+                              >Kapralov</a>, <a href="https://di.ku.dk/english/staff/?pure=en/persons/493157"
+                              title="Jakob Bæk Tejs Knudsen"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'J Knudsen'});"
+                              >Knudsen</a>, <a href="http://rasmuspagh.net/"
+                              title="Rasmus Pagh"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'R Pagh'});"
+                              >Pagh</a>, <a href="http://www.cs.cmu.edu/~avelingk/"
+                              title="Ameya Velingker"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'A Velingker'});"
+                              >Velingker</a>, <a href="http://www.cs.cmu.edu/~dwoodruf/"
+                              title="David P. Woodruff"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'D Woodruff'});"
+                              >Woodruff</a>, <a href="https://scholar.google.com/citations?user=S9Ss8M8AAAAJ&hl=en"
+                              title="Amir Zandieh"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'A Zandieh'});"
+                              >Zandieh</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/cube.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+Kernel methods are fundamental tools in machine learning that allow detection of non-linear dependencies between data without explicitly constructing feature vectors in high dimensional spaces. A major disadvantage of kernel methods is their poor scalability: primitives such as kernel PCA or kernel ridge regression generally take prohibitively large quadratic space and (at least) quadratic time, as kernel matrices are usually dense. Some methods for speeding up kernel linear algebra are known, but they all invariably take time exponential in either the dimension of the input point set (e.g., fast multipole methods suffer from the curse of dimensionality) or in the degree of the kernel function.
+</p><p>
+Oblivious sketching has emerged as a powerful approach to speeding up numerical linear algebra over the past decade, but our understanding of oblivious sketching solutions for kernel matrices has remained quite limited, suffering from the aforementioned exponential dependence on input parameters. Our main contribution is a general method for applying sketching solutions developed in numerical linear algebra over the past decade to a tensoring of data points without forming the tensoring explicitly. This leads to the first oblivious sketch for the polynomial kernel with a target dimension that is only polynomially dependent on the degree of the kernel function, as well as the first oblivious sketch for the Gaussian kernel on bounded datasets that does not suffer from an exponential dependence on the dimensionality of input data points.
+</p>
+</div>
+               </li>
+               <li class="toggle-item has_image"
+                   id="paper-lasvegas" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="http://arxiv.org/abs/1704.02054"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_lasvegas_arxiv'});"
+                           >arxiv</a>]  [<a href="/papers/lasvegas.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_lasvegas_pdf'});"
+                           >pdf</a>]  [<a href="https://docs.google.com/presentation/d/1HgNCrDFdIZ_oh2RRedmd1qOHgWxk74HSkUCMGcuUbP8/edit"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_lasvegas_slides'});"
+                           >slides</a>]</span>
+
+                     <span class="year">FOCS
+                     2017
+                        &mdash;
+                        <span class="comment">Updated Jun 2018</span></span>
+
+                     <span class="title">Optimal Las Vegas Locality Sensitive Data Structures</span>
+
+                     <span class="authors">
+                     TA
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/necklace.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+We show that approximate similarity (near neighbour) search can be solved in high dimensions with performance matching state of the art (data independent) Locality Sensitive Hashing, but with a guarantee of no false negatives.
+Specifically we give two data structures for common problems.
+For c-approximate near neighbour in Hamming space, for which we get query time dn<sup>1/c+o(1)</sup> and space dn<sup>1+1/c+o(1)</sup> matching that of [Indyk and Motwani, 1998] and answering a long standing open question from [Indyk, 2000a] and [Pagh, 2016] in the affirmative.
+For (s<sub>1</sub>,s<sub>2</sub>)-approximate Jaccard similarity we get query time d<sup>2</sup>n<sup>ρ+o(1)</sup> and space d<sup>2</sup>n<sup>1+ρ+o(1)</sup>, ρ = <sup>log(1+s<sub>1</sub>)/(2s<sub>1</sub>)</sup>&frasl;<sub>log(1+s<sub>2</sub>)/(2s<sub>2</sub>)</sub>, when sets have equal size, matching the performance of [Pagh and Christiani, 2017].
+</p>
+
+<p>
+We use space partitions as in classic LSH, but construct these using a combination of brute force, tensoring and splitter functions à la [Naor et al., 1995].
+We also show two dimensionality reduction lemmas with 1-sided error.
+</p>
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-output-sensitive" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="http://arxiv.org/abs/1605.02673"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_output-sensitive_arxiv'});"
+                           >arxiv</a>]  [<a href="/papers/output-sensitive-lsh-for-knn.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_output-sensitive_pdf'});"
+                           >pdf</a>]  [<a href="https://docs.google.com/presentation/d/1UOFCN1Eujr4sCQdYqdwn_8D8pNCJHEyzw9Yd_BW6bh4"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_output-sensitive_slides'});"
+                           >slides</a>]</span>
+
+                     <span class="year">SODA
+                     2017</span>
+
+                     <span class="title">Parameter-free Locality‑Sensitive Hashing for Spherical Range Reporting</span>
+
+                     <span class="authors">
+                     TA, <a href="http://itu.dk/people/maau/"
+                              title="Martin Aumüller"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Aumüller'});"
+                              >M Aumüller</a>, <a href="http://rasmuspagh.net/"
+                              title="Rasmus Pagh"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'R Pagh'});"
+                              >R Pagh</a>
+                     </span>
+                  </div>
+                  <div class="abstract"><p>
+We present a data structure for <i>spherical range reporting</i> on a point set S, i.e., reporting all points in S that lie within radius r of a given query point q. Our solution builds upon the Locality-Sensitive Hashing (LSH) framework of Indyk and Motwani, which represents the asymptotically best solutions to near neighbor problems in high dimensions. While traditional LSH data structures have several parameters whose optimal values depend on the distance distribution from q to the points of S, our data structure is parameter-free, except for the space usage, which is configurable by the user. Nevertheless, its expected query time basically matches that of an LSH data structure whose parameters have been <i>optimally chosen for the data and query</i> in question under the given space constraints. In particular, our data structure provides a smooth trade-off between hard queries (typically addressed by standard LSH) and easy queries such as those where the number of points to report is a constant fraction of S, or where almost all points in S are far away from the query point. In contrast, known data structures fix LSH parameters based on certain parameters of the input alone.
+</p>
+<p>
+The algorithm has expected query time bounded by O(t(n/t)^ρ), where t is the number of points to report and ρ∈(0,1) depends on the data distribution and the strength of the LSH family used. We further present a parameter-free way of using multi-probing, for LSH families that support it, and show that for many such families this approach allows us to get expected query time close to O(n^ρ+t), which is the best we can hope to achieve using LSH. The previously best running time in high dimensions was Ω(tn^ρ). For many data distributions where the intrinsic dimensionality of the point set close to q is low, we can give improved upper bounds on the expected query time.
+</p>
+</div>
+               </li>
+               <li class="toggle-item has_image"
+                   id="paper-mips" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="http://arxiv.org/abs/1510.02824"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_mips_arxiv'});"
+                           >arxiv</a>]  [<a href="/papers/mips.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_mips_pdf'});"
+                           >pdf</a>]  [<a href="/papers/PodsPoster.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_mips_poster'});"
+                           >poster</a>]  [<a href="https://docs.google.com/presentation/d/1y_BZ5Ctyn67Vam8rWzrskMkrkc-yIelCQsFLz1g4_bM"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_mips_slides'});"
+                           >slides</a>]</span>
+
+                     <span class="year">PODS
+                     2016</span>
+
+                     <span class="title">On the Complexity of Inner Product Similarity Join</span>
+
+                     <span class="authors">
+                     TA, <a href="http://rasmuspagh.net/"
+                              title="Rasmus Pagh"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'R Pagh'});"
+                              >R Pagh</a>, <a href="http://www.ilyaraz.org/"
+                              title="Ilya Razenshteyn"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'I Razenshteyn'});"
+                              >I Razenshteyn</a>, <a href="http://www.dei.unipd.it/~silvestri/"
+                              title="Francesco Silvestri"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'F Silvestri'});"
+                              >F Silvestri</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/mips.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+A number of tasks in classification, information retrieval, recommendation systems, and record linkage reduce to the core problem of inner product similarity join (IPS join): identifying pairs of vectors in a collection that have a sufficiently large inner product. IPS join is well understood when vectors are normalized and some approximation of inner products is allowed. However, the general case where vectors may have any length appears much more challenging. Recently, new upper bounds based on asymmetric locality-sensitive hashing (ALSH) and asymmetric embeddings have emerged, but little has been known on the lower bound side. In this paper we initiate a systematic study of inner product similarity join, showing new lower and upper bounds. Our main results are: 
+<br/>
+* Approximation hardness of IPS join in subquadratic time, assuming the strong exponential time hypothesis. 
+<br/>* New upper and lower bounds for (A)LSH-based algorithms. In particular, we show that asymmetry can be avoided by relaxing the LSH definition to only consider the collision probability of distinct elements. 
+<br/>* A new indexing method for IPS based on linear sketches, implying that our hardness results are not far from being tight. 
+</p>
+<p>Our technical contributions include new asymmetric embeddings that may be of independent interest. At the conceptual level we strive to provide greater clarity, for example by distinguishing among signed and unsigned variants of IPS join and shedding new light on the effect of asymmetry.
+</p>
+</div>
+               </li>
+         </ul>
+
+<footer class="page-foot">
+            <p class="dots"><span>Elsewhere:</span> <a href="https://en.wikipedia.org/wiki/User:Thomasda">Wikipedia</a><a href="https://oeis.org/wiki/User:Thomas_Dybdahl_Ahle">OEIS</a><a href="https://dblp1.uni-trier.de/pers/hd/a/Ahle:Thomas_D=">DBLP</a><a href="https://orcid.org/0000-0001-9747-0479">ORCID</a><a href="https://www.mathgenealogy.org/id.php?id=254777">Mathematics Genealogy</a><a href="https://mathscinet.ams.org/mathscinet/freetools/collab-dist?source=1223412&amp;target=189017">Erdős number</a></p>
+            <p class="dots"><a href="https://github.com/thomasahle">GitHub</a><a href="https://x.com/thomasahle">X</a><a href="https://bsky.app/profile/thomasahle.bsky.social">Bluesky</a><a href="https://scholar.google.dk/citations?user=aRiVoYgAAAAJ&amp;sortby=pubdate">Google Scholar</a><a href="https://linkedin.com/in/thomasahle">LinkedIn</a><a href="mailto:thomas@ahle.dk">Email</a></p>
+         </footer>
+      </div>
+   </main>
+<script>
+(function () {
+   function track() {
+      if (window.gtag) window.gtag.apply(null, arguments);
+   }
+   var target = /^#paper-/.test(location.hash) ? document.getElementById(location.hash.slice(1)) : null;
+   /* Abstracts: click a card (outside its links) to open or close it */
+   function toggleCard(card) {
+      var open = card.classList.toggle('open');
+      card.setAttribute('aria-expanded', String(open));
+      history.replaceState(null, '', '#' + card.id);
+      track('event', 'toggle', {'event_label': card.id});
+   }
+   document.querySelectorAll('.toggle-item').forEach(function (card) {
+      card.addEventListener('click', function (e) {
+         if (e.target.closest('a')) return;
+         if (String(window.getSelection()).length) return;
+         toggleCard(card);
+      });
+      card.addEventListener('keydown', function (e) {
+         if (e.target === card && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault();
+            toggleCard(card);
+         }
+      });
+   });
+   if (target) {
+      target.classList.add('open');
+      target.setAttribute('aria-expanded', 'true');
+      requestAnimationFrame(function () { target.scrollIntoView(); });
+   }
+})();
+   </script>
+</body>
+</html>

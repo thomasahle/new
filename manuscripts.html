@@ -1,0 +1,1780 @@
+
+<!DOCTYPE html>
+<html lang="en-GB">
+   <head>
+      <!-- Google Analytics (GA4). Besides the standard page_view this records the full
+     referrer, its host, the landing page with query string, and any ?ref= tag
+     as event parameters. Register them in GA4 as event-scoped custom
+     dimensions (full_referrer, referrer_host, landing_page, ref_tag) to see them.
+     This file is the single source of truth: templates include it, and the
+     standalone pages under blog/ and 404.html carry an inlined copy. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-40XB6Q54CE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-40XB6Q54CE', (function () {
+    var ref = document.referrer || '';
+    var host = '';
+    if (ref) {
+      // android-app:// and other odd schemes may not parse; fall back to the raw string.
+      try { host = new URL(ref).hostname || ref; } catch (e) { host = ref; }
+    }
+    var params = {
+      full_referrer: ref || '(direct)',
+      referrer_host: host || '(direct)',
+      landing_page: location.pathname + location.search
+    };
+    var tag = new URLSearchParams(location.search).get('ref');
+    if (tag) { params.ref_tag = tag; }
+    return params;
+  })());
+</script>
+
+      <meta charset="utf-8">
+      <meta name="robots" content="noindex">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="thumbnail" content="/static/potrait.jpg" />
+
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon-16x16.png" sizes="16x16" />
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon-32x32.png" sizes="32x32"/>
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon.ico" sizes="48x48" />
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/android-chrome-192x192.png" sizes="192x192" />
+
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Cardo:ital@0;1&amp;family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&amp;display=swap" rel="stylesheet">
+
+      
+      <script type="application/javascript">function addLoadEvent(func) {
+  var oldonload = window.onload;
+  if (typeof window.onload != 'function') {
+    window.onload = func;
+  } else {
+    window.onload = function() {
+      if (oldonload) {
+        oldonload();
+      }
+      func();
+    }
+  }
+}
+// External links
+addLoadEvent(function() {
+   for (let a of document.querySelectorAll('a[href^="http"]')) {
+      // :not([href*="//' + location.host + '"])')
+      a.addEventListener('click', event => {
+         gtag('event', 'click', {
+            'event_category': 'outbound',
+            'event_label': a.href,
+            'transport_type': 'beacon'
+            /*'hitCallback': function() { document.location = a.href; }*/
+         });
+         //return false;
+      });
+   }
+});</script>
+
+      <script type="application/ld+json">
+         {"@context" : "http://schema.org",
+    "@type" : "CollectionPage",
+     "author": {
+          "@type": "Person",
+          "name": "Thomas Dybdahl Ahle",
+           "image": [ "https://thomasahle.com/static/potrait.jpg" ],
+           "spouse": {
+                "@type": "Person",
+                "name": "Morgan Mingle"
+           }
+     },
+     "description": "My research concerns the theoretical foundations of machine learning and massive data, including similarity search, high-dimensional geometry, kernel methods, sketching and derandomization.",
+     "image": [ "https://thomasahle.com/static/potrait.jpg" ],
+     "primaryImageOfPage": "https://thomasahle.com/static/potrait.jpg",
+     "thumbnailUrl": "https://thomasahle.com/static/potrait.jpg"
+     }
+      </script>
+      <meta name="description"
+            content="Thomas Dybdahl Ahle is a researcher in the theoretical foundations of machine learning and massive data, including similarity search, high-dimensional geometry, kernel methods, sketching and derandomization." />
+  <style type="text/css">:root {
+   /* One neutral grey family and one link blue across the site */
+   --ink: #111;
+   --text: #333;
+   --muted: #666;
+   --line: #e5e5e5;
+   --bg: #fff;
+   --link: #0645ad;
+   --radius: 8px;
+   --sans: Lato, "Helvetica Neue", sans-serif;
+   --serif: Cardo, Garamond, "Times New Roman", serif;
+}
+
+* {
+   box-sizing: border-box;
+}
+
+[hidden] {
+   display: none !important;
+}
+
+html {
+   scroll-behavior: smooth;
+}
+
+body {
+   margin: 0;
+   background: var(--bg);
+   color: var(--text);
+   font-family: var(--sans);
+   font-size: 16px;
+   font-weight: 300;
+   line-height: 1.6;
+   -webkit-font-smoothing: antialiased;
+   text-rendering: optimizeLegibility;
+}
+
+a {
+   color: var(--link);
+   text-decoration: none;
+}
+
+a:hover {
+   text-decoration: underline;
+   text-decoration-skip-ink: auto;
+}
+
+h1, h2, h3 {
+   color: var(--ink);
+}
+
+ul {
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+sub, sup {
+   font-size: 75%;
+   line-height: 0;
+   position: relative;
+   vertical-align: baseline;
+}
+
+sup {
+   top: -0.5em;
+}
+
+sub {
+   bottom: -0.25em;
+}
+
+/* Lato Light for running text, regular for controls */
+.top-nav a, .link-button {
+   font-weight: 400;
+}
+
+.icon {
+   width: 20px;
+   height: 20px;
+   flex: none;
+   fill: none;
+   stroke: currentColor;
+   stroke-width: 1.75;
+   stroke-linecap: round;
+   stroke-linejoin: round;
+}
+
+.icon.solid {
+   fill: currentColor;
+   stroke: none;
+}
+
+/********** Top bar: centered section links in serif small caps **********/
+
+.topbar {
+   position: sticky;
+   top: 0;
+   z-index: 10;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 12px 52px;
+   background: rgba(255, 255, 255, .97);
+   border-bottom: 3px double #ccc;
+}
+
+/* The name is in the letterhead; the bar only shows it on phones */
+.brand {
+   display: none;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.3rem;
+   letter-spacing: .03em;
+   color: #111;
+}
+
+.brand:hover {
+   text-decoration: none;
+}
+
+.menu-toggle {
+   display: none;
+   align-items: center;
+   gap: 6px;
+   padding: 6px 10px;
+   font: inherit;
+   font-size: .95rem;
+   color: var(--ink);
+   background: #fff;
+   border: 1px solid var(--line);
+   border-radius: 6px;
+   cursor: pointer;
+}
+
+.top-nav {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: 4px 0;
+}
+
+.top-nav a {
+   padding: 4px 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.12rem;
+   letter-spacing: .05em;
+   color: #222;
+}
+
+.top-nav a:not(:last-child)::after {
+   content: "·";
+   margin: 0 16px;
+   color: #aaa;
+}
+
+.top-nav a:hover {
+   color: var(--link);
+   text-decoration: none;
+}
+
+.top-nav a.active {
+   font-style: italic;
+   color: #000;
+}
+
+/********** Main **********/
+
+.main {
+   padding: 40px 52px 72px;
+}
+
+.container {
+   max-width: 1100px;
+   margin: 0 auto;
+}
+
+@media (min-width: 1600px) {
+   .container {
+      max-width: 1400px;
+   }
+}
+
+section, h2[id], h3[id], [id^="paper-"], .anchor {
+   scroll-margin-top: 76px;
+}
+
+.anchor {
+   display: block;
+}
+
+/********** Section headings **********/
+
+.section-head {
+   display: flex;
+   align-items: baseline;
+   justify-content: space-between;
+   gap: 8px 16px;
+   flex-wrap: wrap;
+   margin: 36px 0 14px;
+}
+
+.section-head h2,
+.section h2,
+.page-title {
+   margin: 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: 1.85rem;
+   line-height: 1.2;
+   letter-spacing: .03em;
+}
+
+.link-button {
+   display: inline-flex;
+   align-items: center;
+   gap: 6px;
+   padding: 0;
+   font: inherit;
+   font-size: .95rem;
+   color: var(--link);
+   background: none;
+   border: 0;
+   cursor: pointer;
+}
+
+.link-button:hover {
+   text-decoration: underline;
+}
+
+.link-button .icon {
+   width: 17px;
+   height: 17px;
+}
+
+
+/********** Blog preview **********/
+
+.post-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1rem;
+}
+
+@media (min-width: 1300px) {
+   .post-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+.post-card {
+   display: grid;
+   grid-template-columns: 15rem minmax(0, 1fr);
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+
+/* Images fill the left column edge to edge, like the paper cards */
+.post-thumb {
+   position: relative;
+   display: block;
+   border-right: 1px solid #eee;
+   background: #fafafa;
+}
+
+/* Card height follows the text; the image fills whatever space that leaves */
+.post-thumb img {
+   position: absolute;
+   inset: 0;
+   display: block;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   /* Charts and screenshots have their titles and axes at the top left */
+   object-position: left top;
+}
+
+.post-body {
+   display: flex;
+   flex-direction: column;
+   min-width: 0;
+   padding: 14px 18px 16px;
+}
+
+.post-category {
+   margin: 0;
+   font-size: .72rem;
+   font-weight: 400;
+   letter-spacing: .14em;
+   text-transform: uppercase;
+   color: var(--muted);
+}
+
+.post-card h3 {
+   margin: 4px 0 2px;
+   font-size: 1.08rem;
+   font-weight: 700;
+   line-height: 1.3;
+}
+
+.post-card h3 a {
+   color: var(--ink);
+}
+
+.post-meta {
+   margin: 0 0 6px;
+   font-size: .82rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+
+.post-lead {
+   margin: 0 0 10px;
+   font-size: .95rem;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 3;
+   overflow: hidden;
+}
+
+.post-body .link-button {
+   margin-top: auto;
+   align-self: flex-start;
+   font-size: .92rem;
+}
+
+/********** Footer: profiles and social links **********/
+
+/* Inline link lists separated by dots */
+.dots a + a::before {
+   content: "·";
+   display: inline-block;
+   margin: 0 .55em;
+   color: #999;
+}
+
+.page-foot {
+   margin-top: 64px;
+   padding-top: 18px;
+   border-top: 1px solid var(--line);
+   text-align: center;
+   font-size: .85rem;
+   color: var(--muted);
+}
+
+.page-foot p {
+   margin: 0 auto 8px;
+   max-width: none;
+}
+
+.page-foot a {
+   white-space: nowrap;
+}
+
+/********** Narrow screens: name and a menu button **********/
+
+@media (max-width: 900px) {
+   .topbar {
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--line);
+   }
+
+   .brand {
+      display: block;
+   }
+
+   .menu-toggle {
+      display: inline-flex;
+   }
+
+   .top-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 8px 20px 14px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, .06);
+   }
+
+   .topbar.open .top-nav {
+      display: flex;
+   }
+
+   .top-nav a {
+      padding: 9px 0;
+      font-size: 1.15rem;
+   }
+
+   .top-nav a:not(:last-child)::after {
+      content: none;
+   }
+
+   .main {
+      padding: 28px 20px 56px;
+   }
+}
+
+@media (max-width: 1180px) {
+   .main {
+      padding: 36px 36px 64px;
+   }
+
+}
+
+@media (max-width: 640px) {
+   .post-card {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .post-thumb {
+      border-right: 0;
+      border-bottom: 1px solid #eee;
+   }
+
+   .post-thumb img {
+      position: static;
+      height: auto;
+      aspect-ratio: 2 / 1;
+   }
+}
+/* Home page only. Shared tokens, top bar, headings, post cards and footer are in base.css. */
+
+/********** Letterhead: centered on the page, drawing to the right **********/
+
+.letterhead {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) minmax(0, 40em) minmax(0, 1fr);
+   align-items: center;
+   column-gap: 32px;
+   padding: 8px 0 12px;
+   text-align: center;
+}
+
+.letterhead .lh-text {
+   grid-column: 2;
+   grid-row: 1;
+}
+
+.letterhead .portrait {
+   grid-column: 3;
+   grid-row: 1;
+   justify-self: start;
+   position: relative;
+   width: 180px;
+}
+
+.letterhead .portrait img {
+   display: block;
+   width: 100%;
+   height: auto;
+}
+
+.letterhead .portrait .photo {
+   position: absolute;
+   inset: 0;
+   height: 100%;
+   object-fit: cover;
+   opacity: 0;
+   transition: opacity .2s;
+}
+
+.letterhead .portrait:hover .photo[src] {
+   opacity: 1;
+}
+
+.letterhead h1 {
+   margin: 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: clamp(2.1rem, 4vw, 3rem);
+   line-height: 1.1;
+   letter-spacing: .03em;
+}
+
+.letterhead .role {
+   margin: 6px 0 16px;
+   font-family: var(--serif);
+   font-style: italic;
+   font-size: 1.25rem;
+   color: #333;
+}
+
+.letterhead .bio {
+   margin: 0 auto 16px;
+   font-size: 1.05rem;
+}
+
+/* Contact links stack in the left column, mirroring the drawing on the right */
+.letterhead .contact {
+   grid-column: 1;
+   grid-row: 1;
+   justify-self: end;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   gap: 7px;
+   text-align: right;
+   font-size: .82rem;
+   font-weight: 400;
+   letter-spacing: .08em;
+   text-transform: uppercase;
+}
+
+.letterhead .bio {
+   margin-bottom: 0;
+}
+
+/********** Publication cards: the original thomasahle.com design **********/
+
+.pubs {
+   --item-size: 14rem;
+   --item-height: 14rem;
+   --item-padding: 1.5rem;
+   --border-radius: 4px;
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1rem;
+}
+
+/* While an abstract is open, cards keep their own height */
+.pubs:has(.toggle-item.open) {
+   align-items: start;
+}
+
+/* The original cards were sized with the default box model; with
+   border-box the 14rem image would overflow the bottom border. */
+.toggle-item, .toggle-item * {
+   box-sizing: content-box;
+}
+
+.toggle-item {
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: var(--border-radius);
+   background: white;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   color: black;
+   line-height: 1.55;
+   hyphens: auto;
+   display: grid;
+   grid-template-rows: auto 1fr;
+   grid-column-gap: 0px;
+   grid-row-gap: 0px;
+}
+.toggle-item.has_image {
+   grid-template-columns: var(--item-size) 1fr;
+}
+.toggle-item:active {
+   background: #fafafa;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.2);
+}
+.toggle-item:focus-visible {
+   outline: 2px solid var(--link);
+   outline-offset: 2px;
+}
+.toggle-item a {
+   color: var(--link);
+}
+.shown {
+   grid-area: 1 / 2 / 2 / 3;
+   padding: 8px 6%;
+   text-align: center;
+}
+.feature_image {
+   grid-area: 1 / 1 / 3 / 2;
+   border-right: 1px solid #eee;
+}
+.feature_image > img {
+   height: var(--item-height);
+   max-width: 100%;
+   width: auto;
+   object-fit: cover;
+   object-position: center center;
+   border-top-left-radius: 3px;
+   border-bottom-left-radius: 3px;
+}
+.shown .year {
+   display: block;
+   text-align: left;
+}
+.shown .files {
+   float: right;
+   text-align: right;
+}
+.toggle-item .files, .toggle-item .year, .toggle-item .authors {
+   font-size: 90%;
+}
+.shown .title {
+   hyphens: none;
+   margin-top: .5rem;
+   display: block;
+   font-weight: 400;
+   clear: both;
+}
+.toggle-item .abstract {
+   grid-area: 2 / 2 / 3 / 3;
+   padding: 0px var(--item-padding) 1rem var(--item-padding);
+   position: relative;
+   font-family: var(--serif);
+   text-align: justify;
+   line-height: 1.15;
+}
+.toggle-item .abstract p {
+   text-indent: 1em;
+   margin: 0;
+}
+.toggle-item .abstract p:first-child {
+   text-indent: 0;
+}
+.toggle-item:not(.open) {
+   height: var(--item-size);
+}
+.toggle-item:not(.open) .abstract {
+   line-height: 1.1;
+   overflow: hidden;
+   font-style: italic;
+   font-size: .85rem;
+   cursor: pointer;
+   color: #222;
+}
+.toggle-item .abstract:before {
+   position: absolute;
+   font-style: normal;
+   cursor: pointer;
+   color: black;
+   bottom: 0; right: 0;
+   z-index: 1;
+   background: white;
+   padding: 8px 10px 8px 10px;
+   font-family: var(--sans);
+   border-radius: var(--border-radius);
+   font-size: .85rem;
+}
+.toggle-item:not(.open) .abstract:before {
+   content: "View Abstract ⌵";
+}
+.toggle-item.open .abstract:before {
+   margin-top: 10px;
+   content: "Hide Abstract ⌃";
+}
+.toggle-item:not(.open) .abstract:after {
+   content: " ";
+   position: absolute;
+   left: 0; right: 0; top: 0; bottom: 0;
+   background: linear-gradient(180deg, rgba(255,255,255,0) 60%, rgba(255,255,255,1) 100%);
+   border-radius: var(--border-radius);
+}
+.toggle-item .comment {
+   font-style: italic;
+}
+.toggle-item .new {
+   font-weight: bold;
+   background-color: var(--link);
+   color: white;
+   padding: 1px 5px;
+   border-radius: 3px;
+}
+
+/* Wide screens: two cards per row */
+@media (min-width: 1300px) {
+   .pubs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+/* Phones: the original small-screen card */
+@media only screen and (max-width: 500px) {
+   .pubs {
+      --item-size: 7rem;
+      --item-height: 7rem;
+      --item-padding: 1rem;
+   }
+   .toggle-item:not(.open) {
+      height: auto;
+   }
+   .toggle-item:not(.open) .abstract {
+      display: none;
+   }
+   .shown {
+      grid-area: 1 / 2 / 2 / 3;
+   }
+   .toggle-item:not(.has_image) > .shown {
+      grid-area: 1 / 1 / 2 / 3;
+   }
+   .feature_image {
+      grid-area: 1 / 1 / 2 / 2;
+   }
+   .toggle-item .abstract {
+      grid-area: 2 / 1 / 3 / 3;
+   }
+}
+
+/* Media shows the six most recent items until "Show all" is pressed */
+#media:not(.all) .media-card.extra,
+#media:not(.all) .when-all-media,
+#media.all .when-recent,
+#media.all .media-more {
+   display: none;
+}
+
+.media-more {
+   display: block;
+   margin: 16px auto 0;
+}
+
+/********** Recent posts (Bluesky) **********/
+
+.head-links {
+   display: inline-flex;
+   gap: 18px;
+}
+
+.post-card.no-thumb {
+   grid-template-columns: minmax(0, 1fr);
+}
+
+/* Bluesky posts have no title, so their text gets more lines */
+.bsky-text {
+   margin-top: 4px;
+   color: var(--ink);
+   white-space: pre-line;
+   -webkit-line-clamp: 5;
+}
+
+.feed-fallback {
+   margin: 0;
+   color: var(--text);
+}
+
+/********** Full sections **********/
+
+.section {
+   margin-top: 44px;
+}
+
+.section h2 {
+   margin-bottom: 14px;
+}
+
+.section p {
+   max-width: 46em;
+   margin: 0 0 12px;
+}
+
+/* Two-column typographic index (software, games, teaching, other) */
+.index-cols {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 0 48px;
+}
+
+.index-cols h3 {
+   margin: 0 0 4px;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.25rem;
+   font-weight: 400;
+   letter-spacing: .05em;
+   color: var(--muted);
+}
+
+.index {
+   margin: 0;
+}
+
+.index dt {
+   margin-top: 12px;
+   font-size: 1.05rem;
+}
+
+.index dt b {
+   font-weight: 700;
+   color: var(--ink);
+}
+
+.index .links {
+   margin-left: .3em;
+   font-size: .9rem;
+   font-weight: 400;
+}
+
+.index .links a {
+   white-space: nowrap;
+}
+
+.index dd {
+   margin: 1px 0 0;
+   font-family: var(--serif);
+   font-size: 1.04rem;
+   line-height: 1.4;
+   color: #222;
+}
+
+/* The coauthor list uses the full width of the page */
+.section p.coauthor-list {
+   max-width: none;
+}
+
+.coauthor-list b {
+   font-weight: 700;
+   color: var(--ink);
+}
+
+/********** Media cards **********/
+
+.media-grid {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 1rem;
+}
+
+.media-card {
+   display: grid;
+   grid-template-columns: 7.5rem minmax(0, 1fr);
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+
+.media-card.no-logo {
+   grid-template-columns: minmax(0, 1fr);
+}
+
+.media-logo {
+   display: grid;
+   place-items: center;
+   padding: 14px;
+   border-right: 1px solid #eee;
+   background: white;
+}
+
+.media-logo img {
+   display: block;
+   width: 100%;
+   max-width: 92px;
+   height: auto;
+   border-radius: 4px;
+}
+
+.media-body {
+   padding: 14px 18px 16px;
+}
+
+.media-top {
+   display: flex;
+   justify-content: space-between;
+   gap: 12px;
+   font-size: .82rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+
+.media-top .outlet {
+   text-transform: uppercase;
+   letter-spacing: .06em;
+   color: var(--muted);
+}
+
+.media-card h3 {
+   margin: 6px 0;
+   font-family: var(--serif);
+   font-style: italic;
+   font-weight: 400;
+   font-size: 1.2rem;
+   line-height: 1.3;
+   letter-spacing: 0;
+}
+
+.media-card h3 a {
+   color: var(--ink);
+}
+
+.media-card p {
+   margin: 0;
+   font-size: .95rem;
+}
+
+/********** Medium screens: smaller portrait **********/
+
+@media (max-width: 1180px) {
+   /* Text stays centered in its column, drawing to its right */
+   .letterhead {
+      grid-template-columns: minmax(0, 1fr) 150px;
+   }
+
+   .letterhead .lh-text {
+      grid-column: 1;
+   }
+
+   .letterhead .portrait {
+      grid-column: 2;
+      width: 150px;
+   }
+
+   .letterhead .contact {
+      grid-column: 1;
+      grid-row: 2;
+      justify-self: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px 0;
+      margin-top: 16px;
+      text-align: center;
+   }
+
+   .letterhead .contact a + a::before {
+      content: "·";
+      display: inline-block;
+      margin: 0 .55em;
+      color: #999;
+   }
+}
+
+@media (max-width: 640px) {
+   .letterhead {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 14px;
+      padding-top: 0;
+   }
+
+   .letterhead .lh-text {
+      grid-column: 1;
+   }
+
+   .letterhead .portrait {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: center;
+      width: 110px;
+   }
+
+   .letterhead .lh-text {
+      grid-row: 2;
+   }
+
+   /* Wrapped lines would start with a dot, so phones use spacing instead */
+   .letterhead .contact {
+      grid-row: 3;
+      margin-top: 0;
+      gap: 6px 16px;
+   }
+
+   .letterhead .contact a + a::before {
+      content: none;
+   }
+
+   .letterhead .bio {
+      font-size: 1rem;
+   }
+
+   .media-grid {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .index-cols {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .index-cols > div + div {
+      margin-top: 22px;
+   }
+
+   .media-card {
+      grid-template-columns: 5rem minmax(0, 1fr);
+   }
+
+   .media-logo {
+      padding: 10px;
+   }
+}
+
+/********** Book: The Tensor Cookbook **********/
+.book {
+   display: grid;
+   grid-template-columns: minmax(0, 23rem) minmax(0, 1fr);
+   margin: 28px 0 8px;
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+.book-cover {
+   display: block;
+   border-right: 1px solid #eee;
+   background: #fff;
+}
+.book-cover img {
+   display: block;
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   padding: 14px;
+}
+.book-body {
+   padding: 18px 28px 18px;
+}
+.book-label {
+   margin: 0;
+   font-size: .72rem;
+   font-weight: 400;
+   letter-spacing: .14em;
+   text-transform: uppercase;
+   color: var(--muted);
+}
+.book-title {
+   margin: 2px 0 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: 2rem;
+   letter-spacing: .03em;
+   line-height: 1.15;
+}
+.book-title a {
+   color: var(--ink);
+}
+.book-pitch {
+   margin: 2px 0 10px;
+   font-family: var(--serif);
+   font-style: italic;
+   font-size: 1.2rem;
+   color: #333;
+}
+.book-desc {
+   margin: 0 0 8px;
+   max-width: 44em;
+}
+.book-meta {
+   margin: 0 0 4px;
+   font-size: .85rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+.book-links {
+   margin: 0;
+   font-size: .95rem;
+}
+@media (max-width: 760px) {
+   .book {
+      grid-template-columns: minmax(0, 1fr);
+   }
+   .book-cover {
+      border-right: 0;
+      border-bottom: 1px solid #eee;
+   }
+   .book-body {
+      padding: 14px 18px 16px;
+   }
+}
+.page-head {
+   margin: 4px 0 18px;
+}
+
+.page-title {
+   font-size: 2.4rem;
+}
+
+.page-count {
+   margin: 2px 0 0;
+   color: var(--muted);
+}
+</style>
+  <title>Manuscripts &middot; Thomas Dybdahl Ahle</title>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></symbol>
+   </svg>
+
+   <header class="topbar" id="topbar">
+      <a class="brand" href="/new/">Thomas Ahle</a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="top-nav">
+         <svg class="icon"><use href="#i-menu"/></svg> Menu
+      </button>
+      <nav class="top-nav" id="top-nav" aria-label="Sections">
+         <a href="/new/">Home</a>
+         <a href="/new/#publications">Publications</a>
+         <a href="/new/#manuscripts" class="active" aria-current="page">Manuscripts</a>
+         <a href="/new/#projects">Software &amp; Games</a>
+         <a href="/new/#media">Media</a>
+         <a href="/new/#teaching">Teaching</a>
+         <a href="/new/blog/">Blog</a>
+      </nav>
+   </header>
+   <script>
+(function () {
+   /* Narrow screens: the menu button opens the section list */
+   var topbar = document.getElementById('topbar');
+   var menu = document.getElementById('menu-toggle');
+   function closeMenu() {
+      topbar.classList.remove('open');
+      menu.setAttribute('aria-expanded', 'false');
+   }
+   menu.addEventListener('click', function () {
+      var open = topbar.classList.toggle('open');
+      menu.setAttribute('aria-expanded', String(open));
+   });
+   topbar.querySelectorAll('.top-nav a').forEach(function (a) {
+      a.addEventListener('click', closeMenu);
+   });
+})();
+   </script>
+
+   <main class="main" id="top">
+      <div class="container">
+         <div class="page-head">
+            <h1 class="page-title">Manuscripts</h1>
+            <p class="page-count">16 manuscripts, newest first. Click a card to read its abstract.</p>
+         </div>
+         <ul class="pubs">
+               <li class="toggle-item featured has_image"
+                   id="paper-powerlaw" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2609.36271"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_powerlaw_arxiv'});"
+                           >arxiv</a>]</span>
+
+                     <span class="year">
+                     2026
+                        &mdash;
+                        <span class="new">NEW!</span></span>
+
+                     <span class="title">Stochastic Optimization Under Power&#8209;Law Spectra:<br>Tight Bounds and Shuffling Analysis</span>
+
+                     <span class="authors">
+                     TA, <a href="https://scholar.google.com/citations?user=zIv6YN0AAAAJ&hl=en"
+                              title="Yaroslav Bulatov"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'Y Bulatov'});"
+                              >Y Bulatov</a>, <a href="https://www.cs.cornell.edu/~cdesa/"
+                              title="Christopher De Sa"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'C De Sa'});"
+                              >C De Sa</a>, <a href="https://cs.stanford.edu/~chrismre/"
+                              title="Christopher Ré"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'C Ré'});"
+                              >C Ré</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/powerlaw.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+Recent work has established that power-law spectral conditions on data enable tight convergence bounds for deterministic gradient descent, resolving the conflict between classical exponential bounds and observed power-law learning curves. In this work, we extend this result to the stochastic regime of high-dimensional machine learning. We provide two main contributions: (1) We generalize the power-law spectral theory to Stochastic Gradient Descent (SGD), showing that the same spectral exponents govern stochastic dynamics; (2) For the fundamental case of isotropic Gaussian data, we provide a precise analysis of data shuffling, deriving exact constants that prove Single Shuffle is strictly superior to Flip-Flop and IID sampling. Our results bridge the gap between abstract spectral theory and practical stochastic training choices, offering a unified picture of how data geometry drives optimization speed.
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured has_image"
+                   id="paper-polyeval" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2609.06022"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_polyeval_arxiv'});"
+                           >arxiv</a>]  [<a href="https://github.com/thomasahle/fast-polynomials"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_polyeval_github'});"
+                           >github</a>]  [<a href="https://thomasahle.com/fast-polynomials/"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_polyeval_website'});"
+                           >website</a>]</span>
+
+                     <span class="year">
+                     2026
+                        &mdash;
+                        <span class="new">NEW!</span></span>
+
+                     <span class="title">Fast Evaluation of Polynomials with Rational Preprocessing</span>
+
+                     <span class="authors">
+                     TA, <a href="https://di.ku.dk/english/staff/?pure=en/persons/493157"
+                              title="Jakob Bæk Tejs Knudsen"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'J Knudsen'});"
+                              >J Knudsen</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/polyeval.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>Horner's rule evaluates a monic degree-n polynomial using n−1 multiplications. We show that with rational preprocessing of the coefficients, any such polynomial can be evaluated using only ⌊n/2⌋ + 1 multiplications over fields of characteristic zero or of characteristic p &gt; n. This resolves the multiplication side of a conjecture of Rabin and Winograd (Comm. Pure Appl. Math 1972), who achieved n/2 + 2⌈log<sub>2</sub> n⌉ multiplications and conjectured the logarithmic overhead was necessary.
+</p><p>
+We show that this multiplication count can't be beaten in general, proving that three multiplications do not suffice for degree 6. This strengthens the lower bound of Pan (STOC 1978), who proved a tight bound for general, complex preprocessing.
+</p><p>
+In characteristic 2, for every n &gt; 1 and every finite field of size at least 2n, we prove that an n-multiplication chain cannot parametrize all value vectors at 2n distinct evaluation points, even with arbitrary preprocessing. We give ⌊n/2⌋ + 1 multiplication schedules over characteristic 2, each with an explicit inverse, for every odd degree n ≤ 25 and conjecture that this is possible for all n.
+</p><p>
+We also give an injective polynomial construction for universal hashing that uses N multiplications to hash 2N values with a single random key. This improves the best previous construction by Daniel J. Bernstein (cr.yp.to).
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured"
+                   id="paper-autoformal" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2605.00058"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_autoformal_arxiv'});"
+                           >arxiv</a>]</span>
+
+                     <span class="year">
+                     2026
+                        &mdash;
+                        <span class="comment">ICLR 2026 VerifAI Workshop</span></span>
+
+                     <span class="title">Autoformalizing Memory Specifications with Agents</span>
+
+                     <span class="authors">
+                     <a href="https://janoleernst.com/"
+                              title="Jan Ole Ernst"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'J O Ernst'});"
+                              >Ernst</a>, <a href="https://github.com/dmitrisaberi"
+                              title="Dmitri Michelangelo Saberi"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'D M Saberi'});"
+                              >Saberi</a>, <a href="https://www.informatik.uni-wuerzburg.de/ce/team/derek-christ/"
+                              title="Derek Christ"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'D Christ'});"
+                              >Christ</a>, <a href="https://www.iese.fraunhofer.de/blog/author/thomas-zimmermann/"
+                              title="Thomas Zimmermann"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'T Zimmermann'});"
+                              >Zimmermann</a>, <a href="https://rajath.com/"
+                              title="Rajath Salegame"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'R Salegame'});"
+                              >Salegame</a>, <a href="https://oatml.cs.ox.ac.uk/members/suhaas_bhat/"
+                              title="Suhaas M. Bhat"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'S M Bhat'});"
+                              >Bhat</a>, <a href="https://github.com/slevental"
+                              title="Stanislav Levental"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'S Levental'});"
+                              >Levental</a>, TA, <a href="https://www.informatik.uni-wuerzburg.de/ce/team/matthias-jung/"
+                              title="Matthias Jung"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Jung'});"
+                              >Jung</a>
+                     </span>
+                  </div>
+                  <div class="abstract"><p>
+The primary goal of Design Verification (DV) is to ensure that a proposed chip design implementation (either in code, or physical form) exactly matches its specification and is free of functional errors in order to avoid costly re-designs. Achieving this often demands extensive manual interpretation, translating the specification document into a formal, testable representation. While AI has made progress in DV, current approaches typically focus on narrow, isolated tasks rather than full end-to-end specification compliance of modern chip designs, failing to capture the complexity of real-world verification. Our method automatically formalizes natural language memory chip specifications, for industry relevant Dynamic Random Access Memory (DRAM) standards, into a formal representation called DRAMPyML that can be used for downstream DV tasks like the generation of SystemVerilog assertions, stimulus, and functional coverage. We also release our benchmarking dataset, DRAMBench, which can be used to evaluate the evolution of model capabilities (and new approaches) at hardware autoformalization.
+</p>
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-emt" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2406.02332"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_emt_arxiv'});"
+                           >arxiv</a>]</span>
+
+                     <span class="year">
+                     2024</span>
+
+                     <span class="title">Extended Mind Transformers</span>
+
+                     <span class="authors">
+                     <a href="https://www.phoebezeng.com/"
+                              title="Phoebe Klett"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'P Klett'});"
+                              >P Klett</a>, TA
+                     </span>
+                  </div>
+                  <div class="abstract"><p>
+Pre-trained language models demonstrate general intelligence and common sense, but long inputs quickly become a bottleneck for memorizing information at inference time. We resurface a simple method, Memorizing Transformers (Wu et al., 2022), that gives the model access to a bank of pre-computed memories. We show that it is possible to fix many of the shortcomings of the original method, such as the need for fine-tuning, by critically assessing how positional encodings should be updated for the keys and values retrieved. This intuitive method uses the model's own key/query system to select and attend to the most relevant memories at each generation step, rather than using external embeddings. We demonstrate the importance of external information being retrieved in a majority of decoder layers, contrary to previous work. We open source a new counterfactual long-range retrieval benchmark, and show that Extended Mind Transformers outperform today's state of the art by 6% on average.
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured has_image"
+                   id="paper-cookbook" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://github.com/thomasahle/tensorgrad"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cookbook_github'});"
+                           >github</a>]  [<a href="https://raw.githubusercontent.com/thomasahle/tensorgrad/main/paper/cookbook.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cookbook_pdf'});"
+                           >pdf</a>]  [<a href="https://tensorcookbook.com/"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cookbook_website'});"
+                           >website</a>]</span>
+
+                     <span class="year">
+                     2024
+                        &mdash;
+                        <span class="comment">Updated Jul 2026</span></span>
+
+                     <span class="title">The Tensor Cookbook</span>
+
+                     <span class="authors">
+                     TA
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/tensor_cookbook.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+Machine learning involves a lot of tensor manipulation, and it's easy to lose track of the larger structure when manipulating high-dimensional data using notation designed for vectors and matrices. Graphical notation, first introduced by Roger Penrose in 1971, reduces the mental overhead and makes the connections “come alive”: each edge is the index of a tensor, and connecting two edges contracts the tensors over this dimension.
+</p><p>
+The Tensor Cookbook aims to popularize tensor diagrams by rewriting the classical “Matrix Cookbook”. You can think of it as a reference book, skip around for some cool diagrams, or a crash course full of exercises to practice your skill. Its companion, Tensorgrad, is a Python library for symbolic tensor manipulation and derivatives using tensor diagrams.
+</p>
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-errmit" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2401.16231"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_errmit_arxiv'});"
+                           >arxiv</a>]</span>
+
+                     <span class="year">
+                     2024</span>
+
+                     <span class="title">Error Mitigation for Thermodynamic Computing</span>
+
+                     <span class="authors">
+                     <a href="https://scholar.google.com/citations?user=A9p6aIIAAAAJ&hl=en"
+                              title="Maxwell Aifer"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Aifer'});"
+                              >Aifer</a>, <a href="https://scholar.google.com/citations?user=Ee_tECgAAAAJ&hl=en"
+                              title="Denis Melanson"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'D Melanson'});"
+                              >Melanson</a>, <a href="https://scholar.google.com/citations?user=iM2qRCkAAAAJ&hl=en"
+                              title="Kaelan Donatella"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'K Donatella'});"
+                              >Donatella</a>, <a href="https://threeplusone.com/"
+                              title="Gavin E. Crooks"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'G E Crooks'});"
+                              >Crooks</a>, TA, <a href="https://scholar.google.com/citations?user=jvz1G9EAAAAJ&hl=en"
+                              title="Patrick J. Coles"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'P J Coles'});"
+                              >Coles</a>
+                     </span>
+                  </div>
+                  <div class="abstract"><p>
+While physics-based computing can offer speed and energy efficiency compared to digital computing, it also is subject to errors that must be mitigated. For example, many error mitigation methods have been proposed for quantum computing. However this error mitigation framework has yet to be applied to other physics-based computing paradigms. In this work, we consider thermodynamic computing, which has recently captured attention due to its relevance to artificial intelligence (AI) applications, such as probabilistic AI and generative AI. A key source of errors in this paradigm is the imprecision of the analog hardware components. Here, we introduce a method that reduces the overall error from a linear to a quadratic dependence (from ε to ε<sup>2</sup>) on the imprecision ε, for Gaussian sampling and linear algebra applications. The method involves sampling from an ensemble of imprecise distributions associated with various rounding events and then merging these samples. We numerically demonstrate the scalability of this method for dimensions greater than 1000. Finally, we implement this method on an actual thermodynamic computer and show 20% error reduction for matrix inversion; the first thermodynamic error mitigation experiment.
+</p>
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-favour" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2311.13036"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_favour_arxiv'});"
+                           >arxiv</a>]  [<a href="/papers/favour.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_favour_pdf'});"
+                           >pdf</a>]  [<a href="https://youtu.be/Ct63ikA2q-c"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_favour_video'});"
+                           >video</a>]</span>
+
+                     <span class="year">
+                     2022</span>
+
+                     <span class="title">Fast Variance Operator for Uncertainty Rating</span>
+
+                     <span class="authors">
+                     TA, <a href="https://scholar.google.com/citations?user=bPiE44QAAAAJ&hl=en"
+                              title="Sahar Karimi"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'S Karimi'});"
+                              >S Karimi</a>, <a href="https://dl.acm.org/profile/81452604699"
+                              title="Peter Tang"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'P Tang'});"
+                              >P Tang</a>
+                     </span>
+                  </div>
+                  <div class="abstract"><p>We introduce a principled approximate variance propagation framework for Bayesian Neural Networks.
+More accurate than Monte Carlo sampling, and much faster than previous variance propagation frameworks,
+it smoothly interpolates between quality and inference time.
+This is made possible by a new fast algorithm for updating a diagonal-plus-low-rank matrix approximation under various
+operations.</p>
+<p> We tested our algorithm against sampling based MC Dropout
+and Variational Inference on a number of downstream uncertainty themed
+tasks, such as calibration and out-of-distribution testing. We find that
+Favour is as fast as performing 2-3 inference samples, while matching the
+performance of 10-100 samples.
+</p>
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-weighted-sampling" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="/papers/unbiased_sampling_with_replacement.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_weighted-sampling_pdf'});"
+                           >pdf</a>]</span>
+
+                     <span class="year">
+                     2022</span>
+
+                     <span class="title">An Experimental Survey of Weighted Sampling Without Replacement</span>
+
+                     <span class="authors">
+                     TA
+                     </span>
+                  </div>
+                  <div class="abstract"><p>
+For many applications it is beneficial to sample from a set of vectors with a distribution other than uniform, to increase the amount of information in a sample while still estimating the same expected value. Importance sampling rescales the sampled values by the new probability distribution so that the mean stays fixed, but this only works for sampling a single element, while machine learning applications (and many others) need a &ldquo;batch&rdquo; of samples of a fixed size, preferably without repetitions.
+</p><p>
+In this note we investigate how importance sampling can be made to work in this setting, and we show experimentally that our algorithms lower the variance of samples while keeping the mean unbiased, with an application to survey sampling.
+</p>
+</div>
+               </li>
+               <li class="toggle-item has_image"
+                   id="paper-minner" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="/papers/minner.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_minner_pdf'});"
+                           >pdf</a>]  [<a href="https://docs.google.com/presentation/d/e/2PACX-1vTdvK58YN2UcDYbEPM-BOEUwtChKekUvu08Ezz07810dn54bJliaxSZbaapqtHmojHdD_aK-sa44mWp/pub?start=false&loop=false&delayms=5000"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_minner_slides'});"
+                           >slides</a>]</span>
+
+                     <span class="year">
+                     2021</span>
+
+                     <span class="title">Minner: Improved Similarity Estimation and Recall on MinHashed Databases</span>
+
+                     <span class="authors">
+                     TA
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/minner.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>Quantization is the state of the art approach to efficiently storing and searching large high-dimensional datasets. Broder’97 introduced the idea of Minwise Hashing (MinHash) for quantizing or sketching large sets or binary strings into a small number of values and provided a way to reconstruct the overlap or Jaccard Similarity between two sets sketched this way.
+</p><p>In this paper, we propose a new estimator for MinHash in the case where the database is quantized, but the query is not. By computing the similarity between a set and a MinHash sketch directly, rather than first also sketching the query, we increase precision and improve recall.
+</p><p>We take a principled approach based on maximum likelihood with strong theoretical guarantees. Experimenal results show an improved recall@10 corresponding to 10-30% extra MinHash values. Finally, we suggest a third very simple estimator, which is as fast as the classical MinHash estimator while often more precise than the MLE.
+</p><p>Our methods concern only the query side of search and can be used with any existing MinHashed database without changes to the data.t
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured has_image"
+                   id="paper-mersenne" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2008.08654"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_mersenne_arxiv'});"
+                           >arxiv</a>]  [<a href="/papers/mersenne.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_mersenne_pdf'});"
+                           >pdf</a>]</span>
+
+                     <span class="year">
+                     2021
+                        &mdash;
+                        <span class="comment">Updated May 2021</span></span>
+
+                     <span class="title">The Power of Hashing with Mersenne Primes</span>
+
+                     <span class="authors">
+                     TA, <a href="https://di.ku.dk/english/staff/?pure=en/persons/493157"
+                              title="Jakob Bæk Tejs Knudsen"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'J Knudsen'});"
+                              >J Knudsen</a>, <a href="http://hjemmesider.diku.dk/~mthorup/"
+                              title="Mikkel Thorup"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Thorup'});"
+                              >M Thorup</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/mersenne.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>The classic way of computing a k-universal hash function is to use a random degree-(k−1) polynomial over a prime field ℤ<sub>p</sub>. For a fast computation of the polynomial, the prime p is often chosen as a Mersenne prime p = 2<sup>b</sup>−1.
+</p><p>
+In this paper, we show that there are other nice advantages to using Mersenne primes. Our view is that the output of the hash function is a b-bit integer that is uniformly distributed in [2<sup>b</sup>], except that p (the all 1s value) is missing. Uniform bit strings have many nice properties, such as splitting into substrings which gives us two or more hash functions for the cost of one, while preserving strong theoretical qualities. We call this trick “Two for one” hashing, and we demonstrate it on 4-universal hashing in the classic Count Sketch algorithm for second moment estimation.
+</p><p>
+We also provide a new fast branch-free code for division and modulus with Mersenne primes. Contrasting our analytic work, this code generalizes to Pseudo-Mersenne primes p = 2<sup>b</sup>−c for small c, improving upon a classical algorithm of Crandall.
+</p>
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-phd" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="/papers/thesis.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_phd_pdf'});"
+                           >pdf</a>]</span>
+
+                     <span class="year">
+                     2019
+                        &mdash;
+                        <span class="comment">PhD thesis</span></span>
+
+                     <span class="title">Similarity Search: Algorithms for Sets and other High Dimensional Data</span>
+
+                     <span class="authors">
+                     TA
+                     </span>
+                  </div>
+                  <div class="abstract"><p>
+We study five fundamental problems in the field of high dimensional algorithms, similarity search and machine learning. We obtain many new results, including:
+</p><p>
+&bull; Data structures with Las Vegas guarantees for ℓ<sub>1</sub>-Approximate Near Neighbours and Braun Blanquet Approximate Set Similarity Search, with performance matching state of the art Monte Carlo algorithms up to factors n<sup>o(1)</sup>.<br>
+&bull; &ldquo;Supermajorities&rdquo;: the first space/time tradeoff for Approximate Set Similarity Search, along with a number of lower bounds suggesting that the algorithms are optimal among all Locality Sensitive Hashing (LSH) data structures.<br>
+&bull; The first lower bounds on approximative data structures based on the Orthogonal Vectors Conjecture (OVC).<br>
+&bull; Output Sensitive LSH data structures with query time near t + n<sup>ρ</sup> for outputting t distinct elements, where n<sup>ρ</sup> is the state of the art time to output a single element and tn<sup>ρ</sup> was the previous best for t items.<br>
+&bull; A Johnson Lindenstrauss embedding with fast multiplication on tensors (a Tensor Sketch), with high probability guarantees for subspace- and near-neighbour-embeddings.
+</p>
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-tensorsketch2" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/1909.01821"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tensorsketch2_arxiv'});"
+                           >arxiv</a>]  [<a href="/papers/tensorsketch2.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tensorsketch2_pdf'});"
+                           >pdf</a>]</span>
+
+                     <span class="year">
+                     2019
+                        &mdash;
+                        <span class="comment">Merged into "Oblivious Sketching of High‑Degree Polynomial Kernels"</span></span>
+
+                     <span class="title">Almost Optimal Tensor Sketch</span>
+
+                     <span class="authors">
+                     TA, <a href="https://di.ku.dk/english/staff/?pure=en/persons/493157"
+                              title="Jakob Bæk Tejs Knudsen"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'J Knudsen'});"
+                              >J Knudsen</a>
+                     </span>
+                  </div>
+                  <div class="abstract">We construct a structured Johnson Lindenstrauss transformation that can be applied to simple tensors on the form  x = x<sup>(1)</sup> ⊗ ... ⊗ x<sup>(c)</sup> ∈ ℝ<sup>dᶜ</sup>  in time nearly c⋅d.
+That is, exponentially faster than writing out the Kronecker product and then mapping down.
+
+These matrices, M, which preserves the norm of any x ∈ ℝ<sup>dᶜ</sup>, such that  |‖Mx‖₂ - ‖x‖₂| < ε  with probability  1-δ , can be taken to have just  Õ(c² ε⁻² (log1/δ)³)  rows.
+This is within  c² (log 1/δ)²  of optimal for any JL matrix [Larsen & Nelson], and improves upon earlier 'Tensor Sketch' constructions by Pagh and Pham, which used  Õ(3ᶜ ε⁻² δ⁻¹)  rows, by an exponential amount in both  c  and  δ⁻² .
+
+It was shown by Avron, Nguyen and Woodruff that Tensor Sketch is a subspace embedding.
+This has a large number of applications, such as guaranteeing the correctness of kernel-linear regression performed directly on the reduced vectors.
+We show that our construction is a subspace embedding too, improving again upon the exponential dependency on  c  and  δ⁻¹ , enabling sketching of much higher order polynomial kernels, such as Taylor approximations to the ubiquitous Gaussian radial basis function.
+
+Technically, we construct our matrix  M  such that  M(x ⊗ y) = Tx ∘ T'y  where  ∘  is the Hadamard (element-wise) product and  T  and  T'  support fast matrix-vector multiplication ala [Ailon Chazelle].
+To analyze the behavior of  Mx  on non-simple  x , we show a higher order version of Khintchine's inequality, related to the higher order Gaussian chaos analysis by Latała.
+Finally we show that such sketches can be combined recursively, in a way that doesn't increase the dependency on  c  by much.
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-verification" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="/papers/verification.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_verification_pdf'});"
+                           >pdf</a>]</span>
+
+                     <span class="year">
+                     2017</span>
+
+                     <span class="title">It is NP-hard to verify an LSF on the sphere</span>
+
+                     <span class="authors">
+                     TA
+                     </span>
+                  </div>
+                  <div class="abstract">We show a reduction from verifying that an LSF family `covers` the sphere, in the sense of Las Vegas LSF, to 3-sat.</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-minhash" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="/papers/minhash.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_minhash_pdf'});"
+                           >pdf</a>]  [<a href="https://docs.google.com/presentation/d/1oT-L5EON7ZCVScuYRoMzVHxf7x2Y6cig8deQXMmpP0I/edit?usp=sharing"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_minhash_slides'});"
+                           >slides</a>]</span>
+
+                     <span class="year">
+                     2017
+                        &mdash;
+                        <span class="comment">Master thesis</span></span>
+
+                     <span class="title">Minhash without false negatives</span>
+
+                     <span class="authors">
+                     TA
+                     </span>
+                  </div>
+                  <div class="abstract">We consider efficient combinatorial constructions, that allow us to partly derandomize data-structures using the locality sensitive framework of Indyk and Motwani (FOCS '98).
+In particular our constructions allow us to make Zero-Error Probabilistic Polynomial Time (ZPP) analogues of two state of the art algorithms for `Approximate Set Similarity':
+
+This data-structure problem deals with storing a collection  X  of sets such that given a query set  q  for which there exists  x ∈ P  with  |q ∩ x|/|q ∪ x| >= s_1 , the data structures return  x'∈ P  with  |q ∩ x'|/|q ∪ x'|\ge s_2 .
+The first algorithm by Broder et al.introduced the famous `minhash' function, which in the locality sensitive framework yields an  n^{ρ_b}  time,  n^{1+ρ_b}  space data structure for  ρ_b=(log1/s_1)/(log1/s_2) .
+The second by Christiani et al.~ gives an  n^{ρ_c}  time  n^{1+ρ_c}  space data-structure for  ρ_c=(\log2s_1/(1+s_1))/(\log2s_2/(1+s_2)) .
+
+Both algorithms use Monte Carlo randomization, but we show that this is not necessary, at least up to  n^{o(1)}  factors.
+This settles an open problem from Arasu et al and Pagh asking whether locality sensitive data-structures could be made _exact_ or _without false negatives_ other than for hamming distance, and whether a performance gap was needed in the exponent.
+
+The main approach in the thesis is to replace the `locality sensitive hash functions' or `space partitions' with `combinatorial design'.
+We show that many such designs can be constructed efficiently with the `multi-splitters' introduced by Alon et al.
+We further show that careful constructions of such designs can be efficiently decoded.
+
+We also investigate upper and lower bounds on combinatorial analogues of the minhash algorithm.
+This is related to the existence of small, approximate minwise hashing families under  l_∞  distance.
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-tails" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="/papers/tails.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tails_pdf'});"
+                           >pdf</a>]</span>
+
+                     <span class="year">
+                     2017</span>
+
+                     <span class="title">Asymptotic Tail Bounds and Applications</span>
+
+                     <span class="authors">
+                     TA
+                     </span>
+                  </div>
+                  <div class="abstract">In the field of Computer Science, the Chernoff bound is an extremely useful found bounding the error probabilities of various algorithms. Chernoff gives an exponentially decaying upper bound on the probability that a sum of independent random variables is many standard deviations away from its expectation.
+However sometimes we need more than an upper bound, and we need bounds that are tight within a constant factor or better. (There is a fairly standard tail lower bound, but it deviates
+ from Chernoff by a factor of $\sqrt n$.)
+In this project I will explore and derive multiple upper and lower bounds for Chernoff using methods ranging from geometric series and generating functions to saddlepoint approximations and laplace approximation. All these results will be known, but they don’t seem have a good exposition in Computer Science.
+The reason also to consider more simple methods is to help an intuition for deriving similar bounds for different problems. In particular I will derive a tight bound for the size of the intersection between two hamming balls, which does not seem to exist in the literature.
+I will use the formulas to answer whether algorithms exists for the following problems: Locality Sensitive Filters in hamming space with limited use of random bits (as opposed to current methods, requiring gaussian samples), LSF with improved performance for low dimensional spaces. (dimension < 2 log n) Linear space bit sampling LSH, which I have previously partially analyzed, but only in a different context, in which a full analysis was not necessary.
+</div>
+               </li>
+               <li class="toggle-item"
+                   id="paper-donkey" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://github.com/thomasahle/donkey"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_donkey_github'});"
+                           >github</a>]  [<a href="/papers/donkey.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_donkey_pdf'});"
+                           >pdf</a>]</span>
+
+                     <span class="year">
+                     2013
+                        &mdash;
+                        <span class="comment">Bachelor thesis</span></span>
+
+                     <span class="title">Donkeys to Monoids: A Computational Framework for Dynamic Semantics</span>
+
+                     <span class="authors">
+                     TA
+                     </span>
+                  </div>
+                  <div class="abstract"><p>
+In this paper I build a fully automatic system for translation of natural language into formal logic.
+I combine a variety of tools and theories to target standard issues such as anaphora resolution, sentence polarity etc.
+In particular I base my framework on dynamic logics in form of Dynamic Predicate Logic and a set of enhancements by Albert Visser (1999).
+</p><p>
+`Donkey Monoids', as I will call these monoidal DPL variants, are part of a movement in linguistics towards logics that can more naturally approximate human language in aspects such as polarity and scope.
+Indeed their name derives from the famous `Donkey Sentence' by Geach (1962) which exhibit these issues so well.
+</p><p>
+Visser didn't test his ideas computationally and neither did most people involved with DPL.
+In fact most of the classical literature on logification of natural language exhibits this `problem': Not testing computationally makes it easy to miss obvious details.
+With the present paper I supply such an experiment.
+</p><p>
+I build a rewriting system with a well defined set rules, discussing possible semantics.
+I apply the framework to a large collection of sentences, showing the conversion process step by step.
+Finally I discuss ways to enlarge the supported fragment of English, how we can combat and interpret the inherent ambiguity we meet, and how the flexibility of Donkey Monoids relate to the classical Montague lambda structures.
+</p>
+</div>
+               </li>
+         </ul>
+
+<footer class="page-foot">
+            <p class="dots"><span>Elsewhere:</span> <a href="https://en.wikipedia.org/wiki/User:Thomasda">Wikipedia</a><a href="https://oeis.org/wiki/User:Thomas_Dybdahl_Ahle">OEIS</a><a href="https://dblp1.uni-trier.de/pers/hd/a/Ahle:Thomas_D=">DBLP</a><a href="https://orcid.org/0000-0001-9747-0479">ORCID</a><a href="https://www.mathgenealogy.org/id.php?id=254777">Mathematics Genealogy</a><a href="https://mathscinet.ams.org/mathscinet/freetools/collab-dist?source=1223412&amp;target=189017">Erdős number</a></p>
+            <p class="dots"><a href="https://github.com/thomasahle">GitHub</a><a href="https://x.com/thomasahle">X</a><a href="https://bsky.app/profile/thomasahle.bsky.social">Bluesky</a><a href="https://scholar.google.dk/citations?user=aRiVoYgAAAAJ&amp;sortby=pubdate">Google Scholar</a><a href="https://linkedin.com/in/thomasahle">LinkedIn</a><a href="mailto:thomas@ahle.dk">Email</a></p>
+         </footer>
+      </div>
+   </main>
+<script>
+(function () {
+   function track() {
+      if (window.gtag) window.gtag.apply(null, arguments);
+   }
+   var target = /^#paper-/.test(location.hash) ? document.getElementById(location.hash.slice(1)) : null;
+   /* Abstracts: click a card (outside its links) to open or close it */
+   function toggleCard(card) {
+      var open = card.classList.toggle('open');
+      card.setAttribute('aria-expanded', String(open));
+      history.replaceState(null, '', '#' + card.id);
+      track('event', 'toggle', {'event_label': card.id});
+   }
+   document.querySelectorAll('.toggle-item').forEach(function (card) {
+      card.addEventListener('click', function (e) {
+         if (e.target.closest('a')) return;
+         if (String(window.getSelection()).length) return;
+         toggleCard(card);
+      });
+      card.addEventListener('keydown', function (e) {
+         if (e.target === card && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault();
+            toggleCard(card);
+         }
+      });
+   });
+   if (target) {
+      target.classList.add('open');
+      target.setAttribute('aria-expanded', 'true');
+      requestAnimationFrame(function () { target.scrollIntoView(); });
+   }
+})();
+   </script>
+</body>
+</html>

@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+   <head>
+      <!-- Google Analytics (GA4). Besides the standard page_view this records the full
+     referrer, its host, the landing page with query string, and any ?ref= tag
+     as event parameters. Register them in GA4 as event-scoped custom
+     dimensions (full_referrer, referrer_host, landing_page, ref_tag) to see them.
+     This file is the single source of truth: templates include it, and the
+     standalone pages under blog/ and 404.html carry an inlined copy. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-40XB6Q54CE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-40XB6Q54CE', (function () {
+    var ref = document.referrer || '';
+    var host = '';
+    if (ref) {
+      // android-app:// and other odd schemes may not parse; fall back to the raw string.
+      try { host = new URL(ref).hostname || ref; } catch (e) { host = ref; }
+    }
+    var params = {
+      full_referrer: ref || '(direct)',
+      referrer_host: host || '(direct)',
+      landing_page: location.pathname + location.search
+    };
+    var tag = new URLSearchParams(location.search).get('ref');
+    if (tag) { params.ref_tag = tag; }
+    return params;
+  })());
+</script>
+
+      <meta charset="utf-8">
+      <meta name="robots" content="noindex">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="thumbnail" content="/static/potrait.jpg" />
+
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon-16x16.png" sizes="16x16" />
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon-32x32.png" sizes="32x32"/>
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/favicon.ico" sizes="48x48" />
+      <link rel="icon" type="image/x-icon" href="/static/favicon_io/android-chrome-192x192.png" sizes="192x192" />
+
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Cardo:ital@0;1&amp;family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&amp;display=swap" rel="stylesheet">
+
+      
+      <script type="application/javascript">function addLoadEvent(func) {
+  var oldonload = window.onload;
+  if (typeof window.onload != 'function') {
+    window.onload = func;
+  } else {
+    window.onload = function() {
+      if (oldonload) {
+        oldonload();
+      }
+      func();
+    }
+  }
+}
+// External links
+addLoadEvent(function() {
+   for (let a of document.querySelectorAll('a[href^="http"]')) {
+      // :not([href*="//' + location.host + '"])')
+      a.addEventListener('click', event => {
+         gtag('event', 'click', {
+            'event_category': 'outbound',
+            'event_label': a.href,
+            'transport_type': 'beacon'
+            /*'hitCallback': function() { document.location = a.href; }*/
+         });
+         //return false;
+      });
+   }
+});</script>
+
+      <script type="application/ld+json">
+         {"@context" : "http://schema.org",
+    "@type" : "CollectionPage",
+     "author": {
+          "@type": "Person",
+          "name": "Thomas Dybdahl Ahle",
+           "image": [ "https://thomasahle.com/static/potrait.jpg" ],
+           "spouse": {
+                "@type": "Person",
+                "name": "Morgan Mingle"
+           }
+     },
+     "description": "My research concerns the theoretical foundations of machine learning and massive data, including similarity search, high-dimensional geometry, kernel methods, sketching and derandomization.",
+     "image": [ "https://thomasahle.com/static/potrait.jpg" ],
+     "primaryImageOfPage": "https://thomasahle.com/static/potrait.jpg",
+     "thumbnailUrl": "https://thomasahle.com/static/potrait.jpg"
+     }
+      </script>
+      <meta name="description"
+            content="Thomas Dybdahl Ahle is a researcher in the theoretical foundations of machine learning and massive data, including similarity search, high-dimensional geometry, kernel methods, sketching and derandomization." />
+  <style type="text/css">:root {
+   /* One neutral grey family and one link blue across the site */
+   --ink: #111;
+   --text: #333;
+   --muted: #666;
+   --line: #e5e5e5;
+   --bg: #fff;
+   --link: #0645ad;
+   --radius: 8px;
+   --sans: Lato, "Helvetica Neue", sans-serif;
+   --serif: Cardo, Garamond, "Times New Roman", serif;
+}
+
+* {
+   box-sizing: border-box;
+}
+
+[hidden] {
+   display: none !important;
+}
+
+html {
+   scroll-behavior: smooth;
+}
+
+body {
+   margin: 0;
+   background: var(--bg);
+   color: var(--text);
+   font-family: var(--sans);
+   font-size: 16px;
+   font-weight: 300;
+   line-height: 1.6;
+   -webkit-font-smoothing: antialiased;
+   text-rendering: optimizeLegibility;
+}
+
+a {
+   color: var(--link);
+   text-decoration: none;
+}
+
+a:hover {
+   text-decoration: underline;
+   text-decoration-skip-ink: auto;
+}
+
+h1, h2, h3 {
+   color: var(--ink);
+}
+
+ul {
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+sub, sup {
+   font-size: 75%;
+   line-height: 0;
+   position: relative;
+   vertical-align: baseline;
+}
+
+sup {
+   top: -0.5em;
+}
+
+sub {
+   bottom: -0.25em;
+}
+
+/* Lato Light for running text, regular for controls */
+.top-nav a, .link-button {
+   font-weight: 400;
+}
+
+.icon {
+   width: 20px;
+   height: 20px;
+   flex: none;
+   fill: none;
+   stroke: currentColor;
+   stroke-width: 1.75;
+   stroke-linecap: round;
+   stroke-linejoin: round;
+}
+
+.icon.solid {
+   fill: currentColor;
+   stroke: none;
+}
+
+/********** Top bar: centered section links in serif small caps **********/
+
+.topbar {
+   position: sticky;
+   top: 0;
+   z-index: 10;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 12px 52px;
+   background: rgba(255, 255, 255, .97);
+   border-bottom: 3px double #ccc;
+}
+
+/* The name is in the letterhead; the bar only shows it on phones */
+.brand {
+   display: none;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.3rem;
+   letter-spacing: .03em;
+   color: #111;
+}
+
+.brand:hover {
+   text-decoration: none;
+}
+
+.menu-toggle {
+   display: none;
+   align-items: center;
+   gap: 6px;
+   padding: 6px 10px;
+   font: inherit;
+   font-size: .95rem;
+   color: var(--ink);
+   background: #fff;
+   border: 1px solid var(--line);
+   border-radius: 6px;
+   cursor: pointer;
+}
+
+.top-nav {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: 4px 0;
+}
+
+.top-nav a {
+   padding: 4px 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.12rem;
+   letter-spacing: .05em;
+   color: #222;
+}
+
+.top-nav a:not(:last-child)::after {
+   content: "·";
+   margin: 0 16px;
+   color: #aaa;
+}
+
+.top-nav a:hover {
+   color: var(--link);
+   text-decoration: none;
+}
+
+.top-nav a.active {
+   font-style: italic;
+   color: #000;
+}
+
+/********** Main **********/
+
+.main {
+   padding: 40px 52px 72px;
+}
+
+.container {
+   max-width: 1100px;
+   margin: 0 auto;
+}
+
+@media (min-width: 1600px) {
+   .container {
+      max-width: 1400px;
+   }
+}
+
+section, h2[id], h3[id], [id^="paper-"], .anchor {
+   scroll-margin-top: 76px;
+}
+
+.anchor {
+   display: block;
+}
+
+/********** Section headings **********/
+
+.section-head {
+   display: flex;
+   align-items: baseline;
+   justify-content: space-between;
+   gap: 8px 16px;
+   flex-wrap: wrap;
+   margin: 36px 0 14px;
+}
+
+.section-head h2,
+.section h2,
+.page-title {
+   margin: 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: 1.85rem;
+   line-height: 1.2;
+   letter-spacing: .03em;
+}
+
+.link-button {
+   display: inline-flex;
+   align-items: center;
+   gap: 6px;
+   padding: 0;
+   font: inherit;
+   font-size: .95rem;
+   color: var(--link);
+   background: none;
+   border: 0;
+   cursor: pointer;
+}
+
+.link-button:hover {
+   text-decoration: underline;
+}
+
+.link-button .icon {
+   width: 17px;
+   height: 17px;
+}
+
+
+/********** Blog preview **********/
+
+.post-grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1rem;
+}
+
+@media (min-width: 1300px) {
+   .post-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+.post-card {
+   display: grid;
+   grid-template-columns: 15rem minmax(0, 1fr);
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+
+/* Images fill the left column edge to edge, like the paper cards */
+.post-thumb {
+   position: relative;
+   display: block;
+   border-right: 1px solid #eee;
+   background: #fafafa;
+}
+
+/* Card height follows the text; the image fills whatever space that leaves */
+.post-thumb img {
+   position: absolute;
+   inset: 0;
+   display: block;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   /* Charts and screenshots have their titles and axes at the top left */
+   object-position: left top;
+}
+
+.post-body {
+   display: flex;
+   flex-direction: column;
+   min-width: 0;
+   padding: 14px 18px 16px;
+}
+
+.post-category {
+   margin: 0;
+   font-size: .72rem;
+   font-weight: 400;
+   letter-spacing: .14em;
+   text-transform: uppercase;
+   color: var(--muted);
+}
+
+.post-card h3 {
+   margin: 4px 0 2px;
+   font-size: 1.08rem;
+   font-weight: 700;
+   line-height: 1.3;
+}
+
+.post-card h3 a {
+   color: var(--ink);
+}
+
+.post-meta {
+   margin: 0 0 6px;
+   font-size: .82rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+
+.post-lead {
+   margin: 0 0 10px;
+   font-size: .95rem;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 3;
+   overflow: hidden;
+}
+
+.post-body .link-button {
+   margin-top: auto;
+   align-self: flex-start;
+   font-size: .92rem;
+}
+
+/********** Footer: profiles and social links **********/
+
+/* Inline link lists separated by dots */
+.dots a + a::before {
+   content: "·";
+   display: inline-block;
+   margin: 0 .55em;
+   color: #999;
+}
+
+.page-foot {
+   margin-top: 64px;
+   padding-top: 18px;
+   border-top: 1px solid var(--line);
+   text-align: center;
+   font-size: .85rem;
+   color: var(--muted);
+}
+
+.page-foot p {
+   margin: 0 auto 8px;
+   max-width: none;
+}
+
+.page-foot a {
+   white-space: nowrap;
+}
+
+/********** Narrow screens: name and a menu button **********/
+
+@media (max-width: 900px) {
+   .topbar {
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--line);
+   }
+
+   .brand {
+      display: block;
+   }
+
+   .menu-toggle {
+      display: inline-flex;
+   }
+
+   .top-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 8px 20px 14px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, .06);
+   }
+
+   .topbar.open .top-nav {
+      display: flex;
+   }
+
+   .top-nav a {
+      padding: 9px 0;
+      font-size: 1.15rem;
+   }
+
+   .top-nav a:not(:last-child)::after {
+      content: none;
+   }
+
+   .main {
+      padding: 28px 20px 56px;
+   }
+}
+
+@media (max-width: 1180px) {
+   .main {
+      padding: 36px 36px 64px;
+   }
+
+}
+
+@media (max-width: 640px) {
+   .post-card {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .post-thumb {
+      border-right: 0;
+      border-bottom: 1px solid #eee;
+   }
+
+   .post-thumb img {
+      position: static;
+      height: auto;
+      aspect-ratio: 2 / 1;
+   }
+}
+/* Home page only. Shared tokens, top bar, headings, post cards and footer are in base.css. */
+
+/********** Letterhead: centered on the page, drawing to the right **********/
+
+.letterhead {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) minmax(0, 40em) minmax(0, 1fr);
+   align-items: center;
+   column-gap: 32px;
+   padding: 8px 0 12px;
+   text-align: center;
+}
+
+.letterhead .lh-text {
+   grid-column: 2;
+   grid-row: 1;
+}
+
+.letterhead .portrait {
+   grid-column: 3;
+   grid-row: 1;
+   justify-self: start;
+   position: relative;
+   width: 180px;
+}
+
+.letterhead .portrait img {
+   display: block;
+   width: 100%;
+   height: auto;
+}
+
+.letterhead .portrait .photo {
+   position: absolute;
+   inset: 0;
+   height: 100%;
+   object-fit: cover;
+   opacity: 0;
+   transition: opacity .2s;
+}
+
+.letterhead .portrait:hover .photo[src] {
+   opacity: 1;
+}
+
+.letterhead h1 {
+   margin: 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: clamp(2.1rem, 4vw, 3rem);
+   line-height: 1.1;
+   letter-spacing: .03em;
+}
+
+.letterhead .role {
+   margin: 6px 0 16px;
+   font-family: var(--serif);
+   font-style: italic;
+   font-size: 1.25rem;
+   color: #333;
+}
+
+.letterhead .bio {
+   margin: 0 auto 16px;
+   font-size: 1.05rem;
+}
+
+/* Contact links stack in the left column, mirroring the drawing on the right */
+.letterhead .contact {
+   grid-column: 1;
+   grid-row: 1;
+   justify-self: end;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   gap: 7px;
+   text-align: right;
+   font-size: .82rem;
+   font-weight: 400;
+   letter-spacing: .08em;
+   text-transform: uppercase;
+}
+
+.letterhead .bio {
+   margin-bottom: 0;
+}
+
+/********** Publication cards: the original thomasahle.com design **********/
+
+.pubs {
+   --item-size: 14rem;
+   --item-height: 14rem;
+   --item-padding: 1.5rem;
+   --border-radius: 4px;
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1rem;
+}
+
+/* While an abstract is open, cards keep their own height */
+.pubs:has(.toggle-item.open) {
+   align-items: start;
+}
+
+/* The original cards were sized with the default box model; with
+   border-box the 14rem image would overflow the bottom border. */
+.toggle-item, .toggle-item * {
+   box-sizing: content-box;
+}
+
+.toggle-item {
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: var(--border-radius);
+   background: white;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   color: black;
+   line-height: 1.55;
+   hyphens: auto;
+   display: grid;
+   grid-template-rows: auto 1fr;
+   grid-column-gap: 0px;
+   grid-row-gap: 0px;
+}
+.toggle-item.has_image {
+   grid-template-columns: var(--item-size) 1fr;
+}
+.toggle-item:active {
+   background: #fafafa;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.2);
+}
+.toggle-item:focus-visible {
+   outline: 2px solid var(--link);
+   outline-offset: 2px;
+}
+.toggle-item a {
+   color: var(--link);
+}
+.shown {
+   grid-area: 1 / 2 / 2 / 3;
+   padding: 8px 6%;
+   text-align: center;
+}
+.feature_image {
+   grid-area: 1 / 1 / 3 / 2;
+   border-right: 1px solid #eee;
+}
+.feature_image > img {
+   height: var(--item-height);
+   max-width: 100%;
+   width: auto;
+   object-fit: cover;
+   object-position: center center;
+   border-top-left-radius: 3px;
+   border-bottom-left-radius: 3px;
+}
+.shown .year {
+   display: block;
+   text-align: left;
+}
+.shown .files {
+   float: right;
+   text-align: right;
+}
+.toggle-item .files, .toggle-item .year, .toggle-item .authors {
+   font-size: 90%;
+}
+.shown .title {
+   hyphens: none;
+   margin-top: .5rem;
+   display: block;
+   font-weight: 400;
+   clear: both;
+}
+.toggle-item .abstract {
+   grid-area: 2 / 2 / 3 / 3;
+   padding: 0px var(--item-padding) 1rem var(--item-padding);
+   position: relative;
+   font-family: var(--serif);
+   text-align: justify;
+   line-height: 1.15;
+}
+.toggle-item .abstract p {
+   text-indent: 1em;
+   margin: 0;
+}
+.toggle-item .abstract p:first-child {
+   text-indent: 0;
+}
+.toggle-item:not(.open) {
+   height: var(--item-size);
+}
+.toggle-item:not(.open) .abstract {
+   line-height: 1.1;
+   overflow: hidden;
+   font-style: italic;
+   font-size: .85rem;
+   cursor: pointer;
+   color: #222;
+}
+.toggle-item .abstract:before {
+   position: absolute;
+   font-style: normal;
+   cursor: pointer;
+   color: black;
+   bottom: 0; right: 0;
+   z-index: 1;
+   background: white;
+   padding: 8px 10px 8px 10px;
+   font-family: var(--sans);
+   border-radius: var(--border-radius);
+   font-size: .85rem;
+}
+.toggle-item:not(.open) .abstract:before {
+   content: "View Abstract ⌵";
+}
+.toggle-item.open .abstract:before {
+   margin-top: 10px;
+   content: "Hide Abstract ⌃";
+}
+.toggle-item:not(.open) .abstract:after {
+   content: " ";
+   position: absolute;
+   left: 0; right: 0; top: 0; bottom: 0;
+   background: linear-gradient(180deg, rgba(255,255,255,0) 60%, rgba(255,255,255,1) 100%);
+   border-radius: var(--border-radius);
+}
+.toggle-item .comment {
+   font-style: italic;
+}
+.toggle-item .new {
+   font-weight: bold;
+   background-color: var(--link);
+   color: white;
+   padding: 1px 5px;
+   border-radius: 3px;
+}
+
+/* Wide screens: two cards per row */
+@media (min-width: 1300px) {
+   .pubs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+/* Phones: the original small-screen card */
+@media only screen and (max-width: 500px) {
+   .pubs {
+      --item-size: 7rem;
+      --item-height: 7rem;
+      --item-padding: 1rem;
+   }
+   .toggle-item:not(.open) {
+      height: auto;
+   }
+   .toggle-item:not(.open) .abstract {
+      display: none;
+   }
+   .shown {
+      grid-area: 1 / 2 / 2 / 3;
+   }
+   .toggle-item:not(.has_image) > .shown {
+      grid-area: 1 / 1 / 2 / 3;
+   }
+   .feature_image {
+      grid-area: 1 / 1 / 2 / 2;
+   }
+   .toggle-item .abstract {
+      grid-area: 2 / 1 / 3 / 3;
+   }
+}
+
+/* Media shows the six most recent items until "Show all" is pressed */
+#media:not(.all) .media-card.extra,
+#media:not(.all) .when-all-media,
+#media.all .when-recent,
+#media.all .media-more {
+   display: none;
+}
+
+.media-more {
+   display: block;
+   margin: 16px auto 0;
+}
+
+/********** Recent posts (Bluesky) **********/
+
+.head-links {
+   display: inline-flex;
+   gap: 18px;
+}
+
+.post-card.no-thumb {
+   grid-template-columns: minmax(0, 1fr);
+}
+
+/* Bluesky posts have no title, so their text gets more lines */
+.bsky-text {
+   margin-top: 4px;
+   color: var(--ink);
+   white-space: pre-line;
+   -webkit-line-clamp: 5;
+}
+
+.feed-fallback {
+   margin: 0;
+   color: var(--text);
+}
+
+/********** Full sections **********/
+
+.section {
+   margin-top: 44px;
+}
+
+.section h2 {
+   margin-bottom: 14px;
+}
+
+.section p {
+   max-width: 46em;
+   margin: 0 0 12px;
+}
+
+/* Two-column typographic index (software, games, teaching, other) */
+.index-cols {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 0 48px;
+}
+
+.index-cols h3 {
+   margin: 0 0 4px;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.25rem;
+   font-weight: 400;
+   letter-spacing: .05em;
+   color: var(--muted);
+}
+
+.index {
+   margin: 0;
+}
+
+.index dt {
+   margin-top: 12px;
+   font-size: 1.05rem;
+}
+
+.index dt b {
+   font-weight: 700;
+   color: var(--ink);
+}
+
+.index .links {
+   margin-left: .3em;
+   font-size: .9rem;
+   font-weight: 400;
+}
+
+.index .links a {
+   white-space: nowrap;
+}
+
+.index dd {
+   margin: 1px 0 0;
+   font-family: var(--serif);
+   font-size: 1.04rem;
+   line-height: 1.4;
+   color: #222;
+}
+
+/* The coauthor list uses the full width of the page */
+.section p.coauthor-list {
+   max-width: none;
+}
+
+.coauthor-list b {
+   font-weight: 700;
+   color: var(--ink);
+}
+
+/********** Media cards **********/
+
+.media-grid {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 1rem;
+}
+
+.media-card {
+   display: grid;
+   grid-template-columns: 7.5rem minmax(0, 1fr);
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+
+.media-card.no-logo {
+   grid-template-columns: minmax(0, 1fr);
+}
+
+.media-logo {
+   display: grid;
+   place-items: center;
+   padding: 14px;
+   border-right: 1px solid #eee;
+   background: white;
+}
+
+.media-logo img {
+   display: block;
+   width: 100%;
+   max-width: 92px;
+   height: auto;
+   border-radius: 4px;
+}
+
+.media-body {
+   padding: 14px 18px 16px;
+}
+
+.media-top {
+   display: flex;
+   justify-content: space-between;
+   gap: 12px;
+   font-size: .82rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+
+.media-top .outlet {
+   text-transform: uppercase;
+   letter-spacing: .06em;
+   color: var(--muted);
+}
+
+.media-card h3 {
+   margin: 6px 0;
+   font-family: var(--serif);
+   font-style: italic;
+   font-weight: 400;
+   font-size: 1.2rem;
+   line-height: 1.3;
+   letter-spacing: 0;
+}
+
+.media-card h3 a {
+   color: var(--ink);
+}
+
+.media-card p {
+   margin: 0;
+   font-size: .95rem;
+}
+
+/********** Medium screens: smaller portrait **********/
+
+@media (max-width: 1180px) {
+   /* Text stays centered in its column, drawing to its right */
+   .letterhead {
+      grid-template-columns: minmax(0, 1fr) 150px;
+   }
+
+   .letterhead .lh-text {
+      grid-column: 1;
+   }
+
+   .letterhead .portrait {
+      grid-column: 2;
+      width: 150px;
+   }
+
+   .letterhead .contact {
+      grid-column: 1;
+      grid-row: 2;
+      justify-self: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px 0;
+      margin-top: 16px;
+      text-align: center;
+   }
+
+   .letterhead .contact a + a::before {
+      content: "·";
+      display: inline-block;
+      margin: 0 .55em;
+      color: #999;
+   }
+}
+
+@media (max-width: 640px) {
+   .letterhead {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 14px;
+      padding-top: 0;
+   }
+
+   .letterhead .lh-text {
+      grid-column: 1;
+   }
+
+   .letterhead .portrait {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: center;
+      width: 110px;
+   }
+
+   .letterhead .lh-text {
+      grid-row: 2;
+   }
+
+   /* Wrapped lines would start with a dot, so phones use spacing instead */
+   .letterhead .contact {
+      grid-row: 3;
+      margin-top: 0;
+      gap: 6px 16px;
+   }
+
+   .letterhead .contact a + a::before {
+      content: none;
+   }
+
+   .letterhead .bio {
+      font-size: 1rem;
+   }
+
+   .media-grid {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .index-cols {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .index-cols > div + div {
+      margin-top: 22px;
+   }
+
+   .media-card {
+      grid-template-columns: 5rem minmax(0, 1fr);
+   }
+
+   .media-logo {
+      padding: 10px;
+   }
+}
+
+/********** Book: The Tensor Cookbook **********/
+.book {
+   display: grid;
+   grid-template-columns: minmax(0, 23rem) minmax(0, 1fr);
+   margin: 28px 0 8px;
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+.book-cover {
+   display: block;
+   border-right: 1px solid #eee;
+   background: #fff;
+}
+.book-cover img {
+   display: block;
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   padding: 14px;
+}
+.book-body {
+   padding: 18px 28px 18px;
+}
+.book-label {
+   margin: 0;
+   font-size: .72rem;
+   font-weight: 400;
+   letter-spacing: .14em;
+   text-transform: uppercase;
+   color: var(--muted);
+}
+.book-title {
+   margin: 2px 0 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: 2rem;
+   letter-spacing: .03em;
+   line-height: 1.15;
+}
+.book-title a {
+   color: var(--ink);
+}
+.book-pitch {
+   margin: 2px 0 10px;
+   font-family: var(--serif);
+   font-style: italic;
+   font-size: 1.2rem;
+   color: #333;
+}
+.book-desc {
+   margin: 0 0 8px;
+   max-width: 44em;
+}
+.book-meta {
+   margin: 0 0 4px;
+   font-size: .85rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+.book-links {
+   margin: 0;
+   font-size: .95rem;
+}
+@media (max-width: 760px) {
+   .book {
+      grid-template-columns: minmax(0, 1fr);
+   }
+   .book-cover {
+      border-right: 0;
+      border-bottom: 1px solid #eee;
+   }
+   .book-body {
+      padding: 14px 18px 16px;
+   }
+}</style>
+  <title>Thomas Dybdahl Ahle</title>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></symbol>
+   </svg>
+
+   <header class="topbar" id="topbar">
+      <a class="brand" href="#top">Thomas Ahle</a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="top-nav">
+         <svg class="icon"><use href="#i-menu"/></svg> Menu
+      </button>
+      <nav class="top-nav" id="top-nav" aria-label="Sections">
+         <a href="#top" class="active" aria-current="page">Home</a>
+         <a href="#publications">Publications</a>
+         <a href="#manuscripts">Manuscripts</a>
+         <a href="#projects">Software &amp; Games</a>
+         <a href="#media">Media</a>
+         <a href="#teaching">Teaching</a>
+         <a href="/new/blog/">Blog</a>
+      </nav>
+   </header>
+   <script>
+(function () {
+   /* Narrow screens: the menu button opens the section list */
+   var topbar = document.getElementById('topbar');
+   var menu = document.getElementById('menu-toggle');
+   function closeMenu() {
+      topbar.classList.remove('open');
+      menu.setAttribute('aria-expanded', 'false');
+   }
+   menu.addEventListener('click', function () {
+      var open = topbar.classList.toggle('open');
+      menu.setAttribute('aria-expanded', String(open));
+   });
+   topbar.querySelectorAll('.top-nav a').forEach(function (a) {
+      a.addEventListener('click', closeMenu);
+   });
+})();
+   </script>
+
+   <main class="main" id="top">
+      <div class="container">
+
+         <header class="letterhead">
+            <nav class="contact" aria-label="Contact and profiles">
+               <a href="https://x.com/thomasahle">X</a><a href="cv.pdf">CV</a><a href="https://github.com/thomasahle">GitHub</a><a href="https://bsky.app/profile/thomasahle.bsky.social">Bluesky</a><a href="https://linkedin.com/in/thomasahle">LinkedIn</a><a href="https://scholar.google.dk/citations?user=aRiVoYgAAAAJ&amp;sortby=pubdate">Google Scholar</a><a href="mailto:thomas@ahle.dk">thomas@ahle.dk</a>
+            </nav>
+            <div class="lh-text">
+               <h1>Thomas Dybdahl Ahle</h1>
+               <p class="role">Head of Machine Learning, <a href="https://normalcomputing.com/">Normal Computing</a> &middot; Copenhagen</p>
+               <p class="bio">My work combines AI and theory. On the AI side, I build agents that design, formalize and verify chips. On the theory side, I work on hashing with machine-checked guarantees, fast polynomial evaluation, optimization theory, and the foundations of massive data: similarity search, sketching and high-dimensional geometry.</p>
+            </div>
+            <div class="portrait" id="portrait">
+               <img class="face" src="static/ThomasFace.png" alt="A drawing of me" width="638" height="638">
+               <img class="photo" data-src="static/normal_potrait.jpg" alt="">
+            </div>
+         </header>
+
+         <section class="book" id="book" aria-label="The Tensor Cookbook">
+            <a class="book-cover" href="https://tensorcookbook.com/" tabindex="-1" aria-hidden="true"><img src="feature_imgs/cookbook_cover.png" alt=""></a>
+            <div class="book-body">
+               <p class="book-label">Book</p>
+               <h2 class="book-title"><a href="https://tensorcookbook.com/">The Tensor Cookbook</a></h2>
+               <p class="book-pitch">The Matrix Cookbook, rewritten in tensor diagrams.</p>
+               <p class="book-desc">A reference and a crash course in the visual language of tensor diagrams: matrix and tensor derivatives, statistics and probability, Kronecker products, decompositions and machine learning applications, with exercises throughout.</p>
+               <p class="book-meta">82 pages &middot; Updated Jul 2026</p>
+               <p class="book-links"><a href="https://raw.githubusercontent.com/thomasahle/tensorgrad/main/paper/cookbook.pdf">[pdf]</a> <a href="https://tensorcookbook.com/">[website]</a> <a href="https://tensorcookbook.com/playground">[playground]</a> <a href="https://github.com/thomasahle/tensorgrad">[tensorgrad]</a></p>
+            </div>
+         </section>
+
+         <span class="anchor" id="research"></span>
+         
+         <section id="publications">
+            <div class="section-head">
+               <h2>Research</h2>
+               <a class="link-button" href="publications.html">All publications <svg class="icon"><use href="#i-arrow"/></svg></a>
+            </div>
+            <ul class="pubs">
+               <li class="toggle-item featured has_image"
+                   id="paper-pcb" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/pdf/2312.04836"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_pcb_arxiv'});"
+                           >arxiv</a>]  [<a href="https://www.nature.com/articles/s41467-025-59011-x"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_pcb_journal'});"
+                           >journal</a>]</span>
+
+                     <span class="year">NATCOM
+                     2025
+                        &mdash;
+                        <span class="new">NEW!</span></span>
+
+                     <span class="title">Thermodynamic Computing System for AI Applications</span>
+
+                     <span class="authors">
+                     <a href="https://scholar.google.com/citations?user=Ee_tECgAAAAJ&hl=en"
+                              title="Denis Melanson"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'D Melanson'});"
+                              >Melanson</a>, <a href="https://scholar.google.com/citations?user=TbO7kjW1GlwC&hl=en"
+                              title="Mohammad Abu Khater"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Abu Khater'});"
+                              >Abu Khater</a>, <a href="https://scholar.google.com/citations?user=A9p6aIIAAAAJ&hl=en"
+                              title="Maxwell Aifer"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Aifer'});"
+                              >Aifer</a>, <a href="https://scholar.google.com/citations?user=iM2qRCkAAAAJ&hl=en"
+                              title="Kaelan Donatella"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'K Donatella'});"
+                              >Donatella</a>, <a href="https://scholar.google.co.uk/citations?user=I2W8xCoAAAAJ&hl=en"
+                              title="Max Hunter Gordon"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M H Gordon'});"
+                              >Gordon</a>, TA, <a href="https://threeplusone.com/"
+                              title="Gavin E. Crooks"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'G E Crooks'});"
+                              >Crooks</a>, <a href="https://scholar.google.com/citations?user=GS0gdQIAAAAJ&hl=en"
+                              title="Antonio J. Martinez"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'A J Martinez'});"
+                              >Martinez</a>, <a href="https://scholar.google.com/citations?user=8mnfsnYAAAAJ&hl=en"
+                              title="Faris Sbahi"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'F Sbahi'});"
+                              >Sbahi</a>, <a href="https://scholar.google.com/citations?user=jvz1G9EAAAAJ&hl=en"
+                              title="Patrick J. Coles"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'P J Coles'});"
+                              >Coles</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/pcb.png" alt="" loading="lazy"></div>
+                  <div class="abstract">Recent breakthroughs in artificial intelligence (AI) algorithms have highlighted the need for novel
+computing hardware in order to truly unlock the potential for AI. Physics-based hardware, such
+as thermodynamic computing, has the potential to provide a fast, low-power means to accelerate
+AI primitives, especially generative AI and probabilistic AI. In this work, we present a small-scale
+thermodynamic computer, which we call the stochastic processing unit. This device is composed of
+RLC circuits, as unit cells, on a printed circuit board, with 8 unit cells that are all-to-all coupled
+via switched capacitances. It can be used for either sampling or linear algebra primitives, and we
+demonstrate Gaussian sampling and matrix inversion on our hardware. The latter represents the
+first thermodynamic linear algebra experiment. We envision that this hardware, when scaled up in
+size, will have significant impact on accelerating various probabilistic AI applications.
+</div>
+               </li>
+               <li class="toggle-item featured has_image"
+                   id="paper-cqr" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2210.05974"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cqr_arxiv'});"
+                           >arxiv</a>]  [<a href="https://github.com/thomasahle/cce"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cqr_github'});"
+                           >github</a>]  [<a href="/papers/cqr.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cqr_pdf'});"
+                           >pdf</a>]  [<a href="/papers/cce_poster.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cqr_poster'});"
+                           >poster</a>]  [<a href="https://thomasahle.github.io/cce"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_cqr_website'});"
+                           >website</a>]</span>
+
+                     <span class="year">NEURIPS
+                     2023</span>
+
+                     <span class="title">Clustering the Sketch: Dynamic Compression for Embedding Tables</span>
+
+                     <span class="authors">
+                     <a href="https://scholars.croucher.org.hk/scholars/ling-hei-tsang"
+                              title="Henry Ling-Hei Tsang"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'H Tsang'});"
+                              >H Tsang</a>, TA
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/cqr.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+Embedding tables are used by machine learning systems to work with categorical features.
+These tables can become exceedingly large in modern recommendation systems, necessitating the development of new methods for fitting them in memory, even during training.
+</p>
+<p>
+The best previous methods for table compression are so called "post training" quantization schemes such as "product" and "residual" quantization.
+These methods replace table rows with references to k-means clustered "codewords".
+Unfortunately, clustering requires prior knowledge of the table to be compressed, which limits the memory savings to inference time and not training time.
+Hence, recent work, like the QR method, has used random references (linear sketching), which can be computed with hash functions before training.
+Unfortunately, the compression achieved is inferior to that achieved by post-training quantization.
+</p>
+<p>
+The new algorithm, CQR, shows how to get the best of two worlds by combining clustering and sketching:
+First IDs are randomly assigned to a codebook and codewords are trained (end to end) for an epoch. Next, we expand the codebook and apply clustering to reduce the size again. Finally, we add new random references and continue training.
+</p>
+<p>
+We show experimentally close to those of post-training quantization with the training time memory reductions of sketch-based methods, and we prove that our method always converges to the optimal embedding table for least-squares training.
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured has_image"
+                   id="paper-supermajority" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="http://arxiv.org/abs/1904.04045"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_supermajority_arxiv'});"
+                           >arxiv</a>]  [<a href="https://thomasahle.com/blog/sets.html"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_supermajority_blog post'});"
+                           >blog post</a>]  [<a href="/papers/supermajority.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_supermajority_pdf'});"
+                           >pdf</a>]  [<a href="https://docs.google.com/presentation/d/1qB4M7oEHmeRs8b0x1u0O3NS7PozydhVgqI059Bi_2QE"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_supermajority_slides'});"
+                           >slides</a>]  [<a href="https://www.youtube.com/watch?v=Bp3afo2YYCQ"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_supermajority_video'});"
+                           >video</a>]</span>
+
+                     <span class="year">FOCS
+                     2020</span>
+
+                     <span class="title">Subsets and Supermajorities: Optimal Hashing‑based Set Similarity Search</span>
+
+                     <span class="authors">
+                     TA, <a href="https://di.ku.dk/english/staff/?pure=en/persons/493157"
+                              title="Jakob Bæk Tejs Knudsen"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'J Knudsen'});"
+                              >J Knudsen</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/sets.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+We formulate and optimally solve a new generalized Set Similarity Search problem,
+which assumes the size of the database and query sets are known in advance.
+By creating polylog copies of our data-structure, we optimally solve any symmetric Approximate Set Similarity Search problem, including approximate versions of Subset Search, Maximum Inner Product Search (MIPS), Jaccard Similarity Search and Partial Match.
+</p>
+
+<p>
+Our algorithm can be seen as a natural generalization of previous work on Set as well as Euclidean Similarity Search, but conceptually it differs by optimally exploiting the information present in the sets as well as their complements, and doing so asymmetrically between queries and stored sets.
+Doing so we improve upon the best previous work:
+MinHash [J. Discrete Algorithms 1998], SimHash [STOC 2002], Spherical LSF
+[SODA 2016, 2017] and Chosen Path [STOC 2017] by as much as a factor n<sup>.14</sup> in both time and space; or in the near-constant time regime, in space, by an arbitrarily large polynomial factor.
+</p>
+
+<p>
+Turning the geometric concept, based on Boolean supermajority functions, into a practical algorithm requires ideas from branching random walks on Z<sup>2</sup>, for which we give the first non-asymptotic near tight analysis.
+</p>
+
+<p>
+Our lower bounds follow from new hypercontractive arguments, which can be seen as characterizing the exact family of similarity search problems for which supermajorities are optimal.
+The optimality holds for among all hashing based data structures in the random setting, and by reductions, for 1 cell and 2 cell probe data structures.
+As a side effect, we obtain new hypercontractive bounds on the directed noise operator.
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured has_image"
+                   id="paper-tensorsketch-joint" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/1909.01410"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tensorsketch-joint_arxiv'});"
+                           >arxiv</a>]  [<a href="/papers/tensorsketch-joint.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tensorsketch-joint_pdf'});"
+                           >pdf</a>]  [<a href="/papers/TensorSketch_Amir.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tensorsketch-joint_slides'});"
+                           >slides</a>]  [<a href="https://docs.google.com/presentation/d/1cPMMaZ2kuVI1PEJrBjKxLq6k8GYP7JUh_Q23gBw1LGA/edit?usp=sharing"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_tensorsketch-joint_slides 2'});"
+                           >slides 2</a>]</span>
+
+                     <span class="year">SODA
+                     2020
+                        &mdash;
+                        <span class="comment">Merged from "Almost Optimal Tensor&nbsp;Sketch"</span></span>
+
+                     <span class="title">Oblivious Sketching of High‑Degree Polynomial Kernels</span>
+
+                     <span class="authors">
+                     TA, <a href="https://theory.epfl.ch/kapralov/"
+                              title="Michael Kapralov"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Kapralov'});"
+                              >Kapralov</a>, <a href="https://di.ku.dk/english/staff/?pure=en/persons/493157"
+                              title="Jakob Bæk Tejs Knudsen"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'J Knudsen'});"
+                              >Knudsen</a>, <a href="http://rasmuspagh.net/"
+                              title="Rasmus Pagh"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'R Pagh'});"
+                              >Pagh</a>, <a href="http://www.cs.cmu.edu/~avelingk/"
+                              title="Ameya Velingker"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'A Velingker'});"
+                              >Velingker</a>, <a href="http://www.cs.cmu.edu/~dwoodruf/"
+                              title="David P. Woodruff"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'D Woodruff'});"
+                              >Woodruff</a>, <a href="https://scholar.google.com/citations?user=S9Ss8M8AAAAJ&hl=en"
+                              title="Amir Zandieh"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'A Zandieh'});"
+                              >Zandieh</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/cube.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+Kernel methods are fundamental tools in machine learning that allow detection of non-linear dependencies between data without explicitly constructing feature vectors in high dimensional spaces. A major disadvantage of kernel methods is their poor scalability: primitives such as kernel PCA or kernel ridge regression generally take prohibitively large quadratic space and (at least) quadratic time, as kernel matrices are usually dense. Some methods for speeding up kernel linear algebra are known, but they all invariably take time exponential in either the dimension of the input point set (e.g., fast multipole methods suffer from the curse of dimensionality) or in the degree of the kernel function.
+</p><p>
+Oblivious sketching has emerged as a powerful approach to speeding up numerical linear algebra over the past decade, but our understanding of oblivious sketching solutions for kernel matrices has remained quite limited, suffering from the aforementioned exponential dependence on input parameters. Our main contribution is a general method for applying sketching solutions developed in numerical linear algebra over the past decade to a tensoring of data points without forming the tensoring explicitly. This leads to the first oblivious sketch for the polynomial kernel with a target dimension that is only polynomially dependent on the degree of the kernel function, as well as the first oblivious sketch for the Gaussian kernel on bounded datasets that does not suffer from an exponential dependence on the dimensionality of input data points.
+</p>
+</div>
+               </li>
+            </ul>
+         </section>
+         
+         <section id="manuscripts">
+            <div class="section-head">
+               <h2>Manuscripts</h2>
+               <a class="link-button" href="manuscripts.html">All manuscripts <svg class="icon"><use href="#i-arrow"/></svg></a>
+            </div>
+            <ul class="pubs">
+               <li class="toggle-item featured has_image"
+                   id="paper-powerlaw" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2609.36271"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_powerlaw_arxiv'});"
+                           >arxiv</a>]</span>
+
+                     <span class="year">
+                     2026
+                        &mdash;
+                        <span class="new">NEW!</span></span>
+
+                     <span class="title">Stochastic Optimization Under Power&#8209;Law Spectra:<br>Tight Bounds and Shuffling Analysis</span>
+
+                     <span class="authors">
+                     TA, <a href="https://scholar.google.com/citations?user=zIv6YN0AAAAJ&hl=en"
+                              title="Yaroslav Bulatov"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'Y Bulatov'});"
+                              >Y Bulatov</a>, <a href="https://www.cs.cornell.edu/~cdesa/"
+                              title="Christopher De Sa"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'C De Sa'});"
+                              >C De Sa</a>, <a href="https://cs.stanford.edu/~chrismre/"
+                              title="Christopher Ré"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'C Ré'});"
+                              >C Ré</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/powerlaw.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>
+Recent work has established that power-law spectral conditions on data enable tight convergence bounds for deterministic gradient descent, resolving the conflict between classical exponential bounds and observed power-law learning curves. In this work, we extend this result to the stochastic regime of high-dimensional machine learning. We provide two main contributions: (1) We generalize the power-law spectral theory to Stochastic Gradient Descent (SGD), showing that the same spectral exponents govern stochastic dynamics; (2) For the fundamental case of isotropic Gaussian data, we provide a precise analysis of data shuffling, deriving exact constants that prove Single Shuffle is strictly superior to Flip-Flop and IID sampling. Our results bridge the gap between abstract spectral theory and practical stochastic training choices, offering a unified picture of how data geometry drives optimization speed.
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured has_image"
+                   id="paper-polyeval" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2609.06022"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_polyeval_arxiv'});"
+                           >arxiv</a>]  [<a href="https://github.com/thomasahle/fast-polynomials"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_polyeval_github'});"
+                           >github</a>]  [<a href="https://thomasahle.com/fast-polynomials/"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_polyeval_website'});"
+                           >website</a>]</span>
+
+                     <span class="year">
+                     2026
+                        &mdash;
+                        <span class="new">NEW!</span></span>
+
+                     <span class="title">Fast Evaluation of Polynomials with Rational Preprocessing</span>
+
+                     <span class="authors">
+                     TA, <a href="https://di.ku.dk/english/staff/?pure=en/persons/493157"
+                              title="Jakob Bæk Tejs Knudsen"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'J Knudsen'});"
+                              >J Knudsen</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/polyeval.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>Horner's rule evaluates a monic degree-n polynomial using n−1 multiplications. We show that with rational preprocessing of the coefficients, any such polynomial can be evaluated using only ⌊n/2⌋ + 1 multiplications over fields of characteristic zero or of characteristic p &gt; n. This resolves the multiplication side of a conjecture of Rabin and Winograd (Comm. Pure Appl. Math 1972), who achieved n/2 + 2⌈log<sub>2</sub> n⌉ multiplications and conjectured the logarithmic overhead was necessary.
+</p><p>
+We show that this multiplication count can't be beaten in general, proving that three multiplications do not suffice for degree 6. This strengthens the lower bound of Pan (STOC 1978), who proved a tight bound for general, complex preprocessing.
+</p><p>
+In characteristic 2, for every n &gt; 1 and every finite field of size at least 2n, we prove that an n-multiplication chain cannot parametrize all value vectors at 2n distinct evaluation points, even with arbitrary preprocessing. We give ⌊n/2⌋ + 1 multiplication schedules over characteristic 2, each with an explicit inverse, for every odd degree n ≤ 25 and conjecture that this is possible for all n.
+</p><p>
+We also give an injective polynomial construction for universal hashing that uses N multiplications to hash 2N values with a single random key. This improves the best previous construction by Daniel J. Bernstein (cr.yp.to).
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured"
+                   id="paper-autoformal" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2605.00058"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_autoformal_arxiv'});"
+                           >arxiv</a>]</span>
+
+                     <span class="year">
+                     2026
+                        &mdash;
+                        <span class="comment">ICLR 2026 VerifAI Workshop</span></span>
+
+                     <span class="title">Autoformalizing Memory Specifications with Agents</span>
+
+                     <span class="authors">
+                     <a href="https://janoleernst.com/"
+                              title="Jan Ole Ernst"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'J O Ernst'});"
+                              >Ernst</a>, <a href="https://github.com/dmitrisaberi"
+                              title="Dmitri Michelangelo Saberi"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'D M Saberi'});"
+                              >Saberi</a>, <a href="https://www.informatik.uni-wuerzburg.de/ce/team/derek-christ/"
+                              title="Derek Christ"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'D Christ'});"
+                              >Christ</a>, <a href="https://www.iese.fraunhofer.de/blog/author/thomas-zimmermann/"
+                              title="Thomas Zimmermann"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'T Zimmermann'});"
+                              >Zimmermann</a>, <a href="https://rajath.com/"
+                              title="Rajath Salegame"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'R Salegame'});"
+                              >Salegame</a>, <a href="https://oatml.cs.ox.ac.uk/members/suhaas_bhat/"
+                              title="Suhaas M. Bhat"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'S M Bhat'});"
+                              >Bhat</a>, <a href="https://github.com/slevental"
+                              title="Stanislav Levental"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'S Levental'});"
+                              >Levental</a>, TA, <a href="https://www.informatik.uni-wuerzburg.de/ce/team/matthias-jung/"
+                              title="Matthias Jung"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Jung'});"
+                              >Jung</a>
+                     </span>
+                  </div>
+                  <div class="abstract"><p>
+The primary goal of Design Verification (DV) is to ensure that a proposed chip design implementation (either in code, or physical form) exactly matches its specification and is free of functional errors in order to avoid costly re-designs. Achieving this often demands extensive manual interpretation, translating the specification document into a formal, testable representation. While AI has made progress in DV, current approaches typically focus on narrow, isolated tasks rather than full end-to-end specification compliance of modern chip designs, failing to capture the complexity of real-world verification. Our method automatically formalizes natural language memory chip specifications, for industry relevant Dynamic Random Access Memory (DRAM) standards, into a formal representation called DRAMPyML that can be used for downstream DV tasks like the generation of SystemVerilog assertions, stimulus, and functional coverage. We also release our benchmarking dataset, DRAMBench, which can be used to evaluate the evolution of model capabilities (and new approaches) at hardware autoformalization.
+</p>
+</div>
+               </li>
+               <li class="toggle-item featured has_image"
+                   id="paper-mersenne" tabindex="0" aria-expanded="false">
+                  <div class="shown">
+                     <span class="files">[<a href="https://arxiv.org/abs/2008.08654"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_mersenne_arxiv'});"
+                           >arxiv</a>]  [<a href="/papers/mersenne.pdf"
+                           onclick="window.gtag && gtag('event', 'download', {'event_label': 'download_mersenne_pdf'});"
+                           >pdf</a>]</span>
+
+                     <span class="year">
+                     2021
+                        &mdash;
+                        <span class="comment">Updated May 2021</span></span>
+
+                     <span class="title">The Power of Hashing with Mersenne Primes</span>
+
+                     <span class="authors">
+                     TA, <a href="https://di.ku.dk/english/staff/?pure=en/persons/493157"
+                              title="Jakob Bæk Tejs Knudsen"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'J Knudsen'});"
+                              >J Knudsen</a>, <a href="http://hjemmesider.diku.dk/~mthorup/"
+                              title="Mikkel Thorup"
+                              onclick="window.gtag && gtag('event', 'coauthor', {'event_label': 'M Thorup'});"
+                              >M Thorup</a>
+                     </span>
+                  </div>
+                  <div class="feature_image"><img src="feature_imgs/mersenne.png" alt="" loading="lazy"></div>
+                  <div class="abstract"><p>The classic way of computing a k-universal hash function is to use a random degree-(k−1) polynomial over a prime field ℤ<sub>p</sub>. For a fast computation of the polynomial, the prime p is often chosen as a Mersenne prime p = 2<sup>b</sup>−1.
+</p><p>
+In this paper, we show that there are other nice advantages to using Mersenne primes. Our view is that the output of the hash function is a b-bit integer that is uniformly distributed in [2<sup>b</sup>], except that p (the all 1s value) is missing. Uniform bit strings have many nice properties, such as splitting into substrings which gives us two or more hash functions for the cost of one, while preserving strong theoretical qualities. We call this trick “Two for one” hashing, and we demonstrate it on 4-universal hashing in the classic Count Sketch algorithm for second moment estimation.
+</p><p>
+We also provide a new fast branch-free code for division and modulus with Mersenne primes. Contrasting our analytic work, this code generalizes to Pseudo-Mersenne primes p = 2<sup>b</sup>−c for small c, improving upon a classical algorithm of Crandall.
+</p>
+</div>
+               </li>
+            </ul>
+         </section>
+         
+
+         <section class="section" id="coauthors">
+            <span class="anchor" id="about"></span>
+            <span class="anchor" id="resume"></span>
+            <p class="coauthor-list"><b>Coauthors:</b>
+               <a href="https://sites.google.com/view/mikkel-abrahamsen">Mikkel Abrahamsen</a>, <a href="https://scholar.google.com/citations?user=A9p6aIIAAAAJ&hl=en">Maxwell Aifer</a>, <a href="http://itu.dk/people/maau/">Martin Aumüller</a>, <a href="https://oatml.cs.ox.ac.uk/members/suhaas_bhat/">Suhaas M. Bhat</a>, <a href="https://scholar.google.com/citations?user=zIv6YN0AAAAJ&hl=en">Yaroslav Bulatov</a>, <a href="https://www.informatik.uni-wuerzburg.de/ce/team/derek-christ/">Derek Christ</a>, <a href="https://scholar.google.com/citations?user=jvz1G9EAAAAJ&hl=en">Patrick J. Coles</a>, <a href="https://threeplusone.com/">Gavin E. Crooks</a>, <a href="https://scholar.google.com/citations?user=iM2qRCkAAAAJ&hl=en">Kaelan Donatella</a>, <a href="https://twitter.com/Sam_Duffield">Sam Duffield</a>, <a href="https://janoleernst.com/">Jan Ole Ernst</a>, <a href="https://scholar.google.co.uk/citations?user=I2W8xCoAAAAJ&hl=en">Max Hunter Gordon</a>, <a href="https://www.informatik.uni-wuerzburg.de/ce/team/matthias-jung/">Matthias Jung</a>, <a href="https://theory.epfl.ch/kapralov/">Michael Kapralov</a>, <a href="https://scholar.google.com/citations?user=bPiE44QAAAAJ&hl=en">Sahar Karimi</a>, <a href="https://scholar.google.com/citations?user=TbO7kjW1GlwC&hl=en">Mohammad Abu Khater</a>, <a href="https://www.phoebezeng.com/">Phoebe Klett</a>, <a href="https://di.ku.dk/english/staff/?pure=en/persons/493157">Jakob Bæk Tejs Knudsen</a>, <a href="https://github.com/slevental">Stanislav Levental</a>, <a href="https://scholar.google.com/citations?user=GS0gdQIAAAAJ&hl=en">Antonio J. Martinez</a>, <a href="https://scholar.google.com/citations?user=Ee_tECgAAAAJ&hl=en">Denis Melanson</a>, <a href="http://rasmuspagh.net/">Rasmus Pagh</a>, <a href="https://di.ku.dk/english/staff/?pure=en/persons/462256">Peter M. R. Rasmussen</a>, <a href="http://www.ilyaraz.org/">Ilya Razenshteyn</a>, <a href="https://cs.stanford.edu/~chrismre/">Christopher Ré</a>, <a href="https://www.cs.cornell.edu/~cdesa/">Christopher De Sa</a>, <a href="https://github.com/dmitrisaberi">Dmitri Michelangelo Saberi</a>, <a href="https://rajath.com/">Rajath Salegame</a>, <a href="https://scholar.google.com/citations?user=8mnfsnYAAAAJ&hl=en">Faris Sbahi</a>, <a href="http://www.dei.unipd.it/~silvestri/">Francesco Silvestri</a>, <a href="https://dpsimpson.github.io/">Daniel Simpson</a>, <a href="https://dl.acm.org/profile/81452604699">Peter Tang</a>, <a href="http://hjemmesider.diku.dk/~mthorup/">Mikkel Thorup</a>, <a href="https://scholars.croucher.org.hk/scholars/ling-hei-tsang">Henry Ling-Hei Tsang</a>, <a href="http://www.cs.cmu.edu/~avelingk/">Ameya Velingker</a>, <a href="http://www.cs.cmu.edu/~dwoodruf/">David P. Woodruff</a>, <a href="https://scholar.google.com/citations?user=S9Ss8M8AAAAJ&hl=en">Amir Zandieh</a>, <a href="https://www.iese.fraunhofer.de/blog/author/thomas-zimmermann/">Thomas Zimmermann</a>, <a href="https://di.ku.dk/english/staff/?pure=en/persons/433494">Anders Åmand</a>.</p>
+         </section>
+
+         <section id="blog">
+            <div class="section-head">
+               <h2>From the Blog</h2>
+               <a class="link-button" href="/new/blog/">All posts <svg class="icon"><use href="#i-arrow"/></svg></a>
+            </div>
+            <div class="post-grid">
+               <article class="post-card">
+                  <a class="post-thumb" href="/blog/adversarial-examples-for-hashes/" tabindex="-1" aria-hidden="true"><img src="feature_imgs/fast_hashes_need_proofs.png" alt="" loading="lazy"></a>
+                  <div class="post-body">
+                     <p class="post-category">Algorithms</p>
+                     <h3><a href="/blog/adversarial-examples-for-hashes/">Adversarial Examples for Fast Hash Functions</a></h3>
+                     <p class="post-meta">Sep 2026 &middot; 25 min</p>
+                     <p class="post-lead">Explicit colliding inputs for komihash, a5hash, MuseAir, t1ha2, HighwayHash and others under random seeds, measured as worst-case collision bits, next to hash functions with proven bounds and their speed.</p>
+                     <a class="link-button" href="/blog/adversarial-examples-for-hashes/">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+                  </div>
+               </article>
+               <article class="post-card">
+                  <a class="post-thumb" href="https://normalcomputing.com/blog/building-an-open-source-verilog-simulator-with-ai-580k-lines-in-43-days" tabindex="-1" aria-hidden="true"><img src="feature_imgs/verilog_sim.png" alt="" loading="lazy"></a>
+                  <div class="post-body">
+                     <p class="post-category">AI for Hardware</p>
+                     <h3><a href="https://normalcomputing.com/blog/building-an-open-source-verilog-simulator-with-ai-580k-lines-in-43-days">Building an Open-Source Verilog Simulator with AI: 580K Lines in 43 Days</a></h3>
+                     <p class="post-meta">Mar 2026 &middot; 8 min</p>
+                     <p class="post-lead">Over 43 days, AI agents landed 2,968 commits on a fork of CIRCT: an event-driven Verilog simulator, UVM and cocotb support, bounded model checking, equivalence checking and mutation testing. Published on the Normal Computing blog.</p>
+                     <a class="link-button" href="https://normalcomputing.com/blog/building-an-open-source-verilog-simulator-with-ai-580k-lines-in-43-days">Read more <svg class="icon"><use href="#i-arrow"/></svg></a>
+                  </div>
+               </article>
+            </div>
+         </section>
+
+         <section id="posts">
+            <div class="section-head">
+               <h2>Recent Posts</h2>
+               <span class="head-links">
+                  <a class="link-button" href="https://bsky.app/profile/thomasahle.bsky.social">Bluesky <svg class="icon"><use href="#i-arrow"/></svg></a>
+                  <a class="link-button" href="https://x.com/thomasahle">X <svg class="icon"><use href="#i-arrow"/></svg></a>
+               </span>
+            </div>
+            <div class="post-grid" id="bsky-feed" data-actor="thomasahle.bsky.social" hidden></div>
+            <p class="feed-fallback" id="bsky-fallback">Most of my day-to-day posting happens on
+               <a href="https://bsky.app/profile/thomasahle.bsky.social">Bluesky</a> and <a href="https://x.com/thomasahle">X</a>.</p>
+         </section>
+
+         <section class="section" id="projects">
+            <h2>Software &amp; Games</h2>
+            <div class="index-cols">
+               <div>
+                  <h3 id="software">Software</h3>
+               <dl class="index">
+                  <dt><b>tensorgrad</b><span class="links"> [<a href="https://github.com/thomasahle/tensorgrad">source</a>] [<a href="https://tensorcookbook.com/">cookbook</a>]</span></dt>
+                  <dd>Symbolic tensor manipulation and derivatives using tensor diagrams. Companion to The Tensor Cookbook.</dd>
+                  <dt><b>ChainHash</b><span class="links"> [<a href="https://github.com/thomasahle/chainhash">source</a>] [<a href="/blog/adversarial-examples-for-hashes/">benchmarks</a>]</span></dt>
+                  <dd>A fast universal hash function with a machine-checked collision bound.</dd>
+                  <dt><b>Fast polynomials</b><span class="links"> [<a href="https://github.com/thomasahle/fast-polynomials">source</a>] [<a href="/fast-polynomials/">try it</a>]</span></dt>
+                  <dd>Compiles a polynomial into a chain with about half the multiplications of Horner's method.</dd>
+                  <dt><b>Trace Taxi</b><span class="links"> [<a href="https://github.com/thomasahle/trace-taxi">source</a>] [<a href="https://trace.taxi/">open</a>]</span></dt>
+                  <dd>An interactive viewer for AI agent traces.</dd>
+                  <dt><b>latex2png</b><span class="links"> [<a href="https://github.com/thomasahle/latex2png">source</a>] [<a href="/latex2png/">use it</a>]</span></dt>
+                  <dd>Converts LaTeX equations to PNG, JPEG or SVG images.</dd>
+                  <dt><b>RIES Online</b><span class="links"> [<a href="https://github.com/thomasahle/ries">source</a>] [<a href="/ries/">use it</a>]</span></dt>
+                  <dd>An inverse symbolic calculator that finds equations matching a given number.</dd>
+               </dl>
+               </div>
+               <div>
+                  <span class="anchor" id="other"></span>
+                  <h3 id="games">Games</h3>
+               <dl class="index">
+                  <dt><b>Sunfish</b><span class="links"> [<a href="https://github.com/thomasahle/sunfish">source</a>] [<a href="https://lichess.org/@/sunfish-engine">play</a>]</span></dt>
+                  <dd>A minimalist chess engine, playing as a bot on Lichess.</dd>
+                  <dt><b>PyChess</b><span class="links"> [<a href="https://pychess.github.io/">website</a>] [<a href="https://pychess.org/">play</a>]</span></dt>
+                  <dd>A chess engine and Internet chess client.</dd>
+                  <dt><b>Liar's Dice</b><span class="links"> [<a href="https://github.com/thomasahle/liars-dice">source</a>] [<a href="https://dudo.ai">play</a>] [<a href="https://towardsdatascience.com/lairs-dice-by-self-play-3bbed6addde0/">blog post</a>]</span></dt>
+                  <dd>A bluffing dice game with an AI based on Neural Counterfactual Regret.</dd>
+                  <dt><b>TrainBox</b><span class="links"> [<a href="http://trainbox.github.io/game/TrainBox.html">play</a>]</span></dt>
+                  <dd>A train-based puzzle game.</dd>
+                  <dt><b>numberlink</b><span class="links"> [<a href="https://github.com/thomasahle/numberlink">source</a>] [<a href="https://numberlinks.puzzlebaron.com/">play</a>]</span></dt>
+                  <dd>A generator and a fast solver for numberlink puzzles.</dd>
+                  <dt><b>codenames</b><span class="links"> [<a href="https://github.com/thomasahle/codenames">source</a>]</span></dt>
+                  <dd>An AI that plays Codenames using word embeddings.</dd>
+                  <dt><b>fastchess</b><span class="links"> [<a href="https://github.com/thomasahle/fastchess">source</a>]</span></dt>
+                  <dd>Predicts chess moves with a single matrix multiplication.</dd>
+               </dl>
+               </div>
+            </div>
+         </section>
+
+         <section id="media">
+            <div class="section-head">
+               <h2>Media</h2>
+               <button class="link-button" type="button" data-media-all aria-expanded="false">
+                  <span class="when-recent">All media</span><span class="when-all-media">Recent media</span>
+                  <svg class="icon"><use href="#i-arrow"/></svg>
+               </button>
+            </div>
+            <div class="media-grid">
+               <article class="media-card">
+                  <div class="media-logo"><img src="feature_imgs/media/semiengineering.png" alt="Semiconductor Engineering" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Semiconductor Engineering</span><span>Jul 2026</span></div>
+                     <h3><a href="https://semiengineering.com/an-ai-model-fit-for-purpose/">&ldquo;An AI Model Fit For Purpose&rdquo;</a></h3>
+                     <p>Quoted on why compact model representations generalize better.</p>
+                  </div>
+               </article>
+               <article class="media-card">
+                  <div class="media-logo"><img src="feature_imgs/media/mlst.png" alt="Machine Learning Street Talk" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Machine Learning Street Talk</span><span>Jun 2026</span></div>
+                     <h3><a href="https://www.youtube.com/watch?v=5pieVHmlbyk">&ldquo;The Thermodynamic AI Chip&rdquo;</a></h3>
+                     <p>Podcast interview on using swarms of AI agents to design and formally verify chips, and on Normal Computing's thermodynamic computing work.</p>
+                  </div>
+               </article>
+               <article class="media-card">
+                  <div class="media-logo"><img src="feature_imgs/media/semiengineering.png" alt="Semiconductor Engineering" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Semiconductor Engineering</span><span>Jun 2026</span></div>
+                     <h3><a href="https://semiengineering.com/can-ai-create-missing-models/">&ldquo;Can AI Create Missing Models?&rdquo;</a></h3>
+                     <p>Quoted on training surrogate models versus steering real systems end-to-end with AI.</p>
+                  </div>
+               </article>
+               <article class="media-card">
+                  <div class="media-logo"><img src="feature_imgs/media/normal-computing.png" alt="Normal Computing Blog" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Normal Computing Blog</span><span>Mar 2026</span></div>
+                     <h3><a href="https://normalcomputing.com/blog/building-an-open-source-verilog-simulator-with-ai-580k-lines-in-43-days">&ldquo;Building an Open-Source Verilog Simulator with AI: 580K Lines in 43 Days&rdquo;</a></h3>
+                     <p>My write-up of how we used AI agents to build an open-source Verilog simulation and formal verification stack on top of CIRCT in 43 days.</p>
+                  </div>
+               </article>
+               <article class="media-card">
+                  <div class="media-logo"><img src="feature_imgs/media/semiengineering.png" alt="Semiconductor Engineering" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Semiconductor Engineering</span><span>Jul 2025</span></div>
+                     <h3><a href="https://semiengineering.com/multi-modal-ai-in-eda-development-flows/">&ldquo;Multi-Modal AI In EDA Development Flows&rdquo;</a></h3>
+                     <p>Interview on how our company, Normal Computing, is using AI to improve chip design and development.</p>
+                  </div>
+               </article>
+               <article class="media-card">
+                  <div class="media-logo"><img src="feature_imgs/media/prosa.png" alt="Prosa" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Prosa</span><span>May 2021</span></div>
+                     <h3><a href="https://web.archive.org/web/20210613001402/https://www.prosa.dk/artikel/en-ulv-i-faareklaeder/">&ldquo;En ulv i fåreklæder&rdquo;</a></h3>
+                     <p>I was interviewed by the IT workers union on Google's FLoC system and the use of SimHash.</p>
+                  </div>
+               </article>
+               <article class="media-card extra">
+                  <div class="media-logo"><img src="feature_imgs/media/stibo.png" alt="Stibo" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Stibo</span><span>Aug 2016</span></div>
+                     <h3><a href="https://web.archive.org/web/20160829103514/http://www.stibo.com/da/2016/08/26/the-stibo-foundation-supports-it-talents/">&ldquo;The Stibo-Foundation supports IT-talents&rdquo;</a></h3>
+                     <p>The announcement of my winning the Stibo Travel grant.</p>
+                  </div>
+               </article>
+               <article class="media-card extra">
+                  <div class="media-logo"><img src="feature_imgs/media/linux-magazine.png" alt="Linux Magazine" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Linux Magazine</span><span>Jun 2016</span></div>
+                     <h3><a href="https://www.linux-magazine.com/Issues/2016/187/PyChess">&ldquo;Checkmate: Linux chess program PyChess&rdquo;</a></h3>
+                     <p>Article about my PyChess chess software.</p>
+                  </div>
+               </article>
+               <article class="media-card extra">
+                  <div class="media-logo"><img src="feature_imgs/media/linux-format.png" alt="Linux Format" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Linux Format</span><span>Jan 2016</span></div>
+                     <h3><a href="http://www.pressreader.com/australia/linux-format/20151222/282802125292910">&ldquo;Python: Sunfish chess engine&rdquo;</a></h3>
+                     <p>Article about my Sunfish chess software.
+                        <a href="/papers/sunfish.pdf" onclick="window.gtag && gtag('event', 'downloadmedia_pdf');">(pdf)</a></p>
+                  </div>
+               </article>
+               <article class="media-card extra">
+                  <div class="media-logo"><img src="feature_imgs/media/computerworld.png" alt="Computerworld" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Computerworld</span><span>Jun 2015</span></div>
+                     <h3><a href="http://www.computerworld.dk/art/234196">&ldquo;The National Team at the Programming World Cup&rdquo;</a></h3>
+                     <p>Coverage of my team's participation in the ICPC World Finals.</p>
+                  </div>
+               </article>
+               <article class="media-card extra">
+                  <div class="media-logo"><img src="feature_imgs/media/computerworld.png" alt="Computerworld" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Computerworld</span><span>Oct 2013</span></div>
+                     <h3><a href="https://www.computerworld.dk/art/228544/her-er-danmarks-tre-bedste-programmoerer">&ldquo;Denmark's Three Greatest Programmers&rdquo;</a></h3>
+                     <p>Interview with my team after we won the Danish university programming championship against 34 other teams.</p>
+                  </div>
+               </article>
+               <article class="media-card extra">
+                  <div class="media-logo"><img src="feature_imgs/media/oxford.png" alt="University of Oxford" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">University of Oxford</span><span>Mar 2013</span></div>
+                     <h3><a href="https://www.cs.ox.ac.uk/news/622-full.html">&ldquo;Winners of the Oxford Computer Science Programming Competition Announced&rdquo;</a></h3>
+                     <p>Announcement of my win in the Oxford programming competition with a Numberlink puzzle solver.</p>
+                  </div>
+               </article>
+               <article class="media-card extra">
+                  <div class="media-logo"><img src="feature_imgs/media/trophees-du-libre.png" alt="Les Trophées du Libre" loading="lazy"></div>
+                  <div class="media-body">
+                     <div class="media-top"><span class="outlet">Les Trophées du Libre</span><span>Jul 2009</span></div>
+                     <h3><a href="https://www.youtube.com/watch?v=QoVEeZdvTQ8">&ldquo;PyChess: Thomas Dybdahl Ahle, Trophées du Logiciel Libre&rdquo;</a></h3>
+                     <p>Video interview about PyChess at the 2009 Trophées du Libre in Soissons, where PyChess won first place in the Hobbies category.</p>
+                  </div>
+               </article>
+            </div>
+            <button class="link-button media-more" type="button" data-media-all aria-expanded="false">All media <svg class="icon"><use href="#i-arrow"/></svg></button>
+         </section>
+
+         <section class="section" id="teaching">
+            <h2>Teaching &amp; Other</h2>
+            <div class="index-cols">
+               <div>
+                  <h3>Teaching</h3>
+                  <dl class="index">
+                     <dt><b><a href="/teaching/pcpp2019">Practical Concurrent and Parallel Programming</a></b></dt>
+                     <dd>MSc course on correct and efficient concurrent and parallel software, primarily using Java, on standard shared-memory multicore hardware.</dd>
+                     <dt><b>Programming problems</b></dt>
+                     <dd>Challenges I set on the <a href="https://spoj.com">Sphere Online Judge</a>:
+                        <a href="https://spoj.com/problems/POWTOW/">POWTOW</a>, <a href="https://spoj.com/problems/TRANSFER/">TRANSFER</a>, <a href="https://spoj.com/problems/REALROOT/">REALROOT</a>, <a href="https://spoj.com/problems/NANO/">NANO</a>, <a href="https://spoj.com/problems/WAYHOME/">WAYHOME</a>, <a href="https://spoj.com/problems/VFRIENDS/">VFRIENDS</a>, <a href="https://spoj.com/problems/VFRIEND2/">VFRIEND2</a>.</dd>
+                     <dt><b>ICPC team notebook</b><span class="links"> [<a href="https://github.com/thomasahle/icpc">source</a>]</span></dt>
+                     <dd>The algorithms reference my team, Lambdabamserne, brought to the 2015 ICPC World Finals.</dd>
+                  </dl>
+               </div>
+               <div>
+                  <h3>Other</h3>
+               <dl class="index">
+                  <dt><b>Juleflet</b><span class="links"> [<a href="https://juleflet.dk">website</a>] [<a href="https://github.com/thomasahle/julehjerte">source</a>]</span></dt>
+                  <dd>A designer and templates for Danish woven Christmas hearts.</dd>
+                  <dt><b>Danish course</b><span class="links"> [<a href="https://www.memrise.com/course/44645/500-most-common-danish-words/">memrise</a>]</span></dt>
+                  <dd>Learn Danish through its 500 most common words, on Memrise.</dd>
+                  <dt><b>Spejdrpedia</b><span class="links"> [<a href="http://spjdrpedia.dk/wiki/">website</a>]</span></dt>
+                  <dd>An online scout handbook.</dd>
+               </dl>
+               </div>
+            </div>
+         </section>
+
+<footer class="page-foot">
+            <p class="dots"><span>Elsewhere:</span> <a href="https://en.wikipedia.org/wiki/User:Thomasda">Wikipedia</a><a href="https://oeis.org/wiki/User:Thomas_Dybdahl_Ahle">OEIS</a><a href="https://dblp1.uni-trier.de/pers/hd/a/Ahle:Thomas_D=">DBLP</a><a href="https://orcid.org/0000-0001-9747-0479">ORCID</a><a href="https://www.mathgenealogy.org/id.php?id=254777">Mathematics Genealogy</a><a href="https://mathscinet.ams.org/mathscinet/freetools/collab-dist?source=1223412&amp;target=189017">Erdős number</a></p>
+            <p class="dots"><a href="https://github.com/thomasahle">GitHub</a><a href="https://x.com/thomasahle">X</a><a href="https://bsky.app/profile/thomasahle.bsky.social">Bluesky</a><a href="https://scholar.google.dk/citations?user=aRiVoYgAAAAJ&amp;sortby=pubdate">Google Scholar</a><a href="https://linkedin.com/in/thomasahle">LinkedIn</a><a href="mailto:thomas@ahle.dk">Email</a></p>
+         </footer>
+      </div>
+   </main>
+
+   <script>
+(function () {
+   function track() {
+      if (window.gtag) window.gtag.apply(null, arguments);
+   }
+   /* Links to a paper that is only on the full lists go there */
+   var paperPages = {'expm': 'publications.html', 'tla': 'publications.html', 'tiling': 'publications.html', 'bi-moments': 'publications.html', 'tcu': 'publications.html', 'p1': 'publications.html', 'lasvegas': 'publications.html', 'output-sensitive': 'publications.html', 'mips': 'publications.html', 'emt': 'manuscripts.html', 'cookbook': 'manuscripts.html', 'errmit': 'manuscripts.html', 'favour': 'manuscripts.html', 'weighted-sampling': 'manuscripts.html', 'minner': 'manuscripts.html', 'phd': 'manuscripts.html', 'tensorsketch2': 'manuscripts.html', 'verification': 'manuscripts.html', 'minhash': 'manuscripts.html', 'tails': 'manuscripts.html', 'donkey': 'manuscripts.html', 
+   };
+   var hashTag = location.hash.replace(/^#paper-/, '');
+   if (/^#paper-/.test(location.hash) && paperPages[hashTag]) {
+      location.replace(paperPages[hashTag] + location.hash);
+   }
+
+   /* Highlight the top bar link of the section in view */
+   var links = Array.prototype.slice.call(document.querySelectorAll('.top-nav a[href^="#"]'));
+   var sections = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+   function spy() {
+      var current = 0;
+      sections.forEach(function (s, i) {
+         if (s.getBoundingClientRect().top < 140) current = i;
+      });
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) current = sections.length - 1;
+      links.forEach(function (a, i) { a.classList.toggle('active', i === current); });
+   }
+   window.addEventListener('scroll', spy, {passive: true});
+   spy();
+
+   /* Media: the six most recent, with a toggle for the rest */
+   var mediaSection = document.getElementById('media');
+   var mediaButtons = mediaSection.querySelectorAll('[data-media-all]');
+   mediaButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+         var on = mediaSection.classList.toggle('all');
+         mediaButtons.forEach(function (b) { b.setAttribute('aria-expanded', String(on)); });
+         track('event', 'media-all', {'event_label': on ? 'on' : 'off'});
+      });
+   });
+
+   /* Recent Bluesky posts, read from the public API; the fallback line stays if it fails */
+   (function () {
+      var feed = document.getElementById('bsky-feed');
+      var fallback = document.getElementById('bsky-fallback');
+      var actor = feed.dataset.actor;
+      var api = 'https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?filter=posts_no_replies&limit=20&actor=' + encodeURIComponent(actor);
+      function el(tag, cls, text) {
+         var e = document.createElement(tag);
+         if (cls) e.className = cls;
+         if (text) e.textContent = text;
+         return e;
+      }
+      function thumbOf(embed) {
+         if (!embed) return null;
+         var media = embed.media || embed;
+         if (media.images && media.images.length) return media.images[0].thumb;
+         if (media.external && media.external.thumb) return media.external.thumb;
+         return null;
+      }
+      var controller = window.AbortController ? new AbortController() : null;
+      if (controller) setTimeout(function () { controller.abort(); }, 8000);
+      fetch(api, controller ? {signal: controller.signal} : {})
+         .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+         .then(function (data) {
+            var posts = (data.feed || []).filter(function (item) { return !item.reason; }).slice(0, 2);
+            if (!posts.length) return;
+            posts.forEach(function (item) {
+               var post = item.post;
+               var url = 'https://bsky.app/profile/' + actor + '/post/' + post.uri.split('/').pop();
+               var thumb = thumbOf(post.embed);
+               // Same card as the blog preview: image on the left, text on the right
+               var card = el('article', 'post-card' + (thumb ? '' : ' no-thumb'));
+               if (thumb) {
+                  var link = el('a', 'post-thumb');
+                  link.href = url;
+                  link.tabIndex = -1;
+                  link.setAttribute('aria-hidden', 'true');
+                  var img = el('img');
+                  img.src = thumb;
+                  img.alt = '';
+                  img.loading = 'lazy';
+                  link.appendChild(img);
+                  card.appendChild(link);
+               }
+               var body = el('div', 'post-body');
+               body.appendChild(el('p', 'post-category', 'Bluesky'));
+               body.appendChild(el('p', 'post-lead bsky-text', post.record.text));
+               var date = new Date(post.record.createdAt).toLocaleDateString('en-US', {month: 'short', year: 'numeric'});
+               body.appendChild(el('p', 'post-meta', date));
+               var more = el('a', 'link-button', 'View on Bluesky ');
+               more.href = url;
+               var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+               svg.setAttribute('class', 'icon');
+               var use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+               use.setAttribute('href', '#i-arrow');
+               svg.appendChild(use);
+               more.appendChild(svg);
+               body.appendChild(more);
+               card.appendChild(body);
+               feed.appendChild(card);
+            });
+            feed.hidden = false;
+            fallback.hidden = true;
+         })
+         .catch(function () {});
+   })();
+
+   /* Portrait: show the photo on hover, loading it only when first needed */
+   var portrait = document.getElementById('portrait');
+   var photo = portrait.querySelector('.photo');
+   portrait.addEventListener('mouseenter', function () {
+      if (!photo.getAttribute('src')) photo.src = photo.dataset.src;
+      track('event', 'hover_me', {'event_label': 'on'});
+   });
+})();
+   </script>
+<script>
+(function () {
+   function track() {
+      if (window.gtag) window.gtag.apply(null, arguments);
+   }
+   var target = /^#paper-/.test(location.hash) ? document.getElementById(location.hash.slice(1)) : null;
+   /* Abstracts: click a card (outside its links) to open or close it */
+   function toggleCard(card) {
+      var open = card.classList.toggle('open');
+      card.setAttribute('aria-expanded', String(open));
+      history.replaceState(null, '', '#' + card.id);
+      track('event', 'toggle', {'event_label': card.id});
+   }
+   document.querySelectorAll('.toggle-item').forEach(function (card) {
+      card.addEventListener('click', function (e) {
+         if (e.target.closest('a')) return;
+         if (String(window.getSelection()).length) return;
+         toggleCard(card);
+      });
+      card.addEventListener('keydown', function (e) {
+         if (e.target === card && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault();
+            toggleCard(card);
+         }
+      });
+   });
+   if (target) {
+      target.classList.add('open');
+      target.setAttribute('aria-expanded', 'true');
+      requestAnimationFrame(function () { target.scrollIntoView(); });
+   }
+})();
+   </script>
+</body>
+</html>

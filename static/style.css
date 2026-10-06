@@ -1,0 +1,633 @@
+/* Home page only. Shared tokens, top bar, headings, post cards and footer are in base.css. */
+
+/********** Letterhead: centered on the page, drawing to the right **********/
+
+.letterhead {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) minmax(0, 40em) minmax(0, 1fr);
+   align-items: center;
+   column-gap: 32px;
+   padding: 8px 0 12px;
+   text-align: center;
+}
+
+.letterhead .lh-text {
+   grid-column: 2;
+   grid-row: 1;
+}
+
+.letterhead .portrait {
+   grid-column: 3;
+   grid-row: 1;
+   justify-self: start;
+   position: relative;
+   width: 180px;
+}
+
+.letterhead .portrait img {
+   display: block;
+   width: 100%;
+   height: auto;
+}
+
+.letterhead .portrait .photo {
+   position: absolute;
+   inset: 0;
+   height: 100%;
+   object-fit: cover;
+   opacity: 0;
+   transition: opacity .2s;
+}
+
+.letterhead .portrait:hover .photo[src] {
+   opacity: 1;
+}
+
+.letterhead h1 {
+   margin: 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: clamp(2.1rem, 4vw, 3rem);
+   line-height: 1.1;
+   letter-spacing: .03em;
+}
+
+.letterhead .role {
+   margin: 6px 0 16px;
+   font-family: var(--serif);
+   font-style: italic;
+   font-size: 1.25rem;
+   color: #333;
+}
+
+.letterhead .bio {
+   margin: 0 auto 16px;
+   font-size: 1.05rem;
+}
+
+/* Contact links stack in the left column, mirroring the drawing on the right */
+.letterhead .contact {
+   grid-column: 1;
+   grid-row: 1;
+   justify-self: end;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   gap: 7px;
+   text-align: right;
+   font-size: .82rem;
+   font-weight: 400;
+   letter-spacing: .08em;
+   text-transform: uppercase;
+}
+
+.letterhead .bio {
+   margin-bottom: 0;
+}
+
+/********** Publication cards: the original thomasahle.com design **********/
+
+.pubs {
+   --item-size: 14rem;
+   --item-height: 14rem;
+   --item-padding: 1.5rem;
+   --border-radius: 4px;
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: 1rem;
+}
+
+/* While an abstract is open, cards keep their own height */
+.pubs:has(.toggle-item.open) {
+   align-items: start;
+}
+
+/* The original cards were sized with the default box model; with
+   border-box the 14rem image would overflow the bottom border. */
+.toggle-item, .toggle-item * {
+   box-sizing: content-box;
+}
+
+.toggle-item {
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: var(--border-radius);
+   background: white;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   color: black;
+   line-height: 1.55;
+   hyphens: auto;
+   display: grid;
+   grid-template-rows: auto 1fr;
+   grid-column-gap: 0px;
+   grid-row-gap: 0px;
+}
+.toggle-item.has_image {
+   grid-template-columns: var(--item-size) 1fr;
+}
+.toggle-item:active {
+   background: #fafafa;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.2);
+}
+.toggle-item:focus-visible {
+   outline: 2px solid var(--link);
+   outline-offset: 2px;
+}
+.toggle-item a {
+   color: var(--link);
+}
+.shown {
+   grid-area: 1 / 2 / 2 / 3;
+   padding: 8px 6%;
+   text-align: center;
+}
+.feature_image {
+   grid-area: 1 / 1 / 3 / 2;
+   border-right: 1px solid #eee;
+}
+.feature_image > img {
+   height: var(--item-height);
+   max-width: 100%;
+   width: auto;
+   object-fit: cover;
+   object-position: center center;
+   border-top-left-radius: 3px;
+   border-bottom-left-radius: 3px;
+}
+.shown .year {
+   display: block;
+   text-align: left;
+}
+.shown .files {
+   float: right;
+   text-align: right;
+}
+.toggle-item .files, .toggle-item .year, .toggle-item .authors {
+   font-size: 90%;
+}
+.shown .title {
+   hyphens: none;
+   margin-top: .5rem;
+   display: block;
+   font-weight: 400;
+   clear: both;
+}
+.toggle-item .abstract {
+   grid-area: 2 / 2 / 3 / 3;
+   padding: 0px var(--item-padding) 1rem var(--item-padding);
+   position: relative;
+   font-family: var(--serif);
+   text-align: justify;
+   line-height: 1.15;
+}
+.toggle-item .abstract p {
+   text-indent: 1em;
+   margin: 0;
+}
+.toggle-item .abstract p:first-child {
+   text-indent: 0;
+}
+.toggle-item:not(.open) {
+   height: var(--item-size);
+}
+.toggle-item:not(.open) .abstract {
+   line-height: 1.1;
+   overflow: hidden;
+   font-style: italic;
+   font-size: .85rem;
+   cursor: pointer;
+   color: #222;
+}
+.toggle-item .abstract:before {
+   position: absolute;
+   font-style: normal;
+   cursor: pointer;
+   color: black;
+   bottom: 0; right: 0;
+   z-index: 1;
+   background: white;
+   padding: 8px 10px 8px 10px;
+   font-family: var(--sans);
+   border-radius: var(--border-radius);
+   font-size: .85rem;
+}
+.toggle-item:not(.open) .abstract:before {
+   content: "View Abstract ⌵";
+}
+.toggle-item.open .abstract:before {
+   margin-top: 10px;
+   content: "Hide Abstract ⌃";
+}
+.toggle-item:not(.open) .abstract:after {
+   content: " ";
+   position: absolute;
+   left: 0; right: 0; top: 0; bottom: 0;
+   background: linear-gradient(180deg, rgba(255,255,255,0) 60%, rgba(255,255,255,1) 100%);
+   border-radius: var(--border-radius);
+}
+.toggle-item .comment {
+   font-style: italic;
+}
+.toggle-item .new {
+   font-weight: bold;
+   background-color: var(--link);
+   color: white;
+   padding: 1px 5px;
+   border-radius: 3px;
+}
+
+/* Wide screens: two cards per row */
+@media (min-width: 1300px) {
+   .pubs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+}
+
+/* Phones: the original small-screen card */
+@media only screen and (max-width: 500px) {
+   .pubs {
+      --item-size: 7rem;
+      --item-height: 7rem;
+      --item-padding: 1rem;
+   }
+   .toggle-item:not(.open) {
+      height: auto;
+   }
+   .toggle-item:not(.open) .abstract {
+      display: none;
+   }
+   .shown {
+      grid-area: 1 / 2 / 2 / 3;
+   }
+   .toggle-item:not(.has_image) > .shown {
+      grid-area: 1 / 1 / 2 / 3;
+   }
+   .feature_image {
+      grid-area: 1 / 1 / 2 / 2;
+   }
+   .toggle-item .abstract {
+      grid-area: 2 / 1 / 3 / 3;
+   }
+}
+
+/* Media shows the six most recent items until "Show all" is pressed */
+#media:not(.all) .media-card.extra,
+#media:not(.all) .when-all-media,
+#media.all .when-recent,
+#media.all .media-more {
+   display: none;
+}
+
+.media-more {
+   display: block;
+   margin: 16px auto 0;
+}
+
+/********** Recent posts (Bluesky) **********/
+
+.head-links {
+   display: inline-flex;
+   gap: 18px;
+}
+
+.post-card.no-thumb {
+   grid-template-columns: minmax(0, 1fr);
+}
+
+/* Bluesky posts have no title, so their text gets more lines */
+.bsky-text {
+   margin-top: 4px;
+   color: var(--ink);
+   white-space: pre-line;
+   -webkit-line-clamp: 5;
+}
+
+.feed-fallback {
+   margin: 0;
+   color: var(--text);
+}
+
+/********** Full sections **********/
+
+.section {
+   margin-top: 44px;
+}
+
+.section h2 {
+   margin-bottom: 14px;
+}
+
+.section p {
+   max-width: 46em;
+   margin: 0 0 12px;
+}
+
+/* Two-column typographic index (software, games, teaching, other) */
+.index-cols {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 0 48px;
+}
+
+.index-cols h3 {
+   margin: 0 0 4px;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.25rem;
+   font-weight: 400;
+   letter-spacing: .05em;
+   color: var(--muted);
+}
+
+.index {
+   margin: 0;
+}
+
+.index dt {
+   margin-top: 12px;
+   font-size: 1.05rem;
+}
+
+.index dt b {
+   font-weight: 700;
+   color: var(--ink);
+}
+
+.index .links {
+   margin-left: .3em;
+   font-size: .9rem;
+   font-weight: 400;
+}
+
+.index .links a {
+   white-space: nowrap;
+}
+
+.index dd {
+   margin: 1px 0 0;
+   font-family: var(--serif);
+   font-size: 1.04rem;
+   line-height: 1.4;
+   color: #222;
+}
+
+/* The coauthor list uses the full width of the page */
+.section p.coauthor-list {
+   max-width: none;
+}
+
+.coauthor-list b {
+   font-weight: 700;
+   color: var(--ink);
+}
+
+/********** Media cards **********/
+
+.media-grid {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 1rem;
+}
+
+.media-card {
+   display: grid;
+   grid-template-columns: 7.5rem minmax(0, 1fr);
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+
+.media-card.no-logo {
+   grid-template-columns: minmax(0, 1fr);
+}
+
+.media-logo {
+   display: grid;
+   place-items: center;
+   padding: 14px;
+   border-right: 1px solid #eee;
+   background: white;
+}
+
+.media-logo img {
+   display: block;
+   width: 100%;
+   max-width: 92px;
+   height: auto;
+   border-radius: 4px;
+}
+
+.media-body {
+   padding: 14px 18px 16px;
+}
+
+.media-top {
+   display: flex;
+   justify-content: space-between;
+   gap: 12px;
+   font-size: .82rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+
+.media-top .outlet {
+   text-transform: uppercase;
+   letter-spacing: .06em;
+   color: var(--muted);
+}
+
+.media-card h3 {
+   margin: 6px 0;
+   font-family: var(--serif);
+   font-style: italic;
+   font-weight: 400;
+   font-size: 1.2rem;
+   line-height: 1.3;
+   letter-spacing: 0;
+}
+
+.media-card h3 a {
+   color: var(--ink);
+}
+
+.media-card p {
+   margin: 0;
+   font-size: .95rem;
+}
+
+/********** Medium screens: smaller portrait **********/
+
+@media (max-width: 1180px) {
+   /* Text stays centered in its column, drawing to its right */
+   .letterhead {
+      grid-template-columns: minmax(0, 1fr) 150px;
+   }
+
+   .letterhead .lh-text {
+      grid-column: 1;
+   }
+
+   .letterhead .portrait {
+      grid-column: 2;
+      width: 150px;
+   }
+
+   .letterhead .contact {
+      grid-column: 1;
+      grid-row: 2;
+      justify-self: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px 0;
+      margin-top: 16px;
+      text-align: center;
+   }
+
+   .letterhead .contact a + a::before {
+      content: "·";
+      display: inline-block;
+      margin: 0 .55em;
+      color: #999;
+   }
+}
+
+@media (max-width: 640px) {
+   .letterhead {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 14px;
+      padding-top: 0;
+   }
+
+   .letterhead .lh-text {
+      grid-column: 1;
+   }
+
+   .letterhead .portrait {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: center;
+      width: 110px;
+   }
+
+   .letterhead .lh-text {
+      grid-row: 2;
+   }
+
+   /* Wrapped lines would start with a dot, so phones use spacing instead */
+   .letterhead .contact {
+      grid-row: 3;
+      margin-top: 0;
+      gap: 6px 16px;
+   }
+
+   .letterhead .contact a + a::before {
+      content: none;
+   }
+
+   .letterhead .bio {
+      font-size: 1rem;
+   }
+
+   .media-grid {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .index-cols {
+      grid-template-columns: minmax(0, 1fr);
+   }
+
+   .index-cols > div + div {
+      margin-top: 22px;
+   }
+
+   .media-card {
+      grid-template-columns: 5rem minmax(0, 1fr);
+   }
+
+   .media-logo {
+      padding: 10px;
+   }
+}
+
+/********** Book: The Tensor Cookbook **********/
+.book {
+   display: grid;
+   grid-template-columns: minmax(0, 23rem) minmax(0, 1fr);
+   margin: 28px 0 8px;
+   background: white;
+   border: 1px solid rgba(0,0,0,.1);
+   border-radius: 4px;
+   box-shadow: 0px 4px 4px -3px rgba(0,0,0,.1);
+   overflow: hidden;
+}
+.book-cover {
+   display: block;
+   border-right: 1px solid #eee;
+   background: #fff;
+}
+.book-cover img {
+   display: block;
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+   padding: 14px;
+}
+.book-body {
+   padding: 18px 28px 18px;
+}
+.book-label {
+   margin: 0;
+   font-size: .72rem;
+   font-weight: 400;
+   letter-spacing: .14em;
+   text-transform: uppercase;
+   color: var(--muted);
+}
+.book-title {
+   margin: 2px 0 0;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-weight: 400;
+   font-size: 2rem;
+   letter-spacing: .03em;
+   line-height: 1.15;
+}
+.book-title a {
+   color: var(--ink);
+}
+.book-pitch {
+   margin: 2px 0 10px;
+   font-family: var(--serif);
+   font-style: italic;
+   font-size: 1.2rem;
+   color: #333;
+}
+.book-desc {
+   margin: 0 0 8px;
+   max-width: 44em;
+}
+.book-meta {
+   margin: 0 0 4px;
+   font-size: .85rem;
+   font-weight: 400;
+   color: var(--muted);
+}
+.book-links {
+   margin: 0;
+   font-size: .95rem;
+}
+@media (max-width: 760px) {
+   .book {
+      grid-template-columns: minmax(0, 1fr);
+   }
+   .book-cover {
+      border-right: 0;
+      border-bottom: 1px solid #eee;
+   }
+   .book-body {
+      padding: 14px 18px 16px;
+   }
+}
