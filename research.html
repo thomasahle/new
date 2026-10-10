@@ -106,6 +106,15 @@ addLoadEvent(function() {
    --radius: 8px;
    --sans: Lato, "Helvetica Neue", sans-serif;
    --serif: Cardo, Garamond, "Times New Roman", serif;
+   /* Four text roles:
+      headings and labels: Cardo small caps;
+      names and titles: Lato regular, --size-title;
+      reading text: Cardo, --size-read;
+      details and links: Lato light, --size-detail (as on the paper cards). */
+   --size-title: 1rem;
+   --size-read: 1rem;
+   --size-detail: .9rem;
+   --size-label: .95rem;
 }
 
 * {
@@ -168,9 +177,10 @@ sub {
 }
 
 /* Lato Light for running text, regular for controls */
-.top-nav a, .link-button {
+.top-nav a {
    font-weight: 400;
 }
+
 
 .icon {
    width: 20px;
@@ -316,7 +326,7 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
    gap: 6px;
    padding: 0;
    font: inherit;
-   font-size: .95rem;
+   font-size: var(--size-detail);
    color: var(--link);
    background: none;
    border: 0;
@@ -386,18 +396,19 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 
 .post-category {
    margin: 0;
-   font-size: .72rem;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: var(--size-label);
    font-weight: 400;
-   letter-spacing: .14em;
-   text-transform: uppercase;
+   letter-spacing: .05em;
    color: var(--muted);
 }
 
 .post-card h3 {
-   margin: 4px 0 2px;
-   font-size: 1.08rem;
-   font-weight: 700;
-   line-height: 1.3;
+   margin: 2px 0 2px;
+   font-size: var(--size-title);
+   font-weight: 400;
+   line-height: 1.35;
 }
 
 .post-card h3 a {
@@ -406,14 +417,16 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 
 .post-meta {
    margin: 0 0 6px;
-   font-size: .82rem;
-   font-weight: 400;
+   font-size: var(--size-detail);
    color: var(--muted);
 }
 
 .post-lead {
    margin: 0 0 10px;
-   font-size: .95rem;
+   font-family: var(--serif);
+   font-size: var(--size-read);
+   line-height: 1.45;
+   color: var(--text);
    display: -webkit-box;
    -webkit-box-orient: vertical;
    -webkit-line-clamp: 3;
@@ -423,7 +436,6 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 .post-body .link-button {
    margin-top: auto;
    align-self: flex-start;
-   font-size: .92rem;
 }
 
 /********** Footer: profiles and social links **********/
@@ -441,7 +453,7 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
    padding-top: 18px;
    border-top: 1px solid var(--line);
    text-align: center;
-   font-size: .85rem;
+   font-size: var(--size-detail);
    color: var(--muted);
 }
 
@@ -591,7 +603,9 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 
 .letterhead .bio {
    margin: 0 auto 16px;
-   font-size: 1.05rem;
+   font-family: var(--serif);
+   font-size: 1.125rem;
+   line-height: 1.5;
 }
 
 /* Contact links stack in the left column, mirroring the drawing on the right */
@@ -604,10 +618,11 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
    align-items: flex-end;
    gap: 7px;
    text-align: right;
-   font-size: .82rem;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.02rem;
    font-weight: 400;
-   letter-spacing: .08em;
-   text-transform: uppercase;
+   letter-spacing: .05em;
 }
 
 .letterhead .bio {
@@ -825,7 +840,7 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 /* Bluesky posts have no title, so their text gets more lines */
 .bsky-text {
    margin-top: 4px;
-   color: var(--ink);
+   color: var(--text);
    white-space: pre-line;
    -webkit-line-clamp: 5;
 }
@@ -873,18 +888,17 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 
 .index dt {
    margin-top: 12px;
-   font-size: 1.05rem;
+   font-size: var(--size-title);
 }
 
 .index dt b {
-   font-weight: 700;
+   font-weight: 400;
    color: var(--ink);
 }
 
 .index .links {
    margin-left: .3em;
-   font-size: .9rem;
-   font-weight: 400;
+   font-size: var(--size-detail);
 }
 
 .index .links a {
@@ -894,9 +908,9 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 .index dd {
    margin: 1px 0 0;
    font-family: var(--serif);
-   font-size: 1.04rem;
-   line-height: 1.4;
-   color: #222;
+   font-size: var(--size-read);
+   line-height: 1.45;
+   color: var(--text);
 }
 
 /* The coauthor list uses the full width of the page */
@@ -905,8 +919,16 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 }
 
 .coauthor-list b {
-   font-weight: 700;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.1rem;
+   font-weight: 400;
+   letter-spacing: .05em;
    color: var(--ink);
+}
+
+.section p.coauthor-list {
+   font-weight: 400;
 }
 
 /********** Media cards **********/
@@ -954,26 +976,25 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 .media-top {
    display: flex;
    justify-content: space-between;
+   align-items: baseline;
    gap: 12px;
-   font-size: .82rem;
-   font-weight: 400;
+   font-size: var(--size-detail);
    color: var(--muted);
 }
 
 .media-top .outlet {
-   text-transform: uppercase;
-   letter-spacing: .06em;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: var(--size-label);
+   letter-spacing: .05em;
    color: var(--muted);
 }
 
 .media-card h3 {
-   margin: 6px 0;
-   font-family: var(--serif);
-   font-style: italic;
+   margin: 2px 0 4px;
    font-weight: 400;
-   font-size: 1.2rem;
-   line-height: 1.3;
-   letter-spacing: 0;
+   font-size: var(--size-title);
+   line-height: 1.35;
 }
 
 .media-card h3 a {
@@ -982,7 +1003,10 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 
 .media-card p {
    margin: 0;
-   font-size: .95rem;
+   font-family: var(--serif);
+   font-size: var(--size-read);
+   line-height: 1.45;
+   color: var(--text);
 }
 
 /********** Medium screens: smaller portrait **********/
@@ -1089,6 +1113,7 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 
 .page-count {
    margin: 2px 0 0;
+   font-size: var(--size-detail);
    color: var(--muted);
 }
 </style>

@@ -105,6 +105,15 @@ addLoadEvent(function() {
    --radius: 8px;
    --sans: Lato, "Helvetica Neue", sans-serif;
    --serif: Cardo, Garamond, "Times New Roman", serif;
+   /* Four text roles:
+      headings and labels: Cardo small caps;
+      names and titles: Lato regular, --size-title;
+      reading text: Cardo, --size-read;
+      details and links: Lato light, --size-detail (as on the paper cards). */
+   --size-title: 1rem;
+   --size-read: 1rem;
+   --size-detail: .9rem;
+   --size-label: .95rem;
 }
 
 * {
@@ -167,9 +176,10 @@ sub {
 }
 
 /* Lato Light for running text, regular for controls */
-.top-nav a, .link-button {
+.top-nav a {
    font-weight: 400;
 }
+
 
 .icon {
    width: 20px;
@@ -315,7 +325,7 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
    gap: 6px;
    padding: 0;
    font: inherit;
-   font-size: .95rem;
+   font-size: var(--size-detail);
    color: var(--link);
    background: none;
    border: 0;
@@ -385,18 +395,19 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 
 .post-category {
    margin: 0;
-   font-size: .72rem;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: var(--size-label);
    font-weight: 400;
-   letter-spacing: .14em;
-   text-transform: uppercase;
+   letter-spacing: .05em;
    color: var(--muted);
 }
 
 .post-card h3 {
-   margin: 4px 0 2px;
-   font-size: 1.08rem;
-   font-weight: 700;
-   line-height: 1.3;
+   margin: 2px 0 2px;
+   font-size: var(--size-title);
+   font-weight: 400;
+   line-height: 1.35;
 }
 
 .post-card h3 a {
@@ -405,14 +416,16 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 
 .post-meta {
    margin: 0 0 6px;
-   font-size: .82rem;
-   font-weight: 400;
+   font-size: var(--size-detail);
    color: var(--muted);
 }
 
 .post-lead {
    margin: 0 0 10px;
-   font-size: .95rem;
+   font-family: var(--serif);
+   font-size: var(--size-read);
+   line-height: 1.45;
+   color: var(--text);
    display: -webkit-box;
    -webkit-box-orient: vertical;
    -webkit-line-clamp: 3;
@@ -422,7 +435,6 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 .post-body .link-button {
    margin-top: auto;
    align-self: flex-start;
-   font-size: .92rem;
 }
 
 /********** Footer: profiles and social links **********/
@@ -440,7 +452,7 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
    padding-top: 18px;
    border-top: 1px solid var(--line);
    text-align: center;
-   font-size: .85rem;
+   font-size: var(--size-detail);
    color: var(--muted);
 }
 
@@ -590,7 +602,9 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 
 .letterhead .bio {
    margin: 0 auto 16px;
-   font-size: 1.05rem;
+   font-family: var(--serif);
+   font-size: 1.125rem;
+   line-height: 1.5;
 }
 
 /* Contact links stack in the left column, mirroring the drawing on the right */
@@ -603,10 +617,11 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
    align-items: flex-end;
    gap: 7px;
    text-align: right;
-   font-size: .82rem;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.02rem;
    font-weight: 400;
-   letter-spacing: .08em;
-   text-transform: uppercase;
+   letter-spacing: .05em;
 }
 
 .letterhead .bio {
@@ -824,7 +839,7 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 /* Bluesky posts have no title, so their text gets more lines */
 .bsky-text {
    margin-top: 4px;
-   color: var(--ink);
+   color: var(--text);
    white-space: pre-line;
    -webkit-line-clamp: 5;
 }
@@ -872,18 +887,17 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 
 .index dt {
    margin-top: 12px;
-   font-size: 1.05rem;
+   font-size: var(--size-title);
 }
 
 .index dt b {
-   font-weight: 700;
+   font-weight: 400;
    color: var(--ink);
 }
 
 .index .links {
    margin-left: .3em;
-   font-size: .9rem;
-   font-weight: 400;
+   font-size: var(--size-detail);
 }
 
 .index .links a {
@@ -893,9 +907,9 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 .index dd {
    margin: 1px 0 0;
    font-family: var(--serif);
-   font-size: 1.04rem;
-   line-height: 1.4;
-   color: #222;
+   font-size: var(--size-read);
+   line-height: 1.45;
+   color: var(--text);
 }
 
 /* The coauthor list uses the full width of the page */
@@ -904,8 +918,16 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 }
 
 .coauthor-list b {
-   font-weight: 700;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: 1.1rem;
+   font-weight: 400;
+   letter-spacing: .05em;
    color: var(--ink);
+}
+
+.section p.coauthor-list {
+   font-weight: 400;
 }
 
 /********** Media cards **********/
@@ -953,26 +975,25 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 .media-top {
    display: flex;
    justify-content: space-between;
+   align-items: baseline;
    gap: 12px;
-   font-size: .82rem;
-   font-weight: 400;
+   font-size: var(--size-detail);
    color: var(--muted);
 }
 
 .media-top .outlet {
-   text-transform: uppercase;
-   letter-spacing: .06em;
+   font-family: var(--serif);
+   font-variant: small-caps;
+   font-size: var(--size-label);
+   letter-spacing: .05em;
    color: var(--muted);
 }
 
 .media-card h3 {
-   margin: 6px 0;
-   font-family: var(--serif);
-   font-style: italic;
+   margin: 2px 0 4px;
    font-weight: 400;
-   font-size: 1.2rem;
-   line-height: 1.3;
-   letter-spacing: 0;
+   font-size: var(--size-title);
+   line-height: 1.35;
 }
 
 .media-card h3 a {
@@ -981,7 +1002,10 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
 
 .media-card p {
    margin: 0;
-   font-size: .95rem;
+   font-family: var(--serif);
+   font-size: var(--size-read);
+   line-height: 1.45;
+   color: var(--text);
 }
 
 /********** Medium screens: smaller portrait **********/
@@ -1627,7 +1651,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/semiengineering.png" alt="Semiconductor Engineering" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Semiconductor Engineering</span><span>Jul 2026</span></div>
-                     <h3><a href="https://semiengineering.com/an-ai-model-fit-for-purpose/">&ldquo;An AI Model Fit For Purpose&rdquo;</a></h3>
+                     <h3><a href="https://semiengineering.com/an-ai-model-fit-for-purpose/">An AI Model Fit For Purpose</a></h3>
                      <p>Quoted on why compact model representations generalize better.</p>
                   </div>
                </article>
@@ -1635,7 +1659,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/mlst.png" alt="Machine Learning Street Talk" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Machine Learning Street Talk</span><span>Jun 2026</span></div>
-                     <h3><a href="https://www.youtube.com/watch?v=5pieVHmlbyk">&ldquo;The Thermodynamic AI Chip&rdquo;</a></h3>
+                     <h3><a href="https://www.youtube.com/watch?v=5pieVHmlbyk">The Thermodynamic AI Chip</a></h3>
                      <p>Podcast interview on using swarms of AI agents to design and formally verify chips, and on Normal Computing's thermodynamic computing work.</p>
                   </div>
                </article>
@@ -1643,7 +1667,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/semiengineering.png" alt="Semiconductor Engineering" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Semiconductor Engineering</span><span>Jun 2026</span></div>
-                     <h3><a href="https://semiengineering.com/can-ai-create-missing-models/">&ldquo;Can AI Create Missing Models?&rdquo;</a></h3>
+                     <h3><a href="https://semiengineering.com/can-ai-create-missing-models/">Can AI Create Missing Models?</a></h3>
                      <p>Quoted on training surrogate models versus steering real systems end-to-end with AI.</p>
                   </div>
                </article>
@@ -1651,7 +1675,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/normal-computing.png" alt="Normal Computing Blog" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Normal Computing Blog</span><span>Mar 2026</span></div>
-                     <h3><a href="https://normalcomputing.com/blog/building-an-open-source-verilog-simulator-with-ai-580k-lines-in-43-days">&ldquo;Building an Open-Source Verilog Simulator with AI: 580K Lines in 43 Days&rdquo;</a></h3>
+                     <h3><a href="https://normalcomputing.com/blog/building-an-open-source-verilog-simulator-with-ai-580k-lines-in-43-days">Building an Open-Source Verilog Simulator with AI: 580K Lines in 43 Days</a></h3>
                      <p>My write-up of how we used AI agents to build an open-source Verilog simulation and formal verification stack on top of CIRCT in 43 days.</p>
                   </div>
                </article>
@@ -1659,7 +1683,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/semiengineering.png" alt="Semiconductor Engineering" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Semiconductor Engineering</span><span>Jul 2025</span></div>
-                     <h3><a href="https://semiengineering.com/multi-modal-ai-in-eda-development-flows/">&ldquo;Multi-Modal AI In EDA Development Flows&rdquo;</a></h3>
+                     <h3><a href="https://semiengineering.com/multi-modal-ai-in-eda-development-flows/">Multi-Modal AI In EDA Development Flows</a></h3>
                      <p>Interview on how our company, Normal Computing, is using AI to improve chip design and development.</p>
                   </div>
                </article>
@@ -1667,7 +1691,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/prosa.png" alt="Prosa" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Prosa</span><span>May 2021</span></div>
-                     <h3><a href="https://web.archive.org/web/20210613001402/https://www.prosa.dk/artikel/en-ulv-i-faareklaeder/">&ldquo;En ulv i fåreklæder&rdquo;</a></h3>
+                     <h3><a href="https://web.archive.org/web/20210613001402/https://www.prosa.dk/artikel/en-ulv-i-faareklaeder/">En ulv i fåreklæder</a></h3>
                      <p>I was interviewed by the IT workers union on Google's FLoC system and the use of SimHash.</p>
                   </div>
                </article>
@@ -1675,7 +1699,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/stibo.png" alt="Stibo" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Stibo</span><span>Aug 2016</span></div>
-                     <h3><a href="https://web.archive.org/web/20160829103514/http://www.stibo.com/da/2016/08/26/the-stibo-foundation-supports-it-talents/">&ldquo;The Stibo-Foundation supports IT-talents&rdquo;</a></h3>
+                     <h3><a href="https://web.archive.org/web/20160829103514/http://www.stibo.com/da/2016/08/26/the-stibo-foundation-supports-it-talents/">The Stibo-Foundation supports IT-talents</a></h3>
                      <p>The announcement of my winning the Stibo Travel grant.</p>
                   </div>
                </article>
@@ -1683,7 +1707,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/linux-magazine.png" alt="Linux Magazine" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Linux Magazine</span><span>Jun 2016</span></div>
-                     <h3><a href="https://www.linux-magazine.com/Issues/2016/187/PyChess">&ldquo;Checkmate: Linux chess program PyChess&rdquo;</a></h3>
+                     <h3><a href="https://www.linux-magazine.com/Issues/2016/187/PyChess">Checkmate: Linux chess program PyChess</a></h3>
                      <p>Article about my PyChess chess software.</p>
                   </div>
                </article>
@@ -1691,7 +1715,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/linux-format.png" alt="Linux Format" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Linux Format</span><span>Jan 2016</span></div>
-                     <h3><a href="http://www.pressreader.com/australia/linux-format/20151222/282802125292910">&ldquo;Python: Sunfish chess engine&rdquo;</a></h3>
+                     <h3><a href="http://www.pressreader.com/australia/linux-format/20151222/282802125292910">Python: Sunfish chess engine</a></h3>
                      <p>Article about my Sunfish chess software.
                         <a href="/papers/sunfish.pdf" onclick="window.gtag && gtag('event', 'downloadmedia_pdf');">(pdf)</a></p>
                   </div>
@@ -1700,7 +1724,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/computerworld.png" alt="Computerworld" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Computerworld</span><span>Jun 2015</span></div>
-                     <h3><a href="http://www.computerworld.dk/art/234196">&ldquo;The National Team at the Programming World Cup&rdquo;</a></h3>
+                     <h3><a href="http://www.computerworld.dk/art/234196">The National Team at the Programming World Cup</a></h3>
                      <p>Coverage of my team's participation in the ICPC World Finals.</p>
                   </div>
                </article>
@@ -1708,7 +1732,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/computerworld.png" alt="Computerworld" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Computerworld</span><span>Oct 2013</span></div>
-                     <h3><a href="https://www.computerworld.dk/art/228544/her-er-danmarks-tre-bedste-programmoerer">&ldquo;Denmark's Three Greatest Programmers&rdquo;</a></h3>
+                     <h3><a href="https://www.computerworld.dk/art/228544/her-er-danmarks-tre-bedste-programmoerer">Denmark's Three Greatest Programmers</a></h3>
                      <p>Interview with my team after we won the Danish university programming championship against 34 other teams.</p>
                   </div>
                </article>
@@ -1716,7 +1740,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/oxford.png" alt="University of Oxford" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">University of Oxford</span><span>Mar 2013</span></div>
-                     <h3><a href="https://www.cs.ox.ac.uk/news/622-full.html">&ldquo;Winners of the Oxford Computer Science Programming Competition Announced&rdquo;</a></h3>
+                     <h3><a href="https://www.cs.ox.ac.uk/news/622-full.html">Winners of the Oxford Computer Science Programming Competition Announced</a></h3>
                      <p>Announcement of my win in the Oxford programming competition with a Numberlink puzzle solver.</p>
                   </div>
                </article>
@@ -1724,7 +1748,7 @@ We also provide a new fast branch-free code for division and modulus with Mersen
                   <div class="media-logo"><img src="feature_imgs/media/trophees-du-libre.png" alt="Les Trophées du Libre" loading="lazy"></div>
                   <div class="media-body">
                      <div class="media-top"><span class="outlet">Les Trophées du Libre</span><span>Jul 2009</span></div>
-                     <h3><a href="https://www.youtube.com/watch?v=QoVEeZdvTQ8">&ldquo;PyChess: Thomas Dybdahl Ahle, Trophées du Logiciel Libre&rdquo;</a></h3>
+                     <h3><a href="https://www.youtube.com/watch?v=QoVEeZdvTQ8">PyChess: Thomas Dybdahl Ahle, Trophées du Logiciel Libre</a></h3>
                      <p>Video interview about PyChess at the 2009 Trophées du Libre in Soissons, where PyChess won first place in the Hobbies category.</p>
                   </div>
                </article>
