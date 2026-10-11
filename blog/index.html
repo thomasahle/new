@@ -465,6 +465,20 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
    white-space: nowrap;
 }
 
+/* Phones: wrapped lines would start with a dot, so the links are spaced instead */
+@media (max-width: 640px) {
+   .page-foot p {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px 18px;
+   }
+
+   .page-foot .dots a + a::before {
+      content: none;
+   }
+}
+
 /********** Narrow screens: name and a menu button **********/
 
 @media (max-width: 900px) {
@@ -754,7 +768,7 @@ section, h2[id], h3[id], [id^="paper-"], .anchor {
          <p class="no-results" id="no-results" hidden>No posts match your search.</p>
 
 <footer class="page-foot">
-            <p class="dots"><span>Elsewhere:</span> <a href="https://en.wikipedia.org/wiki/User:Thomasda">Wikipedia</a><a href="https://oeis.org/wiki/User:Thomas_Dybdahl_Ahle">OEIS</a><a href="https://dblp1.uni-trier.de/pers/hd/a/Ahle:Thomas_D=">DBLP</a><a href="https://orcid.org/0000-0001-9747-0479">ORCID</a><a href="https://www.mathgenealogy.org/id.php?id=254777">Mathematics Genealogy</a><a href="https://mathscinet.ams.org/mathscinet/freetools/collab-dist?source=1223412&amp;target=189017">Erdős number</a></p>
+            <p class="dots"><a href="https://en.wikipedia.org/wiki/User:Thomasda">Wikipedia</a><a href="https://oeis.org/wiki/User:Thomas_Dybdahl_Ahle">OEIS</a><a href="https://dblp1.uni-trier.de/pers/hd/a/Ahle:Thomas_D=">DBLP</a><a href="https://orcid.org/0000-0001-9747-0479">ORCID</a><a href="https://www.mathgenealogy.org/id.php?id=254777">Mathematics Genealogy</a><a href="https://mathscinet.ams.org/mathscinet/freetools/collab-dist?source=1223412&amp;target=189017">Erdős number</a></p>
             <p class="dots"><a href="https://github.com/thomasahle">GitHub</a><a href="https://lichess.org/@/thomasahle">Lichess</a><a href="https://x.com/thomasahle">X</a><a href="https://bsky.app/profile/thomasahle.bsky.social">Bluesky</a><a href="https://scholar.google.dk/citations?user=aRiVoYgAAAAJ&amp;sortby=pubdate">Google Scholar</a><a href="https://linkedin.com/in/thomasahle">LinkedIn</a><a href="mailto:thomas@ahle.dk">Email</a></p>
          </footer>
       </div>
